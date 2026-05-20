@@ -48,6 +48,18 @@ const { row, related } = Astro.props as PageProps;
 const slug = nameToSlug(row.name);
 const canonical = `https://www.namore.app/names/${slug}`;
 
+// Install CTA URL — tagged with UTMs so when the click event fires in
+// PostHog (via analytics.js's click handler on apps.apple.com/app/id…
+// links), the params land in the event properties and we can attribute
+// install funnel traffic back to the specific name page that drove it.
+//
+// Apple strips most params before the install actually completes (iOS
+// privacy rules), but the click event in PostHog happens BEFORE the
+// user leaves the page, so the attribution is captured there. The
+// post-install user is then a separate anonymous person; correlation
+// uses timing + region heuristics, not deterministic linking.
+const appStoreUrl = `https://apps.apple.com/app/id6766572995?utm_source=names_page&utm_medium=organic&utm_campaign=programmatic_seo&utm_content=${slug}`;
+
 // SEO title — head term + qualifier. Pattern: "Theodora — meaning, origin
 // and popularity". Stays under Google's ~55-60 char SERP truncation for
 // most names.
@@ -179,9 +191,7 @@ const relatedIntro = describeRelation(row, related);
         independently and discover the one you both choose.
       </p>
       <div class="cta-buttons">
-        <a class="btn btn-ink btn-lg" href="https://apps.apple.com/app/id6766572995"
-          >Get the app</a
-        >
+        <a class="btn btn-ink btn-lg" href={appStoreUrl}>Get the app</a>
         <a class="btn btn-ghost btn-lg" href="https://www.namore.app/">Learn more</a>
       </div>
     </aside>

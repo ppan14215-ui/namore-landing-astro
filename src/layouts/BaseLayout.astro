@@ -90,6 +90,20 @@ const appStoreUrl = 'https://apps.apple.com/app/id6766572995';
         set:html={JSON.stringify(jsonLd)}
       />
     )}
+
+    {/* PostHog analytics — same script that runs on namore.app/. Served
+        from the namore-landing project at /analytics.js so name pages
+        and the landing site report to one PostHog project (key
+        phc_yK5hjiKAj644…). Captures $pageview automatically; the
+        `apps.apple.com/app/id6766572995` click handler in analytics.js
+        fires `app_store_click` with the page URL embedded, so the name
+        slug is recoverable from $pathname in PostHog. UTM params on the
+        outgoing App Store URL flow into the event properties too.
+
+        `defer` so it doesn't block the initial HTML render — the script
+        ships small, but per-name pages are SEO surfaces where TTFB and
+        LCP matter. */}
+    <script src="/analytics.js" defer></script>
   </head>
   <body>
     <nav class="nav">
