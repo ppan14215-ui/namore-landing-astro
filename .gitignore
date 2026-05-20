@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# astro build output
+dist/
+.astro/
+
+# vercel
+.vercel/
+
+# env (secrets must never be committed — service role key especially)
+.env
+.env.*
+!.env.example
+
+# editor
+.DS_Store
+.vscode/
+.idea/
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

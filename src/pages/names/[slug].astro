@@ -1,0 +1,189 @@
+---
+/**
+ * /names/[slug] — one static HTML page per name in the Supabase `names`
+ * table. ~11K pages total (English-only v1).
+ *
+ * Build flow:
+ *   1. `getStaticPaths()` reads every name from Supabase via the service
+ *      role key (or the mock fixture when USE_MOCK_DATA=1).
+ *   2. Each row produces a slug + props bundle (the row itself + the 5
+ *      related names for internal linking).
+ *   3. The template renders the brand chrome, the NameCardHero visual,
+ *      the longevity + trend-context narrative, the related-names block,
+ *      and the install CTA.
+ *
+ * Why all the data crunching lives in getStaticPaths instead of the page
+ * body: Astro calls getStaticPaths ONCE at build time and reuses the
+ * result for all 11K pages. Doing related-name computation per page in
+ * the template would mean O(11K × 11K) work; doing it once with shared
+ * state is O(11K).
+ */
+
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import NameCardHero from '@/components/NameCardHero.astro';
+import type { NameRow } from '@/lib/types';
+import { nameToSlug } from '@/lib/types';
+import { getAllNames, findRelatedNames } from '@/lib/names';
+
+export const getStaticPaths = (async () => {
+  const all = await getAllNames();
+  console.log(`[build] generating ${all.length} name pages`);
+
+  return all.map((row) => ({
+    params: { slug: nameToSlug(row.name) },
+    props: {
+      row,
+      related: findRelatedNames(row, all, 5),
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+interface PageProps {
+  row: NameRow;
+  related: NameRow[];
+}
+const { row, related } = Astro.props as PageProps;
+
+const slug = nameToSlug(row.name);
+const canonical = `https://www.namore.app/names/${slug}`;
+
+// SEO title — head term + qualifier. Pattern: "Theodora — meaning, origin
+// and popularity". Stays under Google's ~55-60 char SERP truncation for
+// most names.
+const title = `${row.name} — meaning, origin and popularity`;
+
+// Meta description — short, factual, includes the meaning + origin.
+// Pattern: "<Name>: <meaning>. A <origin> name with <vibe>. See
+// pronunciation, nicknames, and popularity over time on Namore."
+const descParts: string[] = [];
+descParts.push(`${row.name}:`);
+if (row.meaning_short) descParts.push(`${row.meaning_short.toLowerCase()}.`);
+if (row.origin) {
+  const article = /^[aeiou]/i.test(row.origin) ? 'an' : 'a';
+  descParts.push(`${article} ${row.origin} name${row.gender === 'F' ? ' for girls' : row.gender === 'M' ? ' for boys' : ''}.`);
+}
+descParts.push('Pronunciation, nicknames, popularity over time.');
+const description = descParts.join(' ').slice(0, 160);
+
+// JSON-LD: schema.org/Person Name pattern doesn't fit; use DefinedTerm
+// since we're describing a name as a term-in-a-glossary. Google supports
+// DefinedTerm for term/glossary content and it slots cleanly into a
+// programmatic-name-pages dataset.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'DefinedTerm',
+  name: row.name,
+  inDefinedTermSet: {
+    '@type': 'DefinedTermSet',
+    name: 'Namore baby names',
+    url: 'https://www.namore.app/names',
+  },
+  description: row.meaning || row.meaning_short || `${row.name} — a ${row.origin ?? ''} name.`.trim(),
+  ...(row.origin ? { inLanguage: row.origin } : {}),
+  url: canonical,
+};
+
+// Format helpers for the narrative sections.
+function describePopularity(name: NameRow): string | null {
+  if (!Array.isArray(name.popularity_history) || name.popularity_history.length < 2) {
+    return null;
+  }
+  const first = name.popularity_history[0];
+  const last = name.popularity_history[name.popularity_history.length - 1];
+  if (last > first * 1.5) {
+    return `${name.name}'s popularity has grown sharply over the past five decades — from a relative score of ${first} in the 1970s to ${last} in the most recent decade tracked.`;
+  }
+  if (last < first * 0.7) {
+    return `${name.name} has been on a long arc of decline — peaking around the ${name.peak_decade ?? 'mid-century'} and tapering to a relative score of ${last} in recent years.`;
+  }
+  return `${name.name} has held a steady cultural position across the decades, with relative popularity scores ranging from ${Math.min(...name.popularity_history)} to ${Math.max(...name.popularity_history)} since the 1970s.`;
+}
+
+const popularityNarrative = describePopularity(row);
+
+// "Related names" intro varies by what they share with the target row.
+function describeRelation(target: NameRow, related: NameRow[]): string {
+  if (related.length === 0) return '';
+  const sameOrigin = related.every((r) => r.origin === target.origin && target.origin);
+  if (sameOrigin) {
+    return `Other ${target.origin} names with similar texture:`;
+  }
+  return `Names that share ${target.name}'s vibe and feel:`;
+}
+const relatedIntro = describeRelation(row, related);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <main class="wrap page">
+    <p class="page-eyebrow">Baby name</p>
+
+    <NameCardHero name={row} />
+
+    {row.longevity_read && (
+      <section class="narrative" aria-label={`Longevity reading for ${row.name}`}>
+        <h2>How it <em>ages</em>.</h2>
+        <p>{row.longevity_read}</p>
+      </section>
+    )}
+
+    {row.trend_context && (
+      <section class="narrative" aria-label={`Trend context for ${row.name}`}>
+        <h2>The <em>cultural moment</em>.</h2>
+        <p>{row.trend_context}</p>
+      </section>
+    )}
+
+    {popularityNarrative && (
+      <section class="narrative" aria-label={`Popularity history for ${row.name}`}>
+        <h2>Popularity, <em>over time</em>.</h2>
+        <p>{popularityNarrative}</p>
+        {row.peak_count && (
+          <p>
+            Peak years saw roughly {row.peak_count.toLocaleString()} US births;
+            most recent year on record: {(row.births_last_year ?? 0).toLocaleString()}.
+          </p>
+        )}
+      </section>
+    )}
+
+    {related.length > 0 && (
+      <section class="related" aria-label="Related names">
+        <h2>{relatedIntro}</h2>
+        <ul class="related-list">
+          {related.map((r) => (
+            <li>
+              <a href={`/names/${nameToSlug(r.name)}`}>
+                <span class="related-name">{r.name}</span>
+                <span class="related-meta">
+                  {r.origin ?? ''}
+                  {r.meaning_short ? ` · ${r.meaning_short}` : ''}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <aside class="cta" aria-label="Install Namore">
+      <h2>Decide <em>together</em>.</h2>
+      <p>
+        Loving {row.name} is one thing. Both of you loving the same name is
+        another. Namore is the private app for couples to swipe through names
+        independently and discover the one you both choose.
+      </p>
+      <div class="cta-buttons">
+        <a class="btn btn-ink btn-lg" href="https://apps.apple.com/app/id6766572995"
+          >Get the app</a
+        >
+        <a class="btn btn-ghost btn-lg" href="https://www.namore.app/">Learn more</a>
+      </div>
+    </aside>
+  </main>
+</BaseLayout>

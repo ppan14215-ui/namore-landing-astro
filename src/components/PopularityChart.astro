@@ -1,0 +1,80 @@
+---
+/**
+ * PopularityChart — minimal SVG sparkline rendering the `popularity_history`
+ * jsonb column (6-point decade array, 1970s → 2025).
+ *
+ * Mirrors the popularity-over-time visual in NameCard.tsx: a single terra
+ * stroke from left to right, with a dotted baseline. Pre-rendered SVG so
+ * no JS runs in the browser; the SVG ships inline so there's no extra
+ * network request per page.
+ *
+ * Null-tolerant: returns nothing if history is null or wrong shape. The
+ * caller decides whether to skip the whole popularity section or render a
+ * "no data" stub.
+ */
+
+export interface Props {
+  history: number[] | null;
+  width?: number;
+  height?: number;
+}
+
+const { history, width = 580, height = 56 } = Astro.props;
+
+// Bail cleanly if data is missing or malformed.
+const valid =
+  Array.isArray(history) &&
+  history.length >= 2 &&
+  history.every((n) => typeof n === 'number' && !Number.isNaN(n));
+
+let path = '';
+if (valid) {
+  // Normalise the 6 (or N) points to fit the viewBox. Y axis is inverted
+  // because SVG y grows downward — higher popularity should appear higher
+  // on the chart, i.e. smaller y values.
+  const min = Math.min(...history!);
+  const max = Math.max(...history!);
+  const range = max - min || 1; // guard against flat lines
+  const padTop = 6;
+  const padBot = 4;
+  const usableH = height - padTop - padBot;
+
+  path = history!
+    .map((v, i) => {
+      const x = (i / (history!.length - 1)) * width;
+      const y = padTop + (1 - (v - min) / range) * usableH;
+      return `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
+    })
+    .join(' ');
+}
+---
+
+{valid && (
+  <svg
+    class="popularity-chart"
+    viewBox={`0 0 ${width} ${height}`}
+    preserveAspectRatio="none"
+    role="img"
+    aria-label="Popularity over time, 1970 to 2025"
+  >
+    {/* Dotted baseline at the bottom — visual anchor */}
+    <line
+      x1="0"
+      y1={height - 4}
+      x2={width}
+      y2={height - 4}
+      stroke="#E3DAC8"
+      stroke-width="1"
+      stroke-dasharray="2 4"
+    />
+    {/* The popularity curve */}
+    <path
+      d={path}
+      stroke="#C9785C"
+      stroke-width="2.4"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+)}

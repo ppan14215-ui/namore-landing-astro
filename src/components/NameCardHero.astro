@@ -1,0 +1,171 @@
+---
+/**
+ * NameCardHero — the visual product card on every per-name page.
+ *
+ * This is the SEO-page version of `src/components/NameCard.tsx` from the
+ * React Native app. Same visual language, same hierarchy of information,
+ * built as static HTML+CSS so it pre-renders cleanly without any JS:
+ *
+ *   ┌─────────────────────────────────────────────────────────────┐
+ *   │ [RISING]  GIRL · GREEK              🇩🇪 🇳🇱 🇬🇧 +2          │
+ *   │                                                             │
+ *   │   Theodora                                                  │
+ *   │   /thee · oh · DOR · ah/                                    │
+ *   │   ──────────────────────────────────────────────────────    │
+ *   │   MEANING                                                   │
+ *   │   "Gift of God"                                             │
+ *   │   Imperial and beautiful; ages with Byzantine grandeur…     │
+ *   │                                                             │
+ *   │   POPULARITY OVER TIME                  1970 → 2025         │
+ *   │   ╱╱╱ (sparkline)                                           │
+ *   │                                                             │
+ *   │   NICKNAMES        VIBE                                     │
+ *   │   Thea · Teddy     [melodic] [warm] [elegant]               │
+ *   └─────────────────────────────────────────────────────────────┘
+ *
+ * Null-tolerant on every field — the rendered card adapts to whatever
+ * data exists for this row. A name with no popularity_history skips the
+ * sparkline section; a name with no nicknames omits the nicknames column;
+ * etc. Always renders at least name + meaning_short + meaning if those
+ * three are present (which the build's filter guarantees for any row that
+ * makes it into the page set).
+ */
+
+import type { NameRow, TrendLabel } from '@/lib/types';
+import PopularityChart from './PopularityChart.astro';
+
+export interface Props {
+  name: NameRow;
+}
+
+const { name } = Astro.props;
+
+// Format the trend label for the visual pill — uppercase, with underscores
+// converted to spaces (`classic_steady` → `CLASSIC`).
+function formatTrend(t: TrendLabel | null): string {
+  if (!t) return '';
+  if (t === 'classic_steady') return 'CLASSIC';
+  return t.toUpperCase();
+}
+
+// Gender display: M/F/U → BOY/GIRL/UNISEX in the meta line.
+const genderLabel =
+  name.gender === 'M' ? 'BOY' : name.gender === 'F' ? 'GIRL' : 'UNISEX';
+
+// Build the meta line: GENDER · ORIGIN (skipping nulls).
+const metaParts = [genderLabel, name.origin?.toUpperCase()].filter(Boolean);
+const metaLine = metaParts.join(' · ');
+
+// Flag emojis — strip duplicates, cap at 3 visible + overflow count.
+// The DB stores them as a single string like "🇩🇪 🇳🇱 🇬🇧" so we split on
+// whitespace. Non-flag tokens are ignored.
+const flagsRaw = (name.country_flags ?? '').trim();
+const flagsArr = flagsRaw
+  ? Array.from(
+      // Use a Segmenter if available for grapheme-aware splitting; fall
+      // back to whitespace-split which works fine for the DB's current
+      // "🇩🇪 🇳🇱 🇬🇧" formatting convention.
+      flagsRaw.split(/\s+/).filter((s) => s.length > 0),
+    )
+  : [];
+const visibleFlags = flagsArr.slice(0, 3);
+const overflowFlags = Math.max(0, flagsArr.length - 3);
+
+// Vibe pills — split, lowercase, dedupe, cap at 4.
+const vibePills = splitTags(name.vibe_tags).slice(0, 4);
+
+// Nicknames — split + trim, cap at 4. Render with thin-space separator.
+const nicknames = splitTags(name.nicknames).slice(0, 4);
+
+// Popularity meta line below the sparkline: rank + peak decade + peak count.
+const popMetaParts: string[] = [];
+if (typeof name.popularity_rank === 'number')
+  popMetaParts.push(`Current rank ~${name.popularity_rank}`);
+if (name.peak_decade) popMetaParts.push(`Peak: ${name.peak_decade}`);
+if (typeof name.births_last_year === 'number' && name.births_last_year > 0)
+  popMetaParts.push(`${name.births_last_year.toLocaleString()} births last year`);
+
+const hasPopularity =
+  Array.isArray(name.popularity_history) && name.popularity_history.length >= 2;
+
+function splitTags(s: string | null | undefined): string[] {
+  if (!s) return [];
+  return s
+    .split(/[,;|]/)
+    .map((t) => t.trim().toLowerCase())
+    .filter((t) => t.length > 0);
+}
+---
+
+<section class="card" aria-label={`${name.name} name card`}>
+  {/* Top row: trend pill + meta line, plus flags on the right */}
+  <header class="card-top">
+    <div class="card-top-left">
+      {name.trend_label && (
+        <span class={`trend-pill ${name.trend_label}`}>{formatTrend(name.trend_label)}</span>
+      )}
+      {metaLine && <span class="meta">{metaLine}</span>}
+    </div>
+    {visibleFlags.length > 0 && (
+      <span class="flags" aria-label="Countries where this name is used">
+        {visibleFlags.join(' ')}
+        {overflowFlags > 0 && <span class="meta">&nbsp;+{overflowFlags}</span>}
+      </span>
+    )}
+  </header>
+
+  {/* Big serif name + pronunciation */}
+  <h1 class="card-name">{name.name}</h1>
+  {name.pronunciation_text && (
+    <p class="card-pron">{name.pronunciation_text}</p>
+  )}
+
+  <hr class="divider" />
+
+  {/* Meaning section */}
+  {(name.meaning_short || name.meaning) && (
+    <>
+      <p class="section-label">Meaning</p>
+      {name.meaning_short && (
+        <p class="meaning-short">&ldquo;{name.meaning_short}&rdquo;</p>
+      )}
+      {name.meaning && <p class="meaning-long">{name.meaning}</p>}
+    </>
+  )}
+
+  {/* Popularity sparkline + axis + meta */}
+  {hasPopularity && (
+    <div class="popularity">
+      <div class="popularity-top">
+        <p class="section-label" style="margin: 0">
+          Popularity over time
+        </p>
+        <span class="popularity-axis">1970 → 2025</span>
+      </div>
+      <PopularityChart history={name.popularity_history} />
+      {popMetaParts.length > 0 && (
+        <p class="popularity-meta">{popMetaParts.join(' · ')}</p>
+      )}
+    </div>
+  )}
+
+  {/* Nicknames + vibe pills */}
+  {(nicknames.length > 0 || vibePills.length > 0) && (
+    <div class="bottom-row">
+      {nicknames.length > 0 && (
+        <div>
+          <p class="section-label">Nicknames</p>
+          <p class="nicknames">{nicknames.join(' · ')}</p>
+        </div>
+      )}
+      {vibePills.length > 0 && (
+        <div>
+          <p class="section-label">Vibe</p>
+          <div class="vibe-pills">
+            {vibePills.map((v) => <span class="pill">{v}</span>)}
+          </div>
+        </div>
+      )}
+    </div>
+  )}
+</section>

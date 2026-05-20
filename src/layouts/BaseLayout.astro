@@ -1,0 +1,115 @@
+---
+/**
+ * BaseLayout — shared chrome for every programmatic SEO page.
+ *
+ * Owns:
+ *   - Full <head>: title, meta description, canonical, OG, Twitter, JSON-LD slot
+ *   - Brand stylesheet + font preconnect (matches namore-landing)
+ *   - Top nav with logo + "Get the app" CTA
+ *   - Footer with NAMORE.APP wordmark
+ *
+ * Per-page surfaces (title, description, OG image, JSON-LD) are passed in
+ * as props so each name page can render its own meta block without
+ * duplicating the chrome.
+ */
+
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  ogImage?: string;
+  ogImageAlt?: string;
+  /** Raw JSON-LD object to embed as a <script type="application/ld+json">. */
+  jsonLd?: Record<string, unknown>;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogImage = 'https://www.namore.app/og-card.png',
+  ogImageAlt = 'Namore — find a name you both love. The private baby name app for couples.',
+  jsonLd,
+} = Astro.props;
+
+const appStoreUrl = 'https://apps.apple.com/app/id6766572995';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <link rel="icon" href="https://www.namore.app/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://www.namore.app/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="https://www.namore.app/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.namore.app/apple-touch-icon.png" />
+    <meta name="theme-color" content="#F5EFE6" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content="index, follow" />
+
+    {/* Open Graph */}
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta property="og:site_name" content="Namore" />
+    <meta property="og:locale" content="en_US" />
+
+    {/* Twitter */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+
+    {/* App Store smart banner — keeps the install funnel one tap away */}
+    <meta name="apple-itunes-app" content="app-id=6766572995" />
+
+    {/* Fonts — same preconnect + Google Fonts URL as the marketing site */}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    {/* JSON-LD structured data (per-page) */}
+    {jsonLd && (
+      <script
+        type="application/ld+json"
+        set:html={JSON.stringify(jsonLd)}
+      />
+    )}
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="nav-inner">
+        <a class="brand" href="https://www.namore.app/">
+          <img src="https://www.namore.app/logo.png" alt="Namore" width="28" height="28" />
+          namore
+        </a>
+        <div class="nav-cta">
+          <a class="btn btn-ghost" href="https://www.namore.app/">Home</a>
+          <a class="btn btn-ink" href={appStoreUrl}>Get the app</a>
+        </div>
+      </div>
+    </nav>
+
+    <slot />
+
+    <footer>
+      <span>NAMORE.APP</span>
+      <span>© 2026 Namore</span>
+    </footer>
+  </body>
+</html>
