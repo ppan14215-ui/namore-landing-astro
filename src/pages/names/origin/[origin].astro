@@ -1,0 +1,62 @@
+---
+/**
+ * /names/origin/[origin] — one hub per cultural origin (Greek, Hebrew, Old
+ * Norse…), listing every name of that origin sorted by popularity. Thematic
+ * clusters Google understands, and a second crawl path into the name pages.
+ */
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import NameList from '@/components/NameList.astro';
+import type { NameRow } from '@/lib/types';
+import { getAllNames } from '@/lib/names';
+import { distinctOrigins, sortByPopularity } from '@/lib/hubs';
+
+export const getStaticPaths = (async () => {
+  const all = await getAllNames();
+  return distinctOrigins(all).map((o) => ({
+    params: { origin: o.slug },
+    props: {
+      origin: o.origin,
+      names: sortByPopularity(all.filter((r) => r.origin === o.origin)),
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+interface PageProps { origin: string; names: NameRow[]; }
+const { origin, names } = Astro.props as PageProps;
+
+const title = `${origin} baby names — ${names.length.toLocaleString()} names with meanings`;
+const description = `Browse ${names.length.toLocaleString()} ${origin} baby names with meanings and popularity over time. Find one you love on Namore.`;
+const canonical = `https://www.namore.app/names/origin/${Astro.params.origin}`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${origin} baby names`,
+  url: canonical,
+  description,
+};
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <main class="wrap page">
+    <p class="page-eyebrow"><a href="/names">Baby names</a></p>
+    <h1 class="hub-title"><em>{origin}</em> baby names.</h1>
+    <p class="hub-lede">{names.length.toLocaleString()} {origin} names, most popular first.</p>
+
+    <section class="hub-section">
+      <NameList names={names} />
+    </section>
+
+    <nav class="browse" aria-label="Browse more">
+      <a href="/names">← Browse all baby names</a>
+    </nav>
+  </main>
+
+  <style>
+    .hub-title { font-family: var(--serif); }
+    .hub-lede { max-width: 48ch; }
+    .hub-section { margin: 1.75rem 0; }
+    .browse { margin-top: 2rem; font-family: var(--mono); font-size: 0.85rem; }
+  </style>
+</BaseLayout>

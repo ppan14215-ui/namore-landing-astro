@@ -24,7 +24,7 @@
  */
 
 import { readdirSync, statSync, writeFileSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, relative, sep } from 'node:path';
 
 const SITE = 'https://www.namore.app';
 const DIST = 'dist';
@@ -37,19 +37,26 @@ if (!existsSync(NAMES_DIR)) {
   process.exit(1);
 }
 
-// Find every slug under dist/names/. Each entry is a directory containing
-// an index.html (matches Astro's directory-format build output).
-const slugs = readdirSync(NAMES_DIR)
-  .filter((entry) => {
-    const full = join(NAMES_DIR, entry);
-    return (
-      statSync(full).isDirectory() &&
-      existsSync(join(full, 'index.html'))
-    );
-  })
-  .sort(); // alphabetical for determinism — same input always produces same output
+// Recursively find every page under dist/names/. A "page" is any directory
+// containing an index.html (Astro directory-format output). This covers the
+// per-name pages AND the hub pages (the /names index, /names/girls,
+// /names/boys, /names/starting-with/<letter>, /names/origin/<slug>). Returns
+// URL paths relative to /names — '' is the /names index page itself.
+function findPagePaths(dir) {
+  const out = [];
+  if (existsSync(join(dir, 'index.html'))) {
+    out.push(relative(NAMES_DIR, dir).split(sep).join('/')); // '' for NAMES_DIR
+  }
+  for (const entry of readdirSync(dir)) {
+    const full = join(dir, entry);
+    if (statSync(full).isDirectory()) out.push(...findPagePaths(full));
+  }
+  return out;
+}
 
-console.log(`[sitemap] found ${slugs.length} name pages under ${NAMES_DIR}`);
+const slugs = findPagePaths(NAMES_DIR).sort(); // deterministic ordering
+
+console.log(`[sitemap] found ${slugs.length} pages under ${NAMES_DIR}`);
 
 if (slugs.length === 0) {
   console.warn('[sitemap] no pages to index — skipping sitemap generation');
@@ -67,7 +74,7 @@ chunks.forEach((chunk, idx) => {
   const urls = chunk
     .map(
       (slug) => `  <url>
-    <loc>${SITE}/names/${slug}</loc>
+    <loc>${SITE}/names${slug ? '/' + slug : ''}</loc>
     <lastmod>${TODAY}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

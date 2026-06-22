@@ -1,0 +1,51 @@
+---
+/**
+ * /names/girls — gender hub. Lists the most popular girl names; for the full
+ * set, links back to the A–Z and origin hubs on /names. (Static route, so it
+ * takes precedence over the [slug] dynamic route at this path level.)
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import NameList from '@/components/NameList.astro';
+import { getAllNames } from '@/lib/names';
+import { sortByPopularity } from '@/lib/hubs';
+
+const all = await getAllNames();
+const girls = sortByPopularity(all.filter((r) => r.gender === 'F'));
+const shown = girls.slice(0, 600);
+
+const title = `Girl names — ${girls.length.toLocaleString()} baby girl names with meanings`;
+const description = `Browse popular baby girl names with meanings, origins and popularity over time. Find one you love on Namore.`;
+const canonical = 'https://www.namore.app/names/girls';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Baby girl names',
+  url: canonical,
+  description,
+};
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <main class="wrap page">
+    <p class="page-eyebrow"><a href="/names">Baby names</a></p>
+    <h1 class="hub-title"><em>Girl</em> names.</h1>
+    <p class="hub-lede">Popular baby girl names, most-used first. Browse the full set by <a href="/names">letter or origin</a>.</p>
+
+    <section class="hub-section">
+      <NameList names={shown} />
+    </section>
+
+    <nav class="browse" aria-label="Browse more">
+      <a href="/names/boys">Boy names →</a>
+      <a href="/names">← All baby names</a>
+    </nav>
+  </main>
+
+  <style>
+    .hub-title { font-family: var(--serif); }
+    .hub-lede { max-width: 48ch; }
+    .hub-section { margin: 1.75rem 0; }
+    .browse { margin-top: 2rem; display: flex; gap: 1.25rem; flex-wrap: wrap; font-family: var(--mono); font-size: 0.85rem; }
+  </style>
+</BaseLayout>

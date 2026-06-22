@@ -1,0 +1,77 @@
+---
+/**
+ * /names/starting-with/[letter] — the A–Z coverage backbone. One page per
+ * initial that has names, each listing every name with that initial. This
+ * guarantees every name is reachable in two clicks from the homepage
+ * (homepage → /names → letter → name), which is what unsticks the bulk of
+ * the "Discovered – not indexed" pages.
+ */
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import NameList from '@/components/NameList.astro';
+import type { NameRow } from '@/lib/types';
+import { getAllNames } from '@/lib/names';
+import { LETTERS, nameInitial } from '@/lib/hubs';
+
+export const getStaticPaths = (async () => {
+  const all = await getAllNames();
+  return LETTERS.map((L) => ({
+    L,
+    names: all
+      .filter((r) => nameInitial(r.name) === L)
+      .sort((a, b) => a.name.localeCompare(b.name)),
+  }))
+    .filter((g) => g.names.length > 0)
+    .map((g) => ({
+      params: { letter: g.L.toLowerCase() },
+      props: { letter: g.L, names: g.names },
+    }));
+}) satisfies GetStaticPaths;
+
+interface PageProps { letter: string; names: NameRow[]; }
+const { letter, names } = Astro.props as PageProps;
+
+const title = `Baby names starting with ${letter} — ${names.length.toLocaleString()} names`;
+const description = `Browse ${names.length.toLocaleString()} baby names starting with ${letter}, with meanings and origins. Find one you love on Namore.`;
+const canonical = `https://www.namore.app/names/starting-with/${letter.toLowerCase()}`;
+---
+
+<BaseLayout title={title} description={description} canonical={canonical}>
+  <main class="wrap page">
+    <p class="page-eyebrow"><a href="/names">Baby names</a></p>
+    <h1 class="hub-title">Names starting with <em>{letter}</em>.</h1>
+
+    <nav class="hub-row" aria-label="Jump to another letter">
+      {LETTERS.map((l) => (
+        <a class="hub-chip" href={`/names/starting-with/${l.toLowerCase()}`} aria-current={l === letter ? 'page' : undefined}>{l}</a>
+      ))}
+    </nav>
+
+    <section class="hub-section">
+      <NameList names={names} />
+    </section>
+
+    <nav class="browse" aria-label="Browse more">
+      <a href="/names">← Browse all baby names</a>
+    </nav>
+  </main>
+
+  <style>
+    .hub-title { font-family: var(--serif); }
+    .hub-section { margin: 1.75rem 0; }
+    .hub-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+    .hub-chip {
+      display: inline-block;
+      padding: 0.3rem 0.6rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .hub-chip:hover { border-color: var(--terra); color: var(--terra-deep); }
+    .hub-chip[aria-current='page'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .browse { margin-top: 2rem; font-family: var(--mono); font-size: 0.85rem; }
+  </style>
+</BaseLayout>

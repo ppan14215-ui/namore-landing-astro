@@ -1,0 +1,28 @@
+---
+/**
+ * Renders a list of names as internal links. Shared by every hub page so the
+ * link markup + styling stays identical to the related-names block on
+ * individual name pages (reuses the .related-list classes from global.css).
+ */
+import type { NameRow } from '@/lib/types';
+import { nameToSlug } from '@/lib/types';
+
+interface Props {
+  names: NameRow[];
+}
+const { names } = Astro.props as Props;
+---
+
+<ul class="related-list">
+  {names.map((r) => (
+    <li>
+      <a href={`/names/${nameToSlug(r.name)}`}>
+        <span class="related-name">{r.name}</span>
+        <span class="related-meta">
+          {r.origin ?? ''}
+          {r.meaning_short ? ` · ${r.meaning_short}` : ''}
+        </span>
+      </a>
+    </li>
+  ))}
+</ul>

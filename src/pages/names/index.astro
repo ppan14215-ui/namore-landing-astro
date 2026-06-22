@@ -1,0 +1,104 @@
+---
+/**
+ * /names — the browse hub. The entry point that links down into the 10.8K
+ * name pages (by gender, first letter, origin, and a popular-now list) and
+ * is itself linked from the namore.app homepage nav + footer. This is the
+ * crawl path that fixes "Discovered – currently not indexed": homepage →
+ * /names → hub → name page.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import NameList from '@/components/NameList.astro';
+import { getAllNames } from '@/lib/names';
+import { LETTERS, nameInitial, distinctOrigins, sortByPopularity } from '@/lib/hubs';
+
+const all = await getAllNames();
+
+const presentLetters = new Set(all.map((r) => nameInitial(r.name)));
+const letters = LETTERS.filter((l) => presentLetters.has(l));
+const origins = distinctOrigins(all).slice(0, 60);
+const popular = sortByPopularity(all).slice(0, 60);
+const total = all.length;
+
+const title = `Baby names — browse ${total.toLocaleString()} names by origin, letter & popularity`;
+const description = `Browse ${total.toLocaleString()} baby names with meanings, origins and popularity over time. Filter by girl or boy names, first letter, or origin — then decide together on Namore.`;
+const canonical = 'https://www.namore.app/names';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Namore baby names',
+  url: canonical,
+  description,
+};
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <main class="wrap page">
+    <p class="page-eyebrow">Baby names</p>
+    <h1 class="hub-title">Browse <em>baby names</em>.</h1>
+    <p class="hub-lede">
+      {total.toLocaleString()} names with meanings, origins and popularity over
+      time. Find one you like — then see if your partner secretly loves it too.
+    </p>
+
+    <nav class="hub-nav" aria-label="Browse by gender">
+      <a class="hub-chip" href="/names/girls">Girl names</a>
+      <a class="hub-chip" href="/names/boys">Boy names</a>
+    </nav>
+
+    <section class="hub-section" aria-label="Browse by first letter">
+      <h2>By first letter</h2>
+      <nav class="hub-row" aria-label="A to Z">
+        {letters.map((l) => (
+          <a class="hub-chip" href={`/names/starting-with/${l.toLowerCase()}`}>{l}</a>
+        ))}
+      </nav>
+    </section>
+
+    {origins.length > 0 && (
+      <section class="hub-section" aria-label="Browse by origin">
+        <h2>By origin</h2>
+        <nav class="hub-row" aria-label="Origins">
+          {origins.map((o) => (
+            <a class="hub-chip" href={`/names/origin/${o.slug}`}>{o.origin}</a>
+          ))}
+        </nav>
+      </section>
+    )}
+
+    <section class="hub-section" aria-label="Popular names">
+      <h2>Popular right now</h2>
+      <NameList names={popular} />
+    </section>
+
+    <aside class="cta" aria-label="Install Namore">
+      <h2>Decide <em>together</em>.</h2>
+      <p>
+        Namore is the private app for couples to swipe through names
+        independently and discover the one you both choose.
+      </p>
+      <div class="cta-buttons">
+        <a class="btn btn-ink btn-lg" href="https://apps.apple.com/app/id6766572995?utm_source=names_hub&utm_medium=organic&utm_campaign=programmatic_seo">Get the app</a>
+        <a class="btn btn-ghost btn-lg" href="https://www.namore.app/">Learn more</a>
+      </div>
+    </aside>
+  </main>
+
+  <style>
+    .hub-title { font-family: var(--serif); }
+    .hub-lede { max-width: 48ch; }
+    .hub-section { margin: 2.25rem 0; }
+    .hub-nav, .hub-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+    .hub-chip {
+      display: inline-block;
+      padding: 0.35rem 0.7rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .hub-chip:hover { border-color: var(--terra); color: var(--terra-deep); }
+  </style>
+</BaseLayout>
