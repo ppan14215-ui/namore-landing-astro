@@ -9,14 +9,19 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import NameList from '@/components/NameList.astro';
 import { getAllNames } from '@/lib/names';
-import { LETTERS, nameInitial, distinctOrigins, sortByPopularity } from '@/lib/hubs';
+import { LETTERS, nameInitial, distinctOrigins } from '@/lib/hubs';
+import topNames from '@/data/top-names.json';
 
 const all = await getAllNames();
 
 const presentLetters = new Set(all.map((r) => nameInitial(r.name)));
 const letters = LETTERS.filter((l) => presentLetters.has(l));
 const origins = distinctOrigins(all).slice(0, 60);
-const popular = sortByPopularity(all).slice(0, 60);
+const popRank = new Map((topNames as string[]).map((n, i) => [n, i] as [string, number]));
+const popular = all
+  .filter((r) => popRank.has(r.name))
+  .sort((a, b) => (popRank.get(a.name) ?? 1e9) - (popRank.get(b.name) ?? 1e9))
+  .slice(0, 60);
 const total = all.length;
 
 const title = `Baby names — browse ${total.toLocaleString()} names by origin, letter & popularity`;
@@ -42,6 +47,7 @@ const jsonLd = {
     </p>
 
     <nav class="hub-nav" aria-label="Browse by gender">
+      <a class="hub-chip" href="/names/popular">Most popular</a>
       <a class="hub-chip" href="/names/girls">Girl names</a>
       <a class="hub-chip" href="/names/boys">Boy names</a>
     </nav>
@@ -69,6 +75,7 @@ const jsonLd = {
     <section class="hub-section" aria-label="Popular names">
       <h2>Popular right now</h2>
       <NameList names={popular} />
+      <p class="hub-more"><a href="/names/popular">See all popular names →</a></p>
     </section>
 
     <aside class="cta" aria-label="Install Namore">
@@ -100,5 +107,6 @@ const jsonLd = {
       text-decoration: none;
     }
     .hub-chip:hover { border-color: var(--terra); color: var(--terra-deep); }
+    .hub-more a { color: var(--terra-deep); font-family: var(--mono); font-size: 0.85rem; }
   </style>
 </BaseLayout>

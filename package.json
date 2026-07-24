@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build && npm run sitemap",
+    "build": "node scripts/generate-top-names.mjs && astro build && npm run sitemap",
     "build:test": "BUILD_LIMIT=100 astro build && npm run sitemap",
     "build:mock": "USE_MOCK_DATA=1 astro build && npm run sitemap",
     "sitemap": "node scripts/generate-sitemap.mjs",

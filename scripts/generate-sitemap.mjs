@@ -23,7 +23,7 @@
  * run, Astro has already materialised every URL on disk.
  */
 
-import { readdirSync, statSync, writeFileSync, existsSync } from 'node:fs';
+import { readdirSync, statSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 
 const SITE = 'https://www.namore.app';
@@ -31,6 +31,42 @@ const DIST = 'dist';
 const NAMES_DIR = join(DIST, 'names');
 const CHUNK_SIZE = 2000;
 const TODAY = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+
+// --- Priority weighting -----------------------------------------------------
+// Google discovered all ~13K URLs but crawls almost none ("Discovered –
+// currently not indexed"). Priority is a hint, not a command, but it helps a
+// rationed crawl budget focus on the pages worth indexing. We load a curated
+// list of the most globally popular names and give them (and the hub pages)
+// high priority; the long tail gets low priority. We also emit a focused
+// sitemap-top.xml so the signal isn't drowned in the full firehose.
+function slugify(name) {
+  return name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/['\u2019]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+let topSlugs = new Set();
+try {
+  const topNames = JSON.parse(readFileSync('src/data/top-names.json', 'utf8'));
+  topSlugs = new Set(topNames.map(slugify));
+  console.log(`[sitemap] loaded ${topSlugs.size} top-name slugs for prioritisation`);
+} catch (e) {
+  console.warn(`[sitemap] no top-names.json (${e.message}) — using flat priority`);
+}
+function isHub(slug) {
+  return slug === '' || slug === 'girls' || slug === 'boys' || slug === 'popular'
+    || slug.startsWith('starting-with/') || slug.startsWith('origin/');
+}
+function priorityFor(slug) {
+  if (isHub(slug) || topSlugs.has(slug)) return '0.9';
+  return '0.4';
+}
+function changefreqFor(slug) {
+  return (isHub(slug) || topSlugs.has(slug)) ? 'weekly' : 'monthly';
+}
 
 if (!existsSync(NAMES_DIR)) {
   console.error(`[sitemap] ${NAMES_DIR} does not exist — did the build run?`);
@@ -76,8 +112,8 @@ chunks.forEach((chunk, idx) => {
       (slug) => `  <url>
     <loc>${SITE}/names${slug ? '/' + slug : ''}</loc>
     <lastmod>${TODAY}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>${changefreqFor(slug)}</changefreq>
+    <priority>${priorityFor(slug)}</priority>
   </url>`,
     )
     .join('\n');
@@ -93,6 +129,36 @@ ${urls}
   console.log(`[sitemap] wrote ${file} (${chunk.length} URLs)`);
 });
 
+// Focused top-names sitemap — only the curated popular names that actually
+// built to disk. Submit this separately in Search Console; a short, curated
+// sitemap gets crawled far more aggressively than the full 13K-URL firehose.
+const topOnDisk = slugs.filter((slug) => topSlugs.has(slug));
+let extraIndexEntry = '';
+if (topOnDisk.length > 0) {
+  const topUrls = topOnDisk
+    .map(
+      (slug) => `  <url>
+    <loc>${SITE}/names/${slug}</loc>
+    <lastmod>${TODAY}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>`,
+    )
+    .join('\n');
+  const topXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${topUrls}
+</urlset>
+`;
+  writeFileSync(join(DIST, 'sitemap-top.xml'), topXml, 'utf8');
+  console.log(`[sitemap] wrote ${join(DIST, 'sitemap-top.xml')} (${topOnDisk.length} top URLs)`);
+  extraIndexEntry = `  <sitemap>
+    <loc>${SITE}/sitemap-top.xml</loc>
+    <lastmod>${TODAY}</lastmod>
+  </sitemap>
+`;
+}
+
 // Write the sitemap index pointing at every chunk.
 const indexEntries = chunks
   .map(
@@ -105,7 +171,7 @@ const indexEntries = chunks
 
 const indexXml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${indexEntries}
+${extraIndexEntry}${indexEntries}
 </sitemapindex>
 `;
 

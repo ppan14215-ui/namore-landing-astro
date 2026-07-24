@@ -1,0 +1,63 @@
+---
+/**
+ * /names/popular — the "most popular names" hub. Orders by the curated
+ * src/data/top-names.json list (national-top-list names first, then
+ * positively-trending names), regenerated from live data at build time by
+ * scripts/generate-top-names.mjs. Concentrates internal links and crawl
+ * priority on the names people actually search for — part of the crawl path
+ * homepage → /names → /names/popular → name page.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import NameList from '@/components/NameList.astro';
+import { getAllNames } from '@/lib/names';
+import topNames from '@/data/top-names.json';
+
+const all = await getAllNames();
+const rank = new Map((topNames as string[]).map((n, i) => [n, i] as [string, number]));
+const popular = all
+  .filter((r) => rank.has(r.name))
+  .sort((a, b) => (rank.get(a.name) ?? 1e9) - (rank.get(b.name) ?? 1e9));
+const shown = popular.slice(0, 300);
+
+const title = `Most popular baby names — top ${shown.length} names with meanings`;
+const description = `The most popular baby names right now, ranked — with meanings and origins. Discover the names topping birth charts worldwide, then decide together on Namore.`;
+const canonical = 'https://www.namore.app/names/popular';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Most popular baby names',
+  url: canonical,
+  description,
+};
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <main class="wrap page">
+    <p class="page-eyebrow"><a href="/names">Baby names</a></p>
+    <h1 class="hub-title">Most <em>popular</em> names.</h1>
+    <p class="hub-lede">
+      The names topping birth charts around the world right now, most popular
+      first. Browse the full set by <a href="/names">letter or origin</a>, or
+      jump to <a href="/names/girls">girl</a> and <a href="/names/boys">boy</a> names.
+    </p>
+
+    <section class="hub-section">
+      <NameList names={shown} />
+    </section>
+
+    <nav class="browse" aria-label="Browse more">
+      <a href="/names/girls">Girl names →</a>
+      <a href="/names/boys">Boy names →</a>
+      <a href="/names">← All baby names</a>
+    </nav>
+  </main>
+
+  <style>
+    .hub-title { font-family: var(--serif); }
+    .hub-lede { max-width: 52ch; }
+    .hub-section { margin: 1.75rem 0; }
+    .browse { margin-top: 2rem; display: flex; gap: 1.25rem; flex-wrap: wrap; font-family: var(--mono); font-size: 0.85rem; }
+    .browse a { color: var(--terra-deep); }
+  </style>
+</BaseLayout>

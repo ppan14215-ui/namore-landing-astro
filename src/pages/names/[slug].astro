@@ -85,22 +85,37 @@ if (row.origin) {
 descParts.push('Pronunciation, nicknames, popularity over time.');
 const description = descParts.join(' ').slice(0, 160);
 
-// JSON-LD: schema.org/Person Name pattern doesn't fit; use DefinedTerm
-// since we're describing a name as a term-in-a-glossary. Google supports
-// DefinedTerm for term/glossary content and it slots cleanly into a
-// programmatic-name-pages dataset.
+// JSON-LD: a schema.org @graph combining a BreadcrumbList (rich-result
+// eligible — Google renders the Home > Baby Names > <Name> trail in the SERP)
+// with a DefinedTerm describing the name as a glossary entry. BaseLayout
+// JSON.stringify()s whatever object it's handed, so a @graph slots in cleanly.
+// (Fixes an earlier bug where inLanguage was set to the ORIGIN, e.g.
+// "Germanic", which is not a language code — origin now rides on termCode.)
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'DefinedTerm',
-  name: row.name,
-  inDefinedTermSet: {
-    '@type': 'DefinedTermSet',
-    name: 'Namore baby names',
-    url: 'https://www.namore.app/names',
-  },
-  description: row.meaning || row.meaning_short || `${row.name} — a ${row.origin ?? ''} name.`.trim(),
-  ...(row.origin ? { inLanguage: row.origin } : {}),
-  url: canonical,
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.namore.app/' },
+        { '@type': 'ListItem', position: 2, name: 'Baby Names', item: 'https://www.namore.app/names' },
+        { '@type': 'ListItem', position: 3, name: row.name, item: canonical },
+      ],
+    },
+    {
+      '@type': 'DefinedTerm',
+      name: row.name,
+      inDefinedTermSet: {
+        '@type': 'DefinedTermSet',
+        name: 'Namore baby names',
+        url: 'https://www.namore.app/names',
+      },
+      description: row.meaning || row.meaning_short || `${row.name} — a ${row.origin ?? ''} name.`.trim(),
+      inLanguage: 'en',
+      ...(row.origin ? { termCode: row.origin } : {}),
+      url: canonical,
+    },
+  ],
 };
 
 // Format helpers for the narrative sections.
@@ -206,6 +221,7 @@ const relatedIntro = describeRelation(row, related);
       {hasLetterHub && (
         <a href={`/names/starting-with/${initial.toLowerCase()}`}>Names starting with {initial} →</a>
       )}
+      <a href="/names/popular">Most popular names →</a>
       <a href="/names">Browse all baby names →</a>
     </nav>
 
