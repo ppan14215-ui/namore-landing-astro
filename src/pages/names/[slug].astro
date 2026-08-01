@@ -1,7 +1,7 @@
 ---
 /**
  * /names/[slug] — one static HTML page per name in the Supabase `names`
- * table. ~11K pages total (English-only v1).
+ * table. 15K+ pages total (English-only v1).
  *
  * Build flow:
  *   1. `getStaticPaths()` reads every name from Supabase via the service
@@ -14,9 +14,9 @@
  *
  * Why all the data crunching lives in getStaticPaths instead of the page
  * body: Astro calls getStaticPaths ONCE at build time and reuses the
- * result for all 11K pages. Doing related-name computation per page in
- * the template would mean O(11K × 11K) work; doing it once with shared
- * state is O(11K).
+ * result for all pages. Doing related-name computation per page in the
+ * template would mean O(N × N) work; doing it once with shared state is
+ * O(N).
  */
 
 import type { GetStaticPaths } from 'astro';
@@ -51,7 +51,7 @@ const canonical = `https://www.namore.app/names/${slug}`;
 
 // "Up" links to the hub pages — gives each name page a path back to the
 // browse hubs so the internal-link graph is bidirectional (hubs link down,
-// names link up). This is what turns 10.8K orphan pages into a crawlable set.
+// names link up). This is what turns thousands of orphan pages into a crawlable set.
 const initial = nameInitial(row.name);
 const hasLetterHub = /[A-Z]/.test(initial);
 

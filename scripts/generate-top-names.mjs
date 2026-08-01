@@ -45,7 +45,9 @@ async function main() {
   const page = 1000;
   let from = 0;
   while (true) {
-    const res = await fetch(`${url}/rest/v1/names?select=name,country_count,country_ranks,trend_label`, {
+    // The service-role key bypasses RLS. Keep staged/private catalogue rows
+    // out explicitly so this generated public list cannot publish them early.
+    const res = await fetch(`${url}/rest/v1/names?select=name,country_count,country_ranks,trend_label&catalog_status=eq.public`, {
       headers: { ...headers, Range: `${from}-${from + page - 1}`, 'Range-Unit': 'items' },
     });
     if (!res.ok) throw new Error(`Supabase ${res.status}`);

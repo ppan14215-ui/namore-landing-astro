@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "description": "Programmatic SEO build for namore.app — 11K per-name landing pages generated from the Supabase names table.",
+  "description": "Programmatic SEO build for namore.app — 15K+ per-name landing pages generated from the Supabase names table.",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",

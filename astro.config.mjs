@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
-// Programmatic SEO build for namore.app — 11K per-name pages under /names/[slug].
+// Programmatic SEO build for namore.app — 15K+ per-name pages under /names/[slug].
 //
 // Architecture lock 2026-05-20: data comes from the Supabase `names` table
 // at build time via the service role key (server-side only). The CSV at

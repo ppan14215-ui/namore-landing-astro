@@ -15,8 +15,8 @@
  *
  * Why 2K-URL chunks: Google accepts up to 50K URLs per sitemap file but
  * smaller chunks make Search Console monitoring + re-submission painless.
- * Once we have 11K names this produces 6 chunks; for the 100-name test
- * batch it produces 1 chunk + the index.
+ * At 15K+ names this produces 8 chunks; a 100-name test batch produces
+ * 1 chunk + the index.
  *
  * The script walks `dist/names/<slug>/index.html` and emits a `<url>`
  * entry per directory found. No database access needed — by the time we
@@ -33,7 +33,7 @@ const CHUNK_SIZE = 2000;
 const TODAY = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
 
 // --- Priority weighting -----------------------------------------------------
-// Google discovered all ~13K URLs but crawls almost none ("Discovered –
+// Google discovered thousands of URLs but crawls almost none ("Discovered –
 // currently not indexed"). Priority is a hint, not a command, but it helps a
 // rationed crawl budget focus on the pages worth indexing. We load a curated
 // list of the most globally popular names and give them (and the hub pages)
@@ -131,7 +131,7 @@ ${urls}
 
 // Focused top-names sitemap — only the curated popular names that actually
 // built to disk. Submit this separately in Search Console; a short, curated
-// sitemap gets crawled far more aggressively than the full 13K-URL firehose.
+// sitemap gets crawled far more aggressively than the full-catalog firehose.
 const topOnDisk = slugs.filter((slug) => topSlugs.has(slug));
 let extraIndexEntry = '';
 if (topOnDisk.length > 0) {

@@ -16,11 +16,32 @@
  * be exposed client-side; the Astro build produces static HTML so the key
  * never touches a browser. Vercel env vars keep it server-only.
  *
- * **Why one big fetch instead of per-page queries:** with 11K names and
- * static generation, doing 11K HTTP requests to Supabase is wasteful and
- * fragile. One paginated fetch (`select * from names`) is ~3-5MB JSON,
- * easy for Supabase to serve, and the data lives in memory for the entire
- * build. Per-page hooks like `getStaticPaths` reference this shared list.
+ * **Why one big fetch instead of per-page queries:** with 15K+ names and
+ * static generation, doing 15K+ HTTP requests to Supabase is wasteful and
+ * fragile. One paginated fetch is easy for Supabase to serve and the data
+ * lives in memory for the entire build. Per-page hooks like
+ * `getStaticPaths` reference this shared list.
+ *
+ * **Why an explicit column list instead of `select=*` (2026-08-01):** this
+ * build ran `select=*`, which is **35.7MB** over 15,182 rows measured against
+ * production — not the "~3-5MB" an earlier version of this comment claimed.
+ * 59% of those bytes are columns nothing here reads: the DE/NL/ES
+ * translations (`meaning_*`, `origin_*`, `longevity_read_*`,
+ * `trend_context_*`) plus `countries`, `region`, `source_status`,
+ * `country_count`, `syllable_count`, `name_length`, `phonetic_key` and
+ * `country_ranks`. A real Vercel preview against all 15,182 public rows
+ * measured the list below at **11.8MB** on 2026-08-01.
+ *
+ * That compounded with two other multipliers. The seven route modules each
+ * call `getAllNames()`, and before the memoization below that meant **seven
+ * complete catalogue downloads per build** (~250MB). On top of that the
+ * Supabase webhook `vercel-rebuild-on-names-change` fired a deploy hook
+ * *per changed row*, so the 4,000-name expansion on 2026-07-29/30 (4,000
+ * inserts, then 4,000 updates at promote) queued thousands of builds. The
+ * result was 25.6GB of Supabase egress against a 5.5GB plan limit. The
+ * trigger is now disabled server-side; keep this projection honest so the
+ * remaining multiplier stays small. Adding a column here is a real
+ * per-build cost.
  *
  * **Pagination:** Supabase's REST API caps at 1000 rows per request by
  * default. We page through with `range(start, end)` until we've read every
@@ -28,12 +49,25 @@
  * 100K. Page size 1000 keeps payloads under a few MB each.
  *
  * **BUILD_LIMIT:** Phase 2 test batch reads the first N names and stops.
- * Useful for previewing 100 pages before committing to the full 11K build.
+ * Useful for previewing 100 pages before committing to the full catalog build.
  */
 
 import type { NameRow } from './types';
 import { nameToSlug } from './types';
 import mockNames from '../fixtures/names-mock.json' assert { type: 'json' };
+
+// Astro/Vercel execute this module at build time in Node. Keep the small
+// environment surface typed locally so the project does not need the entire
+// Node ambient type package just to read five build variables.
+declare const process: {
+  env: {
+    SUPABASE_URL?: string;
+    SUPABASE_SERVICE_ROLE_KEY?: string;
+    USE_MOCK_DATA?: string;
+    BUILD_LIMIT?: string;
+    NODE_ENV?: string;
+  };
+};
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -43,6 +77,37 @@ const BUILD_LIMIT = process.env.BUILD_LIMIT
   : undefined;
 
 const PAGE_SIZE = 1000; // Supabase default cap per range query
+
+/**
+ * Exactly the columns the templates read. See the "Why an explicit column
+ * list" note above before adding to this — every column here is multiplied
+ * by 15K rows on every production build.
+ *
+ * `id` is not rendered but `findRelatedNames` uses it to exclude the target
+ * row from its own related list.
+ */
+const NAME_COLUMNS = [
+  'id',
+  'name',
+  'gender',
+  'country_flags',
+  'region_tags',
+  'meaning',
+  'meaning_short',
+  'origin',
+  'style_tags',
+  'vibe_tags',
+  'nicknames',
+  'longevity_read',
+  'trend_label',
+  'trend_context',
+  'pronunciation_text',
+  'popularity_history',
+  'popularity_rank',
+  'peak_decade',
+  'peak_count',
+  'births_last_year',
+].join(',');
 
 function shouldUseMock(): boolean {
   if (USE_MOCK_DATA) return true;
@@ -68,7 +133,18 @@ async function fetchSupabasePage(
   from: number,
   to: number,
 ): Promise<NameRow[]> {
-  const url = `${SUPABASE_URL}/rest/v1/names?select=*&order=name.asc`;
+  // `catalog_status=eq.public` matters because this build authenticates with
+  // the service role key, which bypasses RLS. Ordinary app clients are held
+  // to `catalog_status = 'public'` by policy (migration 20260729212321), but
+  // this build is not — so without an explicit filter a private QA batch
+  // sitting in `public.names` awaiting approval would be published as live
+  // SEO pages. That was true of the 4,000-row batch staged 2026-07-29 and
+  // only promoted on 2026-07-30.
+  const url =
+    `${SUPABASE_URL}/rest/v1/names` +
+    `?select=${NAME_COLUMNS}` +
+    `&catalog_status=eq.public` +
+    `&order=name.asc`;
   const res = await fetch(url, {
     headers: {
       apikey: SUPABASE_SERVICE_ROLE_KEY!,
@@ -82,16 +158,24 @@ async function fetchSupabasePage(
       Prefer: 'count=exact',
     },
   });
+  const body = await res.text();
   if (!res.ok) {
-    const text = await res.text().catch(() => '<unreadable>');
     throw new Error(
-      `Supabase fetch failed (${res.status} ${res.statusText}): ${text.slice(0, 200)}`,
+      `Supabase fetch failed (${res.status} ${res.statusText}): ${body.slice(0, 200)}`,
     );
   }
-  return (await res.json()) as NameRow[];
+  // Read the body as text first so the build log can report exactly how much
+  // egress it spent. This project shares a Supabase plan whose egress limit
+  // a runaway rebuild loop has already blown through once — a number in the
+  // log is what makes the next regression obvious instead of invisible.
+  bytesFetched += new TextEncoder().encode(body).length;
+  return JSON.parse(body) as NameRow[];
 }
 
+let bytesFetched = 0;
+
 async function fetchAllFromSupabase(): Promise<NameRow[]> {
+  bytesFetched = 0;
   const all: NameRow[] = [];
   let from = 0;
   // Hard ceiling at 100 pages (100K names) — safety valve against runaway
@@ -111,10 +195,14 @@ async function fetchAllFromSupabase(): Promise<NameRow[]> {
 }
 
 /**
- * Returns every name the SEO build will render. Caller decides what to do
- * with collisions and missing-data rows.
+ * Load and normalize every name once per build process.
+ *
+ * Astro evaluates several route modules while generating the site. Without
+ * this shared promise, each module starts its own complete Supabase download.
+ * Caching the promise also deduplicates concurrent callers while the first
+ * fetch is still in flight.
  */
-export async function getAllNames(): Promise<NameRow[]> {
+async function loadAllNames(): Promise<NameRow[]> {
   let rows: NameRow[];
 
   if (shouldUseMock()) {
@@ -122,7 +210,10 @@ export async function getAllNames(): Promise<NameRow[]> {
     console.log(`[names] mock fixture loaded — ${rows.length} rows`);
   } else {
     rows = await fetchAllFromSupabase();
-    console.log(`[names] Supabase fetch complete — ${rows.length} rows`);
+    console.log(
+      `[names] Supabase fetch complete — ${rows.length} rows, ` +
+        `${(bytesFetched / 1e6).toFixed(1)} MB egress`,
+    );
   }
 
   // Filter out rows that can't render a meaningful page. The bar is low —
@@ -166,11 +257,22 @@ export async function getAllNames(): Promise<NameRow[]> {
   return Array.from(seen.values());
 }
 
+let allNamesPromise: Promise<NameRow[]> | undefined;
+
+/**
+ * Returns every name the SEO build will render. Every caller in this process
+ * shares the same catalogue download and normalized result.
+ */
+export function getAllNames(): Promise<NameRow[]> {
+  allNamesPromise ??= loadAllNames();
+  return allNamesPromise;
+}
+
 /**
  * "Related names" for the internal-linking layer — 5 names per page that
  * share origin OR style/vibe tags with the given row. Internal links are
  * the thing that makes a programmatic-SEO site compound: Google sees a
- * dense graph of related-content links instead of 11K orphan pages.
+ * dense graph of related-content links instead of thousands of orphan pages.
  *
  * Algorithm: score every other name by overlap on (origin, gender,
  * trend_label, vibe_tags, style_tags). Sort descending. Take top 5.
