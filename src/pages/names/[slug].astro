@@ -66,6 +66,7 @@ const hasLetterHub = /[A-Z]/.test(initial);
 // post-install user is then a separate anonymous person; correlation
 // uses timing + region heuristics, not deterministic linking.
 const appStoreUrl = `https://apps.apple.com/app/id6766572995?utm_source=names_page&utm_medium=organic&utm_campaign=programmatic_seo&utm_content=${slug}`;
+const googlePlayUrl = `https://play.google.com/store/apps/details?id=com.julian.namore&utm_source=names_page&utm_medium=organic&utm_campaign=programmatic_seo&utm_content=${slug}`;
 
 // SEO title — head term + qualifier. Pattern: "Theodora — meaning, origin
 // and popularity". Stays under Google's ~55-60 char SERP truncation for
@@ -165,7 +166,10 @@ const relatedIntro = describeRelation(row, related);
         secretly love <strong>{row.name}</strong> — both of you swipe privately
         and only mutual matches are revealed.
       </p>
-      <a class="geo-store" href={appStoreUrl}>Download Namore on the App Store →</a>
+      <div class="geo-stores">
+        <a class="geo-store" href={appStoreUrl}>Download for iPhone →</a>
+        <a class="geo-store" href={googlePlayUrl}>Download for Android →</a>
+      </div>
     </aside>
 
     {row.longevity_read && (
@@ -233,7 +237,8 @@ const relatedIntro = describeRelation(row, related);
         independently and discover the one you both choose.
       </p>
       <div class="cta-buttons">
-        <a class="btn btn-ink btn-lg" href={appStoreUrl}>Get the app</a>
+        <a class="btn btn-ink btn-lg" href={appStoreUrl}>Get for iPhone</a>
+        <a class="btn btn-ink btn-lg" href={googlePlayUrl}>Get for Android</a>
         <a class="btn btn-ghost btn-lg" href="https://www.namore.app/">Learn more</a>
       </div>
     </aside>
@@ -264,9 +269,14 @@ const relatedIntro = describeRelation(row, related);
     color: var(--terra-deep);
     font-weight: 600;
   }
+  .geo-stores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    margin-top: 0.75rem;
+  }
   .geo-store {
     display: inline-block;
-    margin-top: 0.75rem;
     font-family: var(--mono);
     font-size: 0.8rem;
     letter-spacing: 0.01em;

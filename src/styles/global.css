@@ -423,7 +423,13 @@ a.subtle:hover {
 }
 .cta-buttons {
   display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 12px;
+}
+
+@media (max-width: 560px) {
+  .nav-cta .store-nav:first-of-type { display: none; }
 }
 .cta .btn-lg {
   height: 52px;
@@ -445,4 +451,239 @@ footer {
   letter-spacing: 0.5px;
   border-top: 1px solid var(--line);
   margin-top: 80px;
+}
+
+/* ── Blog / comparison articles ────────────────────────────────
+   Used by /blog/* and /de/blog/*. Same tokens as the name pages:
+   serif headings, terra accents, paper cards, 12px radii. */
+
+.post {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 28px 88px;
+}
+
+.post-head {
+  margin-bottom: 36px;
+}
+.post-kicker {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 14px;
+}
+.post h1 {
+  font-family: var(--serif);
+  font-size: clamp(32px, 5vw, 46px);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.8px;
+  margin: 0 0 18px;
+}
+.post-standfirst {
+  font-size: 18.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+.post h2 {
+  font-family: var(--serif);
+  font-size: clamp(23px, 3vw, 28px);
+  font-weight: 500;
+  letter-spacing: -0.4px;
+  line-height: 1.25;
+  margin: 44px 0 14px;
+}
+.post p {
+  font-size: 16.5px;
+  line-height: 1.72;
+  color: var(--ink);
+  margin: 0 0 18px;
+}
+.post ul {
+  margin: 0 0 22px;
+  padding-left: 20px;
+}
+.post li {
+  font-size: 16.5px;
+  line-height: 1.7;
+  margin-bottom: 9px;
+}
+.post a:not(.btn) {
+  color: var(--terra-deep);
+  border-bottom: 1px solid rgba(168, 90, 64, 0.35);
+}
+.post a:not(.btn):hover {
+  border-bottom-color: currentColor;
+}
+
+/* Lead answer block — the paragraph most likely to be quoted. */
+.post-answer {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px 26px 8px;
+  margin: 0 0 8px;
+}
+.post-answer p:first-child {
+  font-size: 17px;
+}
+.post-disclosure {
+  font-size: 14.5px !important;
+  color: var(--ink-3);
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+
+/* Honest-weakness callout. */
+.post-caveat {
+  background: rgba(184, 144, 90, 0.09);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 10px 10px 0;
+  padding: 16px 18px;
+  font-size: 15.5px !important;
+  color: var(--ink-2);
+}
+
+/* Comparison table */
+.table-wrap {
+  overflow-x: auto;
+  margin: 0 0 26px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--paper);
+}
+.cmp {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+.cmp th {
+  text-align: left;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.cmp td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(227, 218, 200, 0.6);
+  vertical-align: top;
+  line-height: 1.5;
+}
+.cmp tr:last-child td {
+  border-bottom: none;
+}
+.cmp tr.is-ours {
+  background: rgba(201, 120, 92, 0.07);
+}
+.cmp tr.is-ours td:first-child {
+  box-shadow: inset 3px 0 0 var(--terra);
+}
+
+/* App screenshots */
+.shot {
+  margin: 28px 0 32px;
+  text-align: center;
+}
+.shot img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  box-shadow: 0 18px 40px rgba(42, 38, 34, 0.13);
+}
+.shot figcaption {
+  font-size: 14px;
+  color: var(--ink-3);
+  margin-top: 14px;
+  line-height: 1.55;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 24px 0 8px;
+}
+
+/* FAQ */
+.faq {
+  margin: 0 0 12px;
+}
+.faq-item {
+  border-top: 1px solid var(--line);
+  padding: 18px 0;
+}
+.faq-item:last-child {
+  border-bottom: 1px solid var(--line);
+}
+.faq dt {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  margin-bottom: 8px;
+}
+.faq dd {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-2);
+}
+
+.post-foot {
+  margin-top: 48px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  font-size: 14.5px;
+  color: var(--ink-3);
+}
+.post-foot p {
+  font-size: 14.5px !important;
+  color: var(--ink-3);
+  margin-bottom: 8px;
+}
+
+@media (max-width: 640px) {
+  .post {
+    padding: 32px 20px 64px;
+  }
+  .cmp {
+    font-size: 14px;
+  }
+  .cmp th,
+  .cmp td {
+    padding: 11px 12px;
+  }
+}
+
+/* Methodology / provenance line — sits under the standfirst. Signals the page
+   is checked editorial work rather than marketing, and carries the authorship
+   disclosure. */
+.post-method {
+  font-size: 14.5px !important;
+  line-height: 1.65;
+  color: var(--ink-3);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin: 0 0 34px !important;
+}
+.more-to-read {
+  font-size: 15px !important;
+  color: var(--ink-2);
 }

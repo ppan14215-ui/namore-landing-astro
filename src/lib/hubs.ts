@@ -2,7 +2,7 @@
  * Helpers for the hub / index pages (/names, by-letter, by-origin, by-gender).
  *
  * Hub pages exist to fix the "Discovered – currently not indexed" problem:
- * before they existed, the 10.8K name pages were an orphan island reachable
+ * before they existed, the name pages were an orphan island reachable
  * only via the sitemap. Hubs give Googlebot a shallow crawl path
  * (homepage → hub → name page) and concentrate internal-link importance so
  * Google spends crawl budget on the section.

@@ -1,0 +1,307 @@
+---
+/**
+ * /blog/best-baby-name-apps — English comparison article.
+ *
+ * FORMAT: modelled on the Baby Name Genius roundup structure (cold-open
+ * stakes paragraph → methodology line → "the short version" + table →
+ * numbered "Best for…" sections → what matters most → first-person
+ * recommendation → sources → next step → more to read). Differences that are
+ * deliberately ours: real app screenshots and a stated weakness on our own
+ * app. Keep the weakness paragraph — it is what makes the #1 placement read
+ * as a judgement rather than an ad. (An authorship-disclosure line was in the
+ * methodology block and was removed on Julian's call 2026-08-16; the page is
+ * on namore.app, so the domain itself carries the attribution.)
+ *
+ * POSITIONING (Julian's call 2026-08-15): Namore ranks #1 on interface
+ * quality, double-blind privacy, no-account setup and one-time pricing —
+ * NOT on the matching mechanic. Per channel-research-2026-08-13 §51 the
+ * "we give you a decision, not a list" claim is FALSE in English: BabyName
+ * shipped the identical swipe-match in Dec 2014. That credit is explicit
+ * below. Do not "strengthen" it.
+ *
+ * DO NOT claim AI/learning superiority — CharliesNames, Nameberry,
+ * BabyCenter, Duonym and Lentil all publicly claim swipe-learning. See the
+ * "AI positioning is already taken" memory.
+ *
+ * Catalog: 15,182 names (Supabase, authoritative). Pricing: free-first.
+ * Register note: hedge claims about competitors ("its listing emphasises")
+ * — we have read their store pages, not used every app.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const canonical = 'https://www.namore.app/blog/best-baby-name-apps';
+const reviewed = 'August 16, 2026';
+
+const APP_STORE = 'https://apps.apple.com/app/id6766572995?utm_source=blog&utm_medium=organic&utm_campaign=best_baby_name_apps_en';
+const PLAY = 'https://play.google.com/store/apps/details?id=com.julian.namore&utm_source=blog&utm_medium=organic&utm_campaign=best_baby_name_apps_en';
+
+const apps = [
+  {
+    name: 'Namore',
+    bestFor: 'Couples who keep talking each other out of names',
+    standout: 'Votes stay hidden until you match, no account, one-time price',
+  },
+  {
+    name: 'BabyName – find it together',
+    bestFor: 'The largest established swipe-and-match app',
+    standout: 'Ran the couples matching idea first, since 2014, 21,000+ ratings',
+  },
+  {
+    name: 'Baby Name Together',
+    bestFor: 'Knowing how common a name will actually be',
+    standout: 'Government naming statistics from 40+ countries',
+  },
+  {
+    name: 'CharliesNames',
+    bestFor: 'Reading properly about names',
+    standout: '15,000+ name pages, popularity hubs for fifteen countries',
+  },
+  {
+    name: 'Baby Name Genius',
+    bestFor: 'Unusual angles on name data',
+    standout: 'Name-to-profession and demographic breakdowns',
+  },
+];
+
+const faqs = [
+  {
+    q: 'What is the best baby name app for couples?',
+    a: 'If you and your partner keep talking past each other, choose an app built on independent voting rather than a shared list. Namore, BabyName and Baby Name Together all work this way. Namore keeps votes hidden until a match and needs no account; BabyName has the largest user base of the three.',
+  },
+  {
+    q: 'Do baby name apps need an account?',
+    a: 'Most do. Namore does not — partners connect with a six-letter code and you can use it without signing up at all.',
+  },
+  {
+    q: 'Are baby name apps free?',
+    a: 'Most are free to download with paid upgrades. Namore gives each partner 100 free swipes with no ads, then a 24-hour reset. One optional €7.99 payment unlocks unlimited swiping and the filters on both phones. There is no subscription.',
+  },
+  {
+    q: 'Which baby name app has the most names?',
+    a: 'CharliesNames and Namore are comparable at roughly 15,000 each. Raw count matters less than you would expect. What you actually notice is whether the deck keeps repeating the same few hundred popular names, which is a curation problem rather than a database-size one.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: 'Best baby name apps in 2026',
+      description:
+        'A comparison of the baby name apps couples actually use — independent voting, privacy, name data and pricing.',
+      datePublished: '2026-08-16',
+      dateModified: '2026-08-16',
+      author: { '@type': 'Person', name: 'Julian Ziegler' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Namore',
+        logo: { '@type': 'ImageObject', url: 'https://www.namore.app/logo@2x.png' },
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="Best baby name apps in 2026 | Namore"
+  description="A comparison of the baby name apps couples actually use — independent voting, privacy, name data and pricing, and what each one does better than the rest."
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <article class="post">
+    <header class="post-head">
+      <p class="post-kicker">App comparison · Reviewed {reviewed}</p>
+      <h1>Best baby name apps in 2026</h1>
+    </header>
+
+    <p class="post-standfirst">
+      If you just want to browse names on the sofa, almost any of these will do. If you want to get two
+      people from "I quite like that one" to an actual agreed name, the differences start to matter
+      quickly.
+    </p>
+
+    <p class="post-method">
+      This list is based on public App Store and Google Play listings and official product sites
+      reviewed on {reviewed}. Features and pricing change, so check the current listing before you
+      download anything.
+    </p>
+
+    <h2>The short version</h2>
+    <div class="table-wrap">
+      <table class="cmp">
+        <thead>
+          <tr><th>App</th><th>Best for</th><th>What stands out</th></tr>
+        </thead>
+        <tbody>
+          {apps.map((a, i) => (
+            <tr class={i === 0 ? 'is-ours' : undefined}>
+              <td data-label="App">{a.name}</td>
+              <td data-label="Best for">{a.bestFor}</td>
+              <td data-label="What stands out">{a.standout}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <h2>1. Namore</h2>
+    <p>
+      Best for couples who keep accidentally killing each other's names. That is a narrower problem
+      than "help me find a name," and it is the one this app is built around.
+    </p>
+    <p>
+      The rule is that neither of you sees the other's vote until you have both said yes to the same
+      name. No shared list, no favourites tab, no way to work out what your partner already rejected.
+      When you match, you get a reveal, and the reveal is the point — it turns a negotiation back into
+      a moment.
+    </p>
+
+    <figure class="shot">
+      <img
+        src="https://www.namore.app/blog-assets/02-private-by-design.webp"
+        alt="Namore's swipe screen, showing one name card with no indication of the partner's votes."
+        width="900" height="1947" loading="lazy" decoding="async"
+      />
+      <figcaption>One card at a time, with nothing on screen to read your partner's mind from.</figcaption>
+    </figure>
+
+    <p>
+      Three things you notice using it. There is no account — one of you starts a session, the other
+      joins with a six-letter code, and that is the setup. The price is one payment rather than a
+      subscription: 100 free swipes each with no ads and a 24-hour reset, and €7.99 once unlocks
+      unlimited swiping and the filters on both phones. And matching is not where it stops. A final round has you
+      both rank your matches privately and then puts the two rankings side by side, which is how you
+      get from twelve names you both like down to one.
+    </p>
+
+    <figure class="shot">
+      <img
+        src="https://www.namore.app/blog-assets/04-match-moment.webp"
+        alt="Namore's match screen revealing a name both partners chose independently."
+        width="900" height="1947" loading="lazy" decoding="async"
+      />
+      <figcaption>The reveal fires only when you both said yes, separately.</figcaption>
+    </figure>
+
+    <p>
+      There are 15,182 names with meaning, origin, pronunciation, nicknames and popularity trend, in
+      English, German, Dutch and Spanish. Free on iPhone and Android, data hosted in the EU, no ads.
+    </p>
+    <p class="post-caveat">
+      Where it is weaker: it is new. iOS in May 2026, Google Play in August 2026, so it has a small
+      fraction of the reviews the older apps have and none of their community. If you want the comfort
+      of something a million people have used, that is a fair reason to start elsewhere. It also does
+      not do forums, registries or pregnancy tracking.
+    </p>
+    <p class="cta-row">
+      <a class="btn btn-ink" href={APP_STORE}>Get Namore on iOS</a>
+      <a class="btn btn-ghost" href={PLAY}>Get it on Google Play</a>
+    </p>
+
+    <h2>2. BabyName – find it together</h2>
+    <p>
+      Best for couples who want the most established version of the swipe-and-match workflow.
+    </p>
+    <p>
+      Credit where it is due: BabyName shipped swipe-to-match for couples in December 2014, years
+      before most of the apps now advertising the idea, ours included. Its listing emphasises partner
+      matching, separate swiping, and a large catalogue with meanings and origins, and it carries more
+      than 21,000 ratings — more than every other app here put together. If what you want is the safest,
+      most-used option, this is it, and no amount of design polish elsewhere changes that.
+    </p>
+    <p>
+      It reads as app-first rather than content-first. The interface is carrying a decade of
+      accumulated features, and it asks for more at sign-up than the newer apps do.
+    </p>
+
+    <h2>3. Baby Name Together</h2>
+    <p>
+      Best for the question of how common a name is actually going to be.
+    </p>
+    <p>
+      Live since 2014 with over a million downloads, and it does couples matching too. What sets it
+      apart publicly is naming statistics drawn from government registries in more than forty
+      countries, so you can see whether a name is climbing or fading where you live. If the worry
+      keeping you up is how many other children in the class will share the name, this is the strongest
+      of the five on that.
+    </p>
+
+    <h2>4. CharliesNames</h2>
+    <p>
+      Best for reading properly about names rather than deciding between them.
+    </p>
+    <p>
+      A German app, around since 2015, with the largest reference layer here — roughly 15,000 name
+      pages plus popularity data for fifteen countries. Its materials also mention AI-assisted
+      suggestions. It is excellent for origins, variants and regional patterns, and it is the weakest of
+      the five at getting two people to a single answer, because that depth is organised for browsing.
+    </p>
+
+    <h2>5. Baby Name Genius</h2>
+    <p>
+      Best for looking at a shortlist from an angle nobody else offers.
+    </p>
+    <p>
+      Formerly Nametrix. It surfaces correlations the others do not bother with, such as which
+      professions a name turns up in more often. Treat that as entertainment rather than evidence, but
+      it is a well-built app and a genuinely different lens. It has partner matching as well, though it
+      is not the centre of the product the way it is in the top three.
+    </p>
+
+    <h2>What actually matters most</h2>
+    <ul>
+      <li>If you are choosing together, how the app handles independent voting matters more than how many names it holds.</li>
+      <li>If your problem is that one of you decides faster than the other, look for hidden votes rather than shared lists.</li>
+      <li>If you keep getting stuck after matching, check whether the app does anything at all once you have overlap.</li>
+      <li>If setup is annoying, one of you will quietly stop opening it, and the app stops mattering entirely.</li>
+    </ul>
+
+    <h2>My recommendation</h2>
+    <p>
+      If the two of you keep talking each other out of names, start with Namore — it is free on the
+      App Store and Google Play, and the hidden voting removes the thing causing it. If you would
+      rather have the most established option with the biggest user base, BabyName is the obvious
+      first alternative to compare. If you mostly want to read and browse, CharliesNames is the
+      deeper library.
+    </p>
+    <p>
+      Honestly, install two of them and see which one your partner actually opens. That settles it more
+      often than any feature list does.
+    </p>
+
+    <h2>Common questions</h2>
+    <dl class="faq">
+      {faqs.map((f) => (
+        <div class="faq-item">
+          <dt>{f.q}</dt>
+          <dd>{f.a}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <footer class="post-foot">
+      <p>
+        Sources: publicly visible App Store and Google Play listings and official product sites,
+        reviewed {reviewed}. Features, pricing and positioning change.
+      </p>
+      <p>
+        Next step: if your real question is how to decide as a couple rather than which app has the
+        most names, the more useful thing to look at is whether an app is built for two people making
+        one decision.
+      </p>
+      <p class="more-to-read">
+        <a href="/names">Browse baby names</a> · <a href="/de/blog/beste-babynamen-apps">Auf Deutsch lesen</a>
+      </p>
+    </footer>
+  </article>
+</BaseLayout>

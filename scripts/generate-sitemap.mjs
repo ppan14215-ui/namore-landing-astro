@@ -159,19 +159,82 @@ ${topUrls}
 `;
 }
 
-// Write the sitemap index pointing at every chunk.
-const indexEntries = chunks
+// --- Blog pages -------------------------------------------------------------
+// Walked separately from dist/names because findPagePaths() is rooted at
+// NAMES_DIR. Blog articles build to dist/blog/<slug>/ and dist/de/blog/<slug>/
+// and would otherwise appear in no sitemap at all.
+const BLOG_DIRS = [join(DIST, 'blog'), join(DIST, 'de', 'blog')];
+const blogUrls = [];
+for (const dir of BLOG_DIRS) {
+  if (!existsSync(dir)) continue;
+  for (const entry of readdirSync(dir)) {
+    if (existsSync(join(dir, entry, 'index.html'))) {
+      blogUrls.push(`${SITE}/${relative(DIST, join(dir, entry)).split(sep).join('/')}`);
+    }
+  }
+}
+let blogIndexEntry = '';
+if (blogUrls.length > 0) {
+  const blogXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${blogUrls
   .map(
-    (_, idx) => `  <sitemap>
+    (u) => `  <url>
+    <loc>${u}</loc>
+    <lastmod>${TODAY}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>`,
+  )
+  .join('\n')}
+</urlset>
+`;
+  writeFileSync(join(DIST, 'sitemap-blog.xml'), blogXml, 'utf8');
+  blogIndexEntry = `  <sitemap>
+    <loc>${SITE}/sitemap-blog.xml</loc>
+    <lastmod>${TODAY}</lastmod>
+  </sitemap>
+`;
+  console.log(`[sitemap] wrote ${join(DIST, 'sitemap-blog.xml')} (${blogUrls.length} blog URLs)`);
+}
+
+// Write the sitemap index.
+//
+// Crawl-budget gate (2026-08-16). Search Console showed 7,932 URLs stuck at
+// "Discovered - currently not indexed" against only 233 "Crawled - currently
+// not indexed". That ratio means Google is not *rejecting* these pages on
+// quality — it has never fetched them. On a young domain with almost no
+// inbound links, asking for 16K URLs starves the few hundred that matter.
+//
+// So by default the index advertises only sitemap-top.xml (curated popular
+// names + hubs) and sitemap-blog.xml. The full per-chunk catalog is still
+// WRITTEN to disk and still reachable by crawl and internal links — it is
+// just not submitted. Nothing is lost: those URLs were not being crawled.
+//
+// Re-enable once the indexed count on the curated set is healthy and the
+// domain has earned more links:  FULL_CATALOG_SITEMAP=1 npm run sitemap
+const FULL_CATALOG_SITEMAP = process.env.FULL_CATALOG_SITEMAP === '1';
+const indexEntries = FULL_CATALOG_SITEMAP
+  ? chunks
+      .map(
+        (_, idx) => `  <sitemap>
     <loc>${SITE}/sitemap-${idx}.xml</loc>
     <lastmod>${TODAY}</lastmod>
   </sitemap>`,
-  )
-  .join('\n');
+      )
+      .join('\n')
+  : '';
+if (!FULL_CATALOG_SITEMAP) {
+  console.log(
+    `[sitemap] crawl-budget mode: index advertises sitemap-top.xml + sitemap-blog.xml only ` +
+      `(${chunks.length} full-catalog chunk(s) written but not submitted). ` +
+      `Set FULL_CATALOG_SITEMAP=1 to submit everything.`,
+  );
+}
 
 const indexXml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${extraIndexEntry}${indexEntries}
+${extraIndexEntry}${blogIndexEntry}${indexEntries}
 </sitemapindex>
 `;
 

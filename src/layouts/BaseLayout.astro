@@ -34,7 +34,8 @@ const {
   jsonLd,
 } = Astro.props;
 
-const appStoreUrl = 'https://apps.apple.com/app/id6766572995';
+const appStoreUrl = 'https://apps.apple.com/app/id6766572995?utm_source=names_nav&utm_medium=organic&utm_campaign=programmatic_seo';
+const googlePlayUrl = 'https://play.google.com/store/apps/details?id=com.julian.namore&utm_source=names_nav&utm_medium=organic&utm_campaign=programmatic_seo';
 ---
 
 <!doctype html>
@@ -114,7 +115,8 @@ const appStoreUrl = 'https://apps.apple.com/app/id6766572995';
         </a>
         <div class="nav-cta">
           <a class="btn btn-ghost" href="https://www.namore.app/">Home</a>
-          <a class="btn btn-ink" href={appStoreUrl}>Get the app</a>
+          <a class="btn btn-ghost store-nav" href={appStoreUrl}>iPhone</a>
+          <a class="btn btn-ink store-nav" href={googlePlayUrl}>Android</a>
         </div>
       </div>
     </nav>
@@ -123,7 +125,7 @@ const appStoreUrl = 'https://apps.apple.com/app/id6766572995';
 
     <footer>
       <span>NAMORE.APP</span>
-      <span>© 2026 Namore</span>
+      <span><a href={appStoreUrl}>App Store</a> · <a href={googlePlayUrl}>Google Play</a> · © 2026 Namore</span>
     </footer>
   </body>
 </html>
