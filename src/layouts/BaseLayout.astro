@@ -125,6 +125,18 @@ const googlePlayUrl = 'https://play.google.com/store/apps/details?id=com.julian.
 
     <footer>
       <span>NAMORE.APP</span>
+      {/*
+        Internal links to the comparison articles. Added 2026-08-16 after Search
+        Console URL Inspection reported "Referring page: None detected" for both
+        blog URLs — nothing on the site linked to them, so they had no internal
+        PageRank at all. Sitewide footer placement is deliberate: it gives the
+        articles a link from every page in the ~15K /names corpus, which is the
+        largest internal signal available on this domain.
+      */}
+      <span>
+        <a href="/blog/best-baby-name-apps">Best baby name apps</a> ·
+        <a href="/de/blog/beste-babynamen-apps">Beste Babynamen-Apps</a>
+      </span>
       <span><a href={appStoreUrl}>App Store</a> · <a href={googlePlayUrl}>Google Play</a> · © 2026 Namore</span>
     </footer>
   </body>
