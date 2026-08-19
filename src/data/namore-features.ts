@@ -73,7 +73,8 @@ export const FACTS = {
   namesNl: 11182,
   freeSwipes: 100,
   cycleHours: 24,
-  priceEur: '7,99',
+  /** ⚠️ German storefront only, and currently ambiguous — see the privacy-price proof. */
+  priceEurDe: '7,99',
   priceEurEn: '€7.99',
   maxSessionVotes: 17260,
   maxSessionDays: 95,
@@ -206,18 +207,18 @@ export const FEATURES: Feature[] = [
   },
   {
     key: 'privacy-price',
-    proof: 'Supabase eu-west-1 (Ireland). One-time IAP unlocks both phones; no subscription tier exists. Unser Baby Name matches the price but also sells a monthly plan.',
+    proof: 'Supabase eu-west-1 (Ireland). One-time IAP unlocks both phones; no subscription tier exists. ⚠️ PRICE IS LOCALISED PER STOREFRONT (Julian, 2026-08-19) — never state one figure as if it were global; AT/CH/ES readers would be misled, and §3 PAngV wants the actual Endpreis. Additionally the GERMAN storefront currently lists TWO products, "Namore Unlimited 7,99 €" and "Namore Unlimited 4,99 €", so even the German figure is not unambiguous. Say "einmaliger Kauf" and name the German figure only as the current one, in the store.',
     de: {
       title: 'Ein Preis, einmal, für beide — und Daten in der EU',
-      body: 'Ein einmaliger Kauf schaltet unbegrenztes Wischen und alle Filter für beide Handys frei — aktuell 7,99 €. Kein Abo, keine Folgekosten. Gehostet in Irland, keine Weitergabe von Daten, kein Modelltraining mit euren Swipes.',
+      body: 'Ein einmaliger Kauf schaltet unbegrenztes Wischen und alle Filter für beide Handys frei. Kein Abo, keine Folgekosten. Der Preis wird je Land festgelegt — im deutschen App Store liegt er derzeit bei 7,99 €; was für euch gilt, steht im Store vor dem Kauf. Gehostet in Irland, keine Weitergabe von Daten, kein Modelltraining mit euren Swipes.',
     },
     en: {
       title: 'One price, once, for both — and EU hosting',
-      body: 'A single purchase unlocks unlimited swiping and every filter on both phones — currently €7.99. No subscription, nothing recurring. Hosted in Ireland, no data sold, no model trained on your swipes.',
+      body: 'A single purchase unlocks unlimited swiping and every filter on both phones. No subscription, nothing recurring. The price is set per country — the store shows what applies to you before you buy. Hosted in Ireland, no data sold, no model trained on your swipes.',
     },
     es: {
       title: 'Un precio, una vez, para los dos — y datos en la UE',
-      body: 'Un único pago desbloquea deslizamientos ilimitados y todos los filtros en ambos móviles — actualmente 7,99 €. Sin suscripción. Alojado en Irlanda, sin venta de datos ni entrenamiento de modelos con vuestros votos.',
+      body: 'Un único pago desbloquea deslizamientos ilimitados y todos los filtros en ambos móviles. Sin suscripción. El precio se fija por país — la tienda os muestra el vuestro antes de comprar. Alojado en Irlanda, sin venta de datos ni entrenamiento de modelos con vuestros votos.',
     },
   },
 ];

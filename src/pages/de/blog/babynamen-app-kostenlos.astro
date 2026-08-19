@@ -29,11 +29,11 @@ const faqs = [
   },
   {
     q: 'Welche Babynamen-App hat kein Abo?',
-    a: 'Die hier verglichenen Apps verkaufen laut ihren Einträgen Einmalkäufe statt Abonnements — bei Unser Baby Name weist der deutsche App Store „Full Version 8,99 €“ und „Unlock all features 1,99 €“ aus, bei Kinder Sets ab 0,99 €, bei CharliesNames Käufe von 1,99 € bis 14,99 €. Bei Namore schaltet ein einmaliger Kauf von 7,99 € beide Handys frei.',
+    a: 'Die meisten verkaufen Einmalkäufe: Kinder nennt Sets ab 0,99 €, CharliesNames Käufe von 1,99 € bis 14,99 €. Unser Baby Name führt beides — der deutsche App Store weist „Full Version 8,99 €“ und „Unlock all features 1,99 €“ aus und nennt daneben ein Monatsabo. Bei Namore gibt es nur einen einmaligen Kauf, der beide Handys freischaltet, und kein Abo. Alle Beträge sind die Angaben des deutschen Stores; in anderen Ländern gelten andere Preise.',
   },
   {
     q: 'Was kostet Namore wirklich?',
-    a: 'Nichts, solange euch 100 Swipes pro Person je 24 Stunden reichen — ohne Werbung und ohne Konto. Wer unbegrenzt wischen und alle Filter nutzen will, zahlt einmalig 7,99 €, und das gilt für beide Handys zusammen. Kein Abo, keine wiederkehrende Zahlung.',
+    a: 'Nichts, solange euch 100 Swipes pro Person je 24 Stunden reichen — ohne Werbung und ohne Konto. Wer unbegrenzt wischen und alle Filter nutzen will, zahlt einmalig, und das gilt für beide Handys zusammen. Der Preis wird je Land festgelegt — im deutschen App Store derzeit 7,99 €. Kein Abo, keine wiederkehrende Zahlung.',
   },
   {
     q: 'Welche App hat die meisten Gratis-Swipes?',
@@ -95,10 +95,12 @@ const jsonLd = {
     </p>
 
     <p class="post-method">
-      Alle Preisangaben stammen aus den öffentlich einsehbaren Einträgen im deutschen App Store
-      beziehungsweise von der Preisseite des Anbieters, abgerufen am {VERIFIED}. Achtung: Auf den
-      eigenen Websites mancher Anbieter stehen andere Preise als im Store. Maßgeblich ist der
-      Eintrag, in dem ihr tatsächlich kauft — schaut vor dem Kauf dort nach.
+      Alle Preisangaben stammen aus den öffentlich einsehbaren Einträgen im <strong>deutschen</strong>
+      App Store beziehungsweise von der Preisseite des Anbieters, abgerufen am {VERIFIED}. Zwei
+      Einschränkungen, die hier wirklich zählen: <strong>App-Preise werden je Land festgelegt</strong> —
+      in Österreich, der Schweiz oder Spanien steht bei allen Apps etwas anderes, auch bei unserer.
+      Und auf den eigenen Websites mancher Anbieter stehen andere Zahlen als im Store. Maßgeblich ist
+      immer der Eintrag, in dem ihr tatsächlich kauft — schaut vor dem Kauf dort nach.
     </p>
 
     <h2>Preise und Werbung, wie sie im Eintrag stehen</h2>
@@ -110,7 +112,7 @@ const jsonLd = {
         <tbody>
           <tr class="is-ours">
             <td data-label="App">Namore</td>
-            <td data-label="Preisangabe">Kostenlos mit 100 Swipes pro Person je 24 Stunden · 7,99 € einmalig für beide Handys, kein Abo</td>
+            <td data-label="Preisangabe">Kostenlos mit 100 Swipes pro Person je 24 Stunden · einmaliger Kauf für beide Handys, kein Abo (deutscher Store derzeit 7,99 €, je Land unterschiedlich)</td>
             <td data-label="Werbung">Keine, auch nicht im Gratistarif</td>
           </tr>
           {APPS.map((a) => (
