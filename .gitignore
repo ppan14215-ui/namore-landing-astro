@@ -25,3 +25,7 @@ yarn-debug.log*
 yarn-error.log*
 .vercel
 .env*.local
+
+# secrets (added 2026-08-18)
+*service-account*.json
+*.pem

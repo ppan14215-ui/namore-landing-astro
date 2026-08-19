@@ -23,6 +23,12 @@ export interface Props {
   ogImageAlt?: string;
   /** Raw JSON-LD object to embed as a <script type="application/ld+json">. */
   jsonLd?: Record<string, unknown>;
+  /**
+   * Document language. Defaults to 'en'. The German cluster under /de/ MUST
+   * pass 'de' — Google reads <html lang> as a localisation signal, and until
+   * 2026-08-17 every German page here shipped as lang="en".
+   */
+  lang?: string;
 }
 
 const {
@@ -32,6 +38,7 @@ const {
   ogImage = 'https://www.namore.app/og-card.png',
   ogImageAlt = 'Namore — find a name you both love. The private baby name app for couples.',
   jsonLd,
+  lang = 'en',
 } = Astro.props;
 
 const appStoreUrl = 'https://apps.apple.com/app/id6766572995?utm_source=names_nav&utm_medium=organic&utm_campaign=programmatic_seo';
@@ -39,7 +46,7 @@ const googlePlayUrl = 'https://play.google.com/store/apps/details?id=com.julian.
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

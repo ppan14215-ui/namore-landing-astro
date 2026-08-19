@@ -1,0 +1,46 @@
+---
+/**
+ * VsTable — head-to-head fact table for the German /de/blog comparison cluster.
+ *
+ * Renders Namore in the left column and one competitor in the right, straight
+ * from src/data/apps-de.ts. Pages must NOT pass literal strings for these
+ * rows — the whole point is that one edit to apps-de.ts fixes every page.
+ *
+ * Rows are deliberately ordered so the two rows a couple actually decides on
+ * (verdeckte Stimmen, Konto) sit above the vanity metrics (Bewertungen).
+ */
+import { NAMORE, type App } from '../data/apps-de';
+
+export interface Props {
+  rival: App;
+}
+const { rival } = Astro.props;
+
+const rows: [string, string, string][] = [
+  ['Plattform', NAMORE.platform, rival.platform],
+  ['Verdeckte Stimmen', NAMORE.doubleBlind, rival.doubleBlind],
+  ['Konto nötig', NAMORE.account, rival.account],
+  ['Preis', NAMORE.price, rival.price],
+  ['Namen', NAMORE.names, rival.names],
+  ['KI', NAMORE.ai, rival.ai],
+  ['App Store', NAMORE.ios, rival.ios],
+  ['Google Play', NAMORE.android, rival.android],
+];
+---
+
+<div class="table-wrap">
+  <table class="cmp">
+    <thead>
+      <tr><th></th><th>Namore</th><th>{rival.name}</th></tr>
+    </thead>
+    <tbody>
+      {rows.map(([label, ours, theirs]) => (
+        <tr>
+          <td data-label=""><strong>{label}</strong></td>
+          <td data-label="Namore">{ours}</td>
+          <td data-label={rival.name}>{theirs}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

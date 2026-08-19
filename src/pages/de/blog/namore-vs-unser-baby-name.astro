@@ -1,0 +1,187 @@
+---
+/**
+ * /de/blog/namore-vs-unser-baby-name
+ *
+ * Target query: "Unser Baby Name App" — verbatim from Google's
+ * "Wird auch oft gesucht" block for "beste babynamen apps" (DE, 2026-08-19).
+ *
+ * ⚠️ IDENTITY: "Unser Baby Name" and "Baby Name Together" are ONE product by
+ * Linkinet — same iOS id 918073224, same Android package com.BabyName.start,
+ * unserbabyname.de and babynametogether.com are the German and English faces
+ * of one site. NEVER list them as two competitors anywhere in this cluster.
+ *
+ * ⚠️ THIS IS THE CLOSEST COLLISION IN THE MARKET and the page has to read that
+ * way or nobody believes it. They match our 7,99 € one-time price EXACTLY,
+ * they have 1 Mio.+ installs to our handful, and 30.000+ names to our 15.182.
+ * They beat us on reach and database size. Say it plainly and early. The
+ * honest wins are: no account (they require e-mail account linking), the
+ * post-match decision round, and a single price with no subscription
+ * alternative dangling next to it.
+ *
+ * ⚠️ Their double-blind status is NOT VERIFIED. They say the app shows only
+ * names you both liked and that swiping is "privat", but nowhere that votes
+ * are hidden. Do not claim they show partner votes.
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import VsTable from '../../../components/VsTable.astro';
+import ClusterFoot from '../../../components/ClusterFoot.astro';
+import { byslug, VERIFIED, APP_STORE, PLAY } from '../../../data/apps-de';
+
+const rival = byslug('unser-baby-name');
+const canonical = 'https://www.namore.app/de/blog/namore-vs-unser-baby-name';
+const campaign = 'vs_unser_baby_name';
+
+const faqs = [
+  {
+    q: 'Was ist der Unterschied zwischen Namore und Unser Baby Name?',
+    a: 'Unser Baby Name (international: Baby Name Together) hat die größere Datenbank mit über 30.000 Namen, amtliche Namensstatistiken aus über 40 Ländern und über eine Million Installationen. Namore ist kleiner, braucht dafür kein Konto, hält die Stimmen beider Partner bis zum Match verdeckt und hat nach dem Match eine Endrunde, die aus den Treffern eine Reihenfolge macht. Beide kosten einmalig 7,99 €.',
+  },
+  {
+    q: 'Sind Unser Baby Name und Baby Name Together dieselbe App?',
+    a: 'Ja. Es ist ein Produkt des Anbieters Linkinet mit derselben App-ID in beiden Stores; unserbabyname.de und babynametogether.com sind die deutsche und die englische Seite desselben Angebots. Vergleichsseiten, die beide als getrennte Apps auflisten, haben sich vertan.',
+  },
+  {
+    q: 'Braucht man bei Unser Baby Name ein Konto?',
+    a: 'Ja. Beide Partner verknüpfen ihre Konten über die E-Mail-Adresse, damit das Matching funktioniert. Bei Namore gibt es kein Konto: Einer startet eine Sitzung, der andere tritt mit einem sechsstelligen Code bei.',
+  },
+  {
+    q: 'Welche App ist günstiger?',
+    a: 'Der Einmalpreis ist identisch — beide verlangen 7,99 €. Der Unterschied liegt daneben: Unser Baby Name bietet zusätzlich ein Abo für 2,99 € im Monat an, im deutschen App Store finden sich außerdem Käufe zu 8,99 € und 1,99 €. Bei Namore gibt es genau einen Preis, einmal, für beide Handys zusammen, und kein Abo als Alternative.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: 'Namore vs. Unser Baby Name: gleicher Preis, anderer Ansatz',
+      description:
+        'Namore und Unser Baby Name (Baby Name Together) im Vergleich — Konto, verdeckte Stimmen, Namensdaten, Statistiken und der identische Einmalpreis von 7,99 €.',
+      inLanguage: 'de-DE',
+      datePublished: '2026-08-19',
+      dateModified: '2026-08-19',
+      author: { '@type': 'Person', name: 'Julian Ziegler' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Namore',
+        logo: { '@type': 'ImageObject', url: 'https://www.namore.app/logo@2x.png' },
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: 'de-DE',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  lang="de"
+  title="Namore vs. Unser Baby Name: gleicher Preis, anderer Ansatz | Namore"
+  description="Namore und Unser Baby Name im ehrlichen Vergleich: Konto, verdeckte Stimmen, Namensdaten und Statistiken — bei identischem Einmalpreis von 7,99 €."
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <article class="post" lang="de">
+    <header class="post-head">
+      <p class="post-kicker">App-Vergleich · Geprüft am {VERIFIED}</p>
+      <h1>Namore vs. Unser Baby Name</h1>
+    </header>
+
+    <p class="post-standfirst">
+      Von allen Apps in diesem Vergleich ist das die, die Namore am ähnlichsten ist — und die einzige
+      mit exakt demselben Preis. Beide kosten einmalig 7,99 €, beide lassen Paare getrennt wischen,
+      beide zeigen am Ende nur gemeinsame Treffer. Unser Baby Name ist dabei deutlich größer.
+      Der Unterschied liegt woanders: beim Konto und bei dem, was nach dem Match passiert.
+    </p>
+
+    <p class="post-method">
+      Grundlage sind die öffentlich einsehbaren Einträge im deutschen App Store und bei Google Play
+      sowie die Seiten des Anbieters, geprüft am {VERIFIED}.
+    </p>
+
+    <p class="post-caveat">
+      Zur Einordnung: <strong>Unser Baby Name und Baby Name Together sind dieselbe App</strong> —
+      ein Produkt des Anbieters Linkinet, dieselbe App-ID in beiden Stores, nur mit deutscher und
+      englischer Website. Wer sie in einem Vergleich als zwei Apps findet, liest eine Liste, die
+      nicht geprüft wurde.
+    </p>
+
+    <h2>Die Zahlen nebeneinander</h2>
+    <VsTable rival={rival} />
+
+    <h2>Wo Unser Baby Name klar vorne liegt</h2>
+    <p>
+      Bei der Größe, und das ist kein kleiner Punkt. Über eine Million Installationen bei Google Play
+      mit 6.840 Bewertungen, gegenüber einer App, die es erst seit Mai 2026 gibt. Wenn euch wichtig
+      ist, dass viele Menschen ein Produkt schon benutzt und bewertet haben, ist der Fall klar.
+    </p>
+    <p>
+      Inhaltlich sind es zwei Dinge. Erstens die Datenbank: über 30.000 Namen gegenüber unseren
+      15.182. Zweitens — und das ist die eigentliche Stärke — amtliche Namensstatistiken aus über
+      vierzig Ländern. Wenn eure Frage lautet „wie viele Kinder in der Klasse werden später auch so
+      heißen“, ist das die App, die euch das am besten beantwortet. Namore zeigt einen
+      Beliebtheitsverlauf pro Name, aber nicht dieselbe Breite an Länderstatistiken.
+    </p>
+
+    <h2>Wo der Unterschied für euch liegt</h2>
+    <p>
+      <strong>Das Konto.</strong> Bei Unser Baby Name verknüpfen beide Partner ihre Konten über die
+      E-Mail-Adresse, damit das Matching funktioniert. Bei Namore gibt es keins: Einer startet eine
+      Sitzung, der andere tritt mit einem sechsstelligen Code bei, fertig. Das klingt nach einer
+      Kleinigkeit und ist im Alltag oft die Stelle, an der einer von beiden aussteigt — wer sich erst
+      registrieren muss, macht es abends auf dem Sofa vielleicht nicht mehr.
+    </p>
+    <p>
+      <strong>Was nach dem Match passiert.</strong> Beide Apps zeigen euch die Namen, die ihr beide
+      mochtet. Bei Namore ist das die Vorauswahl, nicht das Ergebnis: In einer Endrunde bewertet ihr
+      die Treffer noch einmal getrennt von 1 bis 5, danach stehen beide Reihenfolgen nebeneinander.
+      Genau da bleiben die meisten Paare sonst hängen — zwölf gemeinsame Treffer sind auch keine
+      Entscheidung.
+    </p>
+    <p>
+      <strong>Der Preis daneben.</strong> Die 7,99 € sind identisch. Bei Unser Baby Name steht
+      daneben aber ein Abo für 2,99 € im Monat, dazu im deutschen App Store weitere Käufe zu 8,99 €
+      und 1,99 €. Bei Namore gibt es einen Preis, einmal, für beide Handys — und nichts daneben.
+    </p>
+    <p class="post-caveat">
+      Was wir <em>nicht</em> behaupten: dass Unser Baby Name euch die Stimmen des Partners zeigt. Die
+      App sagt, sie zeige nur Namen, die ihr beide mochtet, und das Wischen sei privat — dass
+      einzelne Stimmen verdeckt bleiben, steht dort aber nirgends. Wir haben es nicht belegt
+      gefunden, und das ist etwas anderes, als es zu widerlegen.
+    </p>
+
+    <h2>Wann ihr welche nehmen solltet</h2>
+    <ul>
+      <li>Ihr wollt wissen, wie häufig ein Name in mehreren Ländern wirklich ist → <strong>Unser Baby Name</strong>.</li>
+      <li>Euch ist eine große, lange erprobte Nutzerbasis wichtig → <strong>Unser Baby Name</strong>.</li>
+      <li>Ihr wollt keine Konten anlegen und keine E-Mail-Adressen verknüpfen → <strong>Namore</strong>.</li>
+      <li>Ihr habt gemeinsame Treffer und müsst daraus jetzt einen Namen machen → <strong>Namore</strong>, wegen der Endrunde.</li>
+      <li>Ihr wollt einen Preis ohne Abo-Alternative daneben → <strong>Namore</strong>.</li>
+    </ul>
+
+    <p class="cta-row">
+      <a class="btn btn-ink" href={APP_STORE(campaign)}>Namore für iOS laden</a>
+      <a class="btn btn-ghost" href={PLAY(campaign)}>Bei Google Play laden</a>
+    </p>
+
+    <h2>Häufige Fragen</h2>
+    <dl class="faq">
+      {faqs.map((f) => (
+        <div class="faq-item">
+          <dt>{f.q}</dt>
+          <dd>{f.a}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <ClusterFoot current="namore-vs-unser-baby-name" />
+  </article>
+</BaseLayout>

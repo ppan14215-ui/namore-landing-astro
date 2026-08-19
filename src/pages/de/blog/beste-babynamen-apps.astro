@@ -22,11 +22,29 @@
  * Geschmack kennen" in the German store.
  *
  * Catalog: 15.182 Namen. Pricing: free-first.
+ *
+ * ══════════════════════════════════════════════════════════════════════
+ * UPDATE 2026-08-19 — this page reached #1 on google.de for
+ * "beste babynamen apps" four days after publishing (verified in-browser,
+ * DE locale, above Apple's own App Store page and FOCUS online).
+ *
+ * DO NOT REWRITE THE PROSE. Changes below are additive only:
+ *   - Mini Marvin added. It was missing, it now ranks on the same query, and
+ *     it is the ONLY other product with confirmed double-blind voting. A
+ *     comparison that omits it is attackable.
+ *   - "Baby Name Together" renamed to "Unser Baby Name" — same product by
+ *     Linkinet (iOS id 918073224 / com.BabyName.start). Listing both would
+ *     have been a factual error.
+ *   - lang="de" added; every German page here shipped as lang="en" until now.
+ *   - Spoke links added via ClusterFoot.
+ * ══════════════════════════════════════════════════════════════════════
  */
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ClusterFoot from '../../../components/ClusterFoot.astro';
+import { VERIFIED } from '../../../data/apps-de';
 
 const canonical = 'https://www.namore.app/de/blog/beste-babynamen-apps';
-const reviewed = '16. August 2026';
+const reviewed = VERIFIED;
 
 const APP_STORE = 'https://apps.apple.com/app/id6766572995?utm_source=blog&utm_medium=organic&utm_campaign=beste_babynamen_apps_de';
 const PLAY = 'https://play.google.com/store/apps/details?id=com.julian.namore&utm_source=blog&utm_medium=organic&utm_campaign=beste_babynamen_apps_de';
@@ -48,9 +66,14 @@ const apps = [
     standout: 'Hat das Prinzip in Deutschland populär gemacht',
   },
   {
-    name: 'Baby Name Together',
+    name: 'Unser Baby Name',
     bestFor: 'Die Frage, wie häufig ein Name wirklich wird',
     standout: 'Amtliche Namensstatistiken aus über 40 Ländern',
+  },
+  {
+    name: 'Mini Marvin',
+    bestFor: 'Wer nichts installieren will',
+    standout: 'Verdeckte Stimmen im Browser, auch mit Großeltern',
   },
   {
     name: 'BabyName – find it together',
@@ -88,7 +111,7 @@ const jsonLd = {
         'Vergleich der Babynamen-Apps für Paare — getrennte Abstimmung, Datenschutz, Namensdaten und Preise.',
       inLanguage: 'de-DE',
       datePublished: '2026-08-16',
-      dateModified: '2026-08-16',
+      dateModified: '2026-08-19',
       author: { '@type': 'Person', name: 'Julian Ziegler' },
       publisher: {
         '@type': 'Organization',
@@ -111,6 +134,7 @@ const jsonLd = {
 ---
 
 <BaseLayout
+  lang="de"
   title="Die besten Babynamen-Apps 2026 | Namore"
   description="Vergleich der Babynamen-Apps für Paare: getrennte Abstimmung, Datenschutz, Namensdaten und Preise — und was jede App besser kann als die anderen."
   canonical={canonical}
@@ -213,7 +237,7 @@ const jsonLd = {
     </p>
     <p>
       Eine deutsche App, seit 2015 am Markt, mit der größten Namenssammlung in diesem Vergleich: rund
-      15.000 Namensseiten plus Beliebtheitsdaten für fünfzehn Länder. Der Eintrag im App Store wirbt
+      15.000 Namensseiten plus Beliebtheitsdaten für sechzehn Länder. Der Eintrag im App Store wirbt
       außerdem mit KI-gestützten Vorschlägen. Für Herkunft, Varianten und regionale Muster ist sie
       hervorragend. Am schwächsten ist sie darin, zwei Menschen zu einer gemeinsamen Antwort zu
       bringen, weil die Tiefe fürs Stöbern gebaut ist. Im deutschen Markt ist sie der Platzhirsch.
@@ -230,18 +254,32 @@ const jsonLd = {
       und die Namensdaten gehen weniger in die Tiefe als bei CharliesNames oder Namore.
     </p>
 
-    <h2>4. Baby Name Together</h2>
+    <h2>4. Unser Baby Name</h2>
     <p>
       Am besten für die Frage, wie häufig ein Name wirklich wird.
     </p>
     <p>
-      Seit 2014 am Markt, über eine Million Downloads, mit getrennter Abstimmung für Paare. Die
+      International als „Baby Name Together“ unterwegs — es ist dieselbe App desselben Anbieters, nicht zwei. Über eine Million Installationen, mit getrennter Abstimmung für Paare. Die
       Besonderheit sind amtliche Namensstatistiken aus über vierzig Ländern — ihr seht, ob ein Name
       gerade steigt oder verschwindet. Wenn euch umtreibt, wie viele Kinder in der Klasse den Namen
       später auch tragen, ist das hier die stärkste App.
     </p>
 
-    <h2>5. BabyName – find it together</h2>
+    <h2>5. Mini Marvin</h2>
+    <p>
+      Am besten für alle, die nichts installieren wollen.
+    </p>
+    <p>
+      Ein Angebot aus Dresden, das komplett im Browser läuft. Bemerkenswert ist es hier aus einem
+      Grund: Es ist die einzige andere Anwendung in diesem Vergleich, bei der die Stimmen beider
+      Partner ausdrücklich verdeckt bleiben — auf der eigenen Seite steht wörtlich, niemand sehe,
+      wie der andere abstimmt. Dazu lassen sich auch Großeltern einbinden. In der kostenlosen
+      Version gibt es Werbung und 500 Swipes am Tag; werbefrei kostet es 6,99 € für drei Monate oder
+      12,99 € einmalig. Es gibt keine App für iPhone oder Android.
+      <a href="/de/blog/namore-vs-mini-marvin">Namore und Mini Marvin im direkten Vergleich</a>.
+    </p>
+
+    <h2>6. BabyName – find it together</h2>
     <p>
       Am besten für alle, denen die größte Nutzerbasis wichtig ist.
     </p>
@@ -258,6 +296,14 @@ const jsonLd = {
       <li>Wenn ihr nach dem Match immer wieder hängenbleibt, schaut, ob die App danach überhaupt noch etwas tut.</li>
       <li>Wenn die Einrichtung nervt, hört einer von euch still auf, sie zu öffnen — und dann ist es egal, was die App kann.</li>
     </ul>
+    <p class="post-caveat">
+      Der Vollständigkeit halber: Verdeckte Abstimmung ist kein Alleinstellungsmerkmal von Namore.
+      Mini Marvin macht das ebenso und sagt es ausdrücklich. Bei Kinder, BabyName und Unser Baby
+      Name steht zur Sichtbarkeit der Stimmen nichts — das heißt nicht, dass sie es nicht können,
+      wir haben es nur nicht belegt gefunden. Belegt anders ist es bei CharliesNames, wo die
+      Daumen-runter-Liste laut den eigenen Hilfeseiten alle Namen sammelt, die mindestens einem von
+      euch nicht gefallen.
+    </p>
 
     <h2>Meine Empfehlung</h2>
     <p>
@@ -281,19 +327,6 @@ const jsonLd = {
       ))}
     </dl>
 
-    <footer class="post-foot">
-      <p>
-        Quellen: öffentlich einsehbare Einträge im App Store und bei Google Play sowie die
-        Herstellerseiten, geprüft am {reviewed}. Funktionen, Preise und Positionierung ändern sich.
-      </p>
-      <p>
-        Nächster Schritt: Wenn eure eigentliche Frage ist, wie man sich zu zweit entscheidet, und
-        nicht, welche App die meisten Namen hat, lohnt der Blick darauf, ob eine App überhaupt für
-        zwei Menschen mit einer Entscheidung gebaut ist.
-      </p>
-      <p class="more-to-read">
-        <a href="/names">Vornamen durchstöbern</a> · <a href="/blog/best-baby-name-apps">Read in English</a>
-      </p>
-    </footer>
+    <ClusterFoot current="beste-babynamen-apps" />
   </article>
 </BaseLayout>

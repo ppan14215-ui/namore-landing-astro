@@ -1,0 +1,190 @@
+---
+/**
+ * /de/blog/namore-vs-charliesnames
+ *
+ * Target query: "CharliesNames" / "CharliesNames Alternative" — both appear in
+ * Google's own "Wird auch oft gesucht" block for "beste babynamen apps" (DE,
+ * read 2026-08-19). CharliesNames is the German category leader and occupies
+ * essentially every German pregnancy-app roundup slot, so "Alternative to the
+ * incumbent" is the realistic entry point, not "beat the incumbent".
+ *
+ * THE ONE MECHANICAL DIFFERENCE THAT IS SOURCED: CharliesNames' own FAQ
+ * describes the thumbs-down list as "Hier landen alle Namen, die mindestens
+ * eine:r von euch nicht schön findet" — so you learn your partner's negatives.
+ * That is the only competitor for which non-blind voting is ESTABLISHED rather
+ * than merely unverified. Do not extend the claim to the others.
+ *
+ * DO NOT claim an AI advantage — CharliesNames advertises
+ * "Meine KI lernt deinen Geschmack kennen" and we do not out-claim that.
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import VsTable from '../../../components/VsTable.astro';
+import ClusterFoot from '../../../components/ClusterFoot.astro';
+import { byslug, NAMORE, VERIFIED, APP_STORE, PLAY } from '../../../data/apps-de';
+
+const rival = byslug('charliesnames');
+const canonical = 'https://www.namore.app/de/blog/namore-vs-charliesnames';
+const campaign = 'vs_charliesnames';
+
+const faqs = [
+  {
+    q: 'Was ist der Unterschied zwischen Namore und CharliesNames?',
+    a: 'CharliesNames ist eine Namensbibliothek mit über 15.000 Vornamen, Namensgenerator und Beliebtheitsdaten für mehrere Länder — gebaut fürs Lesen und Stöbern. Namore ist auf die Entscheidung zu zweit gebaut: Beide wischen getrennt, keiner sieht die Stimme des anderen, und nach dem Match bringt eine Endrunde die gemeinsamen Treffer in eine Reihenfolge. Wer viel über Namen lesen will, ist bei CharliesNames besser aufgehoben. Wer sich zu zweit festlegen will, bei Namore.',
+  },
+  {
+    q: 'Sieht mein Partner bei CharliesNames, welche Namen ich abgelehnt habe?',
+    a: 'Teilweise ja. CharliesNames arbeitet mit gemeinsamen Listen, und die Daumen-runter-Liste sammelt laut den eigenen Hilfeseiten alle Namen, die mindestens einem von euch nicht gefallen. Ihr seht also, dass ein Name aussortiert wurde. Bei Namore bleiben die Stimmen verdeckt, bis ihr beide unabhängig Ja gesagt habt.',
+  },
+  {
+    q: 'Ist CharliesNames kostenlos?',
+    a: 'CharliesNames ist kostenlos nutzbar und finanziert sich über freiwillige In-App-Käufe, die im deutschen App Store zwischen 1,99 € und 14,99 € liegen. Kein Abo. Namore ist ebenfalls kostenlos — 100 Swipes pro Person je 24 Stunden ohne Werbung — und kostet einmalig 7,99 €, wenn ihr unbegrenzt wischen wollt; das gilt für beide Handys zusammen.',
+  },
+  {
+    q: 'Welche App hat mehr Namen?',
+    a: 'CharliesNames nennt über 15.000 Vornamen, Namore 15.182. Der Unterschied ist praktisch bedeutungslos — beide zeigen euch mehr Namen, als ihr in einer Schwangerschaft durchschauen könnt. Entscheidend ist eher, was die App macht, nachdem euch ein Name gefällt.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: 'Namore vs. CharliesNames: Welche Babynamen-App passt zu euch?',
+      description:
+        'Ehrlicher Vergleich von Namore und CharliesNames — verdeckte Stimmen, Konto, Preis, Namensdaten und wofür jede App wirklich gebaut ist.',
+      inLanguage: 'de-DE',
+      datePublished: '2026-08-19',
+      dateModified: '2026-08-19',
+      author: { '@type': 'Person', name: 'Julian Ziegler' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Namore',
+        logo: { '@type': 'ImageObject', url: 'https://www.namore.app/logo@2x.png' },
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: 'de-DE',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  lang="de"
+  title="Namore vs. CharliesNames: Welche Babynamen-App passt zu euch? | Namore"
+  description="Namore und CharliesNames im ehrlichen Vergleich: verdeckte Stimmen, Konto, Preis und Namensdaten — und warum die beiden Apps eigentlich zwei verschiedene Probleme lösen."
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <article class="post" lang="de">
+    <header class="post-head">
+      <p class="post-kicker">App-Vergleich · Geprüft am {VERIFIED}</p>
+      <h1>Namore vs. CharliesNames</h1>
+    </header>
+
+    <p class="post-standfirst">
+      Kurz gesagt: CharliesNames ist die bessere Bibliothek, Namore das bessere
+      Entscheidungswerkzeug. CharliesNames ist dafür gebaut, dass ihr über Namen lest — Herkunft,
+      Bedeutung, Beliebtheit in mehreren Ländern. Namore ist dafür gebaut, dass zwei Menschen sich
+      auf einen Namen einigen, ohne sich gegenseitig zu beeinflussen. Wenn ihr noch sammelt, nehmt
+      CharliesNames. Wenn ihr seit Wochen im Kreis diskutiert, nehmt Namore.
+    </p>
+
+    <p class="post-method">
+      Grundlage sind die öffentlich einsehbaren Einträge im deutschen App Store und bei Google Play
+      sowie die Seiten beider Anbieter, geprüft am {VERIFIED}.
+    </p>
+
+    <h2>Die Zahlen nebeneinander</h2>
+    <VsTable rival={rival} />
+
+    <h2>Der eine Unterschied, der im Alltag zählt</h2>
+    <p>
+      Beide Apps können zu zweit benutzt werden. Der Unterschied liegt darin, was ihr voneinander
+      seht.
+    </p>
+    <p>
+      CharliesNames arbeitet mit gemeinsamen Listen. In den eigenen Hilfeseiten steht zur
+      Daumen-runter-Liste: dort landen alle Namen, die mindestens einem von euch nicht gefallen. Das
+      ist praktisch, wenn ihr gemeinsam aussortieren wollt — und es ist genau das Problem, wenn einer
+      von euch schneller entschieden ist als der andere. Sobald sichtbar wird, dass ein Name
+      abgelehnt wurde, verhandelt ihr wieder statt zu wählen.
+    </p>
+    <p>
+      Bei Namore sieht keiner die Stimme des anderen. Es gibt keine geteilte Favoritenliste und keinen
+      Tab, in dem ihr nachschauen könntet, was der andere schon aussortiert hat. Ein Name taucht erst
+      auf, wenn ihr beide unabhängig voneinander Ja gesagt habt. Das nimmt den Anker raus — man mag
+      einen Namen nicht mehr, weil der Partner ihn mochte, und lehnt ihn nicht mehr ab, weil man beim
+      letzten Vorschlag nachgegeben hat.
+    </p>
+    <p class="post-caveat">
+      Fairerweise: Verdeckte Stimmen sind kein Alleinstellungsmerkmal von Namore. Mini Marvin aus
+      Dresden macht das im Browser ebenso und sagt es auf der eigenen Seite ausdrücklich. Bei Kinder
+      und BabyName steht dazu nichts — das heißt nicht, dass sie es nicht können, wir haben es nur
+      nicht belegt gefunden. <a href="/de/blog/namore-vs-mini-marvin">Namore und Mini Marvin im
+      direkten Vergleich</a>.
+    </p>
+
+    <h2>Was CharliesNames besser kann</h2>
+    <p>
+      Einiges, und es lohnt sich, das offen zu sagen. CharliesNames kommt aus Dachau, ist seit Jahren
+      am Markt und hat über eine Million Installationen bei Google Play mit 4,3 Sternen aus fast
+      4.000 Bewertungen. Das ist eine Größenordnung, die Namore nicht hat und in diesem Jahr auch
+      nicht bekommen wird.
+    </p>
+    <p>
+      Dazu kommt eine echte Website mit Namensseiten, Namensgenerator, Länder-Ranglisten und einem
+      Blog — ihr könnt dort nachlesen, ohne die App zu öffnen. Und die App wirbt mit
+      KI-Vorschlägen: „Meine KI lernt deinen Geschmack kennen.“ Namore macht dieses Versprechen
+      bewusst nicht, weil unser Deck aus euren eigenen Likes innerhalb der Sitzung lernt und wir
+      nicht mehr behaupten wollen, als das Produkt heute tut.
+    </p>
+    <p>
+      Wenn euer eigentliches Bedürfnis „ich will über Namen lesen und mich inspirieren lassen“ ist,
+      ist CharliesNames die bessere App. Ohne Einschränkung.
+    </p>
+
+    <h2>Was Namore besser kann</h2>
+    <ul>
+      <li><strong>Kein Konto.</strong> Einer startet eine Sitzung, der andere tritt mit einem sechsstelligen Code bei. Keine E-Mail, keine Registrierung.</li>
+      <li><strong>Es hört nicht beim Match auf.</strong> Nach dem Match bewertet ihr die gemeinsamen Treffer noch einmal getrennt von 1 bis 5, danach stehen beide Reihenfolgen nebeneinander. So kommt ihr von zwölf Namen auf einen. Keine der hier verglichenen Apps hat eine vergleichbare Endrunde.</li>
+      <li><strong>Ein Preis für beide.</strong> 7,99 € einmalig schalten unbegrenztes Wischen und alle Filter für beide Handys frei. Kein Abo.</li>
+      <li><strong>Daten in der EU.</strong> Gehostet in Irland, keine Werbung, kein Datenverkauf, kein Modelltraining mit euren Swipes.</li>
+    </ul>
+
+    <h2>Wann ihr welche nehmen solltet</h2>
+    <ul>
+      <li>Ihr steht am Anfang und wollt erst mal sehen, was es gibt → <strong>CharliesNames</strong>.</li>
+      <li>Ihr habt zwanzig Namen und kommt seit Wochen nicht weiter → <strong>Namore</strong>.</li>
+      <li>Einer von euch redet dem anderen ständig Namen aus → <strong>Namore</strong>, wegen der verdeckten Stimmen.</li>
+      <li>Ihr wollt wissen, wie ein Name in Dänemark oder Polen dasteht → <strong>CharliesNames</strong>.</li>
+      <li>Ihr wollt keine Konten anlegen → <strong>Namore</strong>.</li>
+      <li>Ehrlichste Antwort: beide sind kostenlos. Installiert beide und schaut, welche euer Partner tatsächlich öffnet. Das entscheidet es öfter als jede Funktionsliste.</li>
+    </ul>
+
+    <p class="cta-row">
+      <a class="btn btn-ink" href={APP_STORE(campaign)}>Namore für iOS laden</a>
+      <a class="btn btn-ghost" href={PLAY(campaign)}>Bei Google Play laden</a>
+    </p>
+
+    <h2>Häufige Fragen</h2>
+    <dl class="faq">
+      {faqs.map((f) => (
+        <div class="faq-item">
+          <dt>{f.q}</dt>
+          <dd>{f.a}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <ClusterFoot current="namore-vs-charliesnames" />
+  </article>
+</BaseLayout>
