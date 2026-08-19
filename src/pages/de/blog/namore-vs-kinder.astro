@@ -1,25 +1,17 @@
 ---
 /**
- * /de/blog/namore-vs-kinder
+ * namore-vs-kinder — rebuilt 2026-08-19 under the post-review evidence rule.
  *
- * Target query: "Kinder App Babynamen", "Babynamen App wie Tinder",
- * "Namens App wie Tinder" — the last two are verbatim from Google's
- * "Wird auch oft gesucht" block (DE, 2026-08-19). Kinder is the app people
- * mean when they say "das Tinder für Babynamen", so this page has to serve
- * the Tinder-analogy query as much as the brand query.
- *
- * ⚠️ Kinder's double-blind behaviour is NOT VERIFIED. Its store listing says
- * only "Sie können sich mit Ihrem Partner verbinden, um Übereinstimmungen zu
- * finden" — nothing about visibility. Do NOT claim Kinder shows partner votes.
- * Say "nicht belegt" and mean it.
- *
- * Kinder's pricing is genuinely the most honest in the category — you buy the
- * name sets you want, purchases are shared with the partner, no subscription,
- * no ads. Say so plainly; a comparison that cannot name a competitor's
- * advantage reads as an ad.
+ * Competitor content on this page is ONLY literal transcriptions from the
+ * store listing, rendered by <StoreFacts> with a source link and a date.
+ * This page's own prose says nothing factual about the competitor that is
+ * not in that block. Do not add characterisation, superlatives, or claims
+ * about what a competitor does internally — see the header of apps-de.ts.
  */
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import VsTable from '../../../components/VsTable.astro';
+import Disclosure from '../../../components/Disclosure.astro';
+import StoreFacts from '../../../components/StoreFacts.astro';
+import WhyNamore from '../../../components/WhyNamore.astro';
 import ClusterFoot from '../../../components/ClusterFoot.astro';
 import { byslug, VERIFIED, APP_STORE, PLAY } from '../../../data/apps-de';
 
@@ -29,20 +21,16 @@ const campaign = 'vs_kinder';
 
 const faqs = [
   {
-    q: 'Was ist der Unterschied zwischen Namore und Kinder?',
-    a: 'Kinder hat das Wischprinzip für Babynamen in Deutschland bekannt gemacht und verkauft Namenspakete einzeln ab 0,99 €, ohne Abo und ohne Werbung. Namore ist neuer und setzt auf verdeckte Stimmen: Keiner sieht die Bewertung des anderen, bis ihr beide denselben Namen mögt, und nach dem Match sortiert eine Endrunde die Treffer. Kinder ist der etablierte Klassiker, Namore das gezieltere Werkzeug für die Entscheidung.',
-  },
-  {
-    q: 'Sieht mein Partner bei Kinder meine Bewertungen?',
-    a: 'Das ist nicht belegt. Der Store-Eintrag von Kinder sagt nur, dass ihr euch mit dem Partner verbinden könnt, um Übereinstimmungen zu finden — zur Sichtbarkeit der einzelnen Stimmen steht dort nichts. Wir behaupten deshalb weder das eine noch das andere. Bei Namore ist es ausdrücklich so, dass Stimmen bis zum Match verdeckt bleiben.',
+    q: 'Was unterscheidet Namore von Kinder?',
+    a: 'Kinder verkauft laut App Store einzelne Namens-Sets ab 0,99 €, alle zusammen für 5,99 €, wobei Käufe zwischen verbundenen Partnern geteilt werden; der Eintrag weist die App als werbehaltig aus und bietet einen Login per E-Mail an. Namore zeigt keine Werbung, braucht kein Konto — ein Code aus sechs Buchstaben genügt — und hat nach dem Match eine Endrunde, in der ihr die gemeinsamen Treffer getrennt bewertet.',
   },
   {
     q: 'Welche App ist günstiger?',
-    a: 'Das hängt davon ab, wie viel ihr braucht. Kinder verkauft einzelne Namenspakete ab 0,99 €, alle Pakete zusammen kosten 5,99 €, und Käufe gelten für beide Partner. Namore ist kostenlos mit 100 Swipes pro Person je 24 Stunden ohne Werbung; unbegrenztes Wischen und alle Filter kosten einmalig 7,99 € für beide Handys. Wenn ihr nur ein Namenspaket wollt, ist Kinder günstiger. Wenn ihr alles freischalten wollt, liegen beide nah beieinander.',
+    a: 'Das hängt davon ab, wie viel ihr braucht. Ein einzelnes Sprach-Set bei Kinder kostet 0,99 €, alle zusammen 5,99 €. Namore ist kostenlos mit 100 Swipes pro Person je 24 Stunden ohne Werbung; unbegrenztes Wischen und alle Filter kosten einmalig 7,99 € und gelten für beide Handys.',
   },
   {
-    q: 'Gibt es eine Babynamen-App wie Tinder?',
-    a: 'Ja, mehrere. Kinder hat das Prinzip in Deutschland populär gemacht, BabyName liefert es international schon seit Dezember 2014 aus, und Namore und Mini Marvin arbeiten ebenfalls mit Wischen. Der Unterschied liegt darin, was nach dem Wischen passiert: Bei Namore bleiben die Stimmen bis zum Match verdeckt, und danach folgt eine Endrunde, in der ihr die gemeinsamen Treffer in eine Reihenfolge bringt.',
+    q: 'Gibt es eine Babynamen-App zum Wischen?',
+    a: 'Mehrere. Kinder, BabyName, Unser Baby Name, Mini Marvin und Namore arbeiten alle mit Wischen. Der Unterschied liegt darin, was danach passiert: Bei Namore erscheint ein Name erst, wenn ihr beide unabhängig voneinander Ja gesagt habt, und im Anschluss bringt eine Endrunde die gemeinsamen Treffer in eine Reihenfolge.',
   },
 ];
 
@@ -51,9 +39,8 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'Article',
-      headline: 'Namore vs. Kinder: Der Wisch-Klassiker gegen den Neuzugang',
-      description:
-        'Namore und Kinder im Vergleich — Wischprinzip, verdeckte Stimmen, Preise, Namensdaten und für wen welche App die richtige ist.',
+      headline: 'Namore und Kinder im Vergleich',
+      description: 'Namore und Kinder nebeneinander: was im Store-Eintrag von Kinder steht, was Namore macht, und wofür welche App die passendere ist.',
       inLanguage: 'de-DE',
       datePublished: '2026-08-19',
       dateModified: '2026-08-19',
@@ -80,76 +67,41 @@ const jsonLd = {
 
 <BaseLayout
   lang="de"
-  title="Namore vs. Kinder: Welche Babynamen-App zum Wischen? | Namore"
-  description="Namore und Kinder im ehrlichen Vergleich: Wischprinzip, verdeckte Stimmen, Preismodell und Namensdaten — und wofür der Klassiker bis heute die bessere Wahl ist."
+  title='Namore und Kinder im Vergleich | Namore'
+  description='Namore und Kinder nebeneinander: was im Store-Eintrag von Kinder steht, was Namore macht, und wofür welche App die passendere ist.'
   canonical={canonical}
   jsonLd={jsonLd}
 >
   <article class="post" lang="de">
+    <Disclosure />
+
     <header class="post-head">
-      <p class="post-kicker">App-Vergleich · Geprüft am {VERIFIED}</p>
-      <h1>Namore vs. Kinder</h1>
+      <p class="post-kicker">App-Vergleich · Abgerufen am {VERIFIED}</p>
+      <h1>Namore und Kinder</h1>
     </header>
 
     <p class="post-standfirst">
-      Kurz gesagt: Kinder ist der Klassiker mit dem fairsten Preismodell, Namore der neuere Ansatz
-      mit verdeckten Stimmen und einer Endrunde nach dem Match. Wenn ihr einfach zu zweit wischen
-      wollt und nur ein Namenspaket braucht, ist Kinder für unter einem Euro schwer zu schlagen. Wenn
-      das Problem eher „wir kommen zu keiner Entscheidung“ heißt, ist Namore dafür gebaut.
+      Kinder verkauft Namens-Sets einzeln statt im Abo und ist mit 381 Bewertungen im deutschen App
+      Store länger im Einsatz als Namore. Namore ist neuer und auf die Entscheidung zu zweit gebaut.
+      Unten steht zuerst, was Kinder über sich selbst sagt — wörtlich und verlinkt.
     </p>
 
-    <p class="post-method">
-      Grundlage sind die öffentlich einsehbaren Einträge im deutschen App Store und bei Google Play
-      sowie die Seiten beider Anbieter, geprüft am {VERIFIED}.
-    </p>
+    <StoreFacts app={rival} />
 
-    <h2>Die Zahlen nebeneinander</h2>
-    <VsTable rival={rival} />
-
-    <h2>Was Kinder richtig gut macht</h2>
+    <h2>Wofür Kinder die bessere Wahl sein kann</h2>
     <p>
-      Das Preismodell. Kinder verkauft euch Namenspakete einzeln ab 0,99 €, alle zusammen für 5,99 €,
-      und ein Kauf gilt für beide Partner. Kein Abo, keine Werbung, kein Freischalt-Karussell. In
-      einer Kategorie, in der fast jede App inzwischen ein Monatsabo verkauft, ist das die
-      ehrlichste Variante, die wir gefunden haben — und sie ist ein Grund, Kinder zu empfehlen.
+      Das Preismodell ist ungewöhnlich fair: Der Eintrag weist einzelne Sprach-Sets zu je 0,99 € aus
+      und alle zusammen für 5,99 €, und er hält ausdrücklich fest, dass Käufe geteilt werden, wenn
+      ihr verbunden seid. Wer nur ein Set braucht, kommt für unter einem Euro aus. Mit 20.000+
+      Namen nennt Kinder außerdem mehr Namen als Namore.
     </p>
     <p>
-      Dazu kommt Reichweite: über eine halbe Million Installationen bei Google Play und eine
-      Oberfläche in 23 Sprachen. Und Kinder hat in Deutschland das Prinzip „wischen statt blättern“
-      bekannt gemacht; wer den Vergleich mit Tinder zuerst gehört hat, hat ihn wahrscheinlich über
-      diese App gehört. Diese Rolle nehmen wir Kinder nicht weg und wollen es auch nicht.
+      Zwei Dinge stehen ebenfalls im Eintrag und sind für eure Entscheidung relevant: Die App
+      enthält Werbung, und ihr könnt ein Konto anlegen beziehungsweise euch per E-Mail anmelden.
+      Bei Namore gibt es beides nicht.
     </p>
 
-    <h2>Wo wir nichts behaupten</h2>
-    <p>
-      Eine Sache, die andere Vergleichsseiten an dieser Stelle einfach hinschreiben, lassen wir
-      bewusst offen: Ob Kinder die Stimmen des Partners verdeckt hält, steht nirgends. Der
-      Store-Eintrag sagt, dass ihr euch verbinden könnt, um Übereinstimmungen zu finden — mehr nicht.
-      Wir haben es nicht belegt gefunden, und „nicht belegt“ ist nicht dasselbe wie „kann es nicht“.
-      In der Tabelle oben steht deshalb genau das.
-    </p>
-    <p>
-      Bei Namore ist die Regel dagegen ausdrücklich Teil des Produkts: Keiner sieht die Stimme des
-      anderen, es gibt keine geteilte Liste, und ein Name erscheint erst, wenn beide unabhängig Ja
-      gesagt haben.
-    </p>
-
-    <h2>Was Namore anders macht</h2>
-    <ul>
-      <li><strong>Nach dem Match geht es weiter.</strong> Ihr bewertet die gemeinsamen Treffer noch einmal getrennt von 1 bis 5, danach stehen beide Reihenfolgen nebeneinander. Ein Match ist bei uns nicht das Ende, sondern die Vorauswahl.</li>
-      <li><strong>Kein Konto.</strong> Sechsstelliger Code statt Registrierung. Kinder bietet einen optionalen E-Mail-Login zur Sicherung an; bei uns gibt es gar keinen.</li>
-      <li><strong>Tiefere Namensdaten.</strong> 15.182 Namen mit Bedeutung, Herkunft, Aussprache, Kosenamen und Beliebtheitsverlauf. Kinder nennt 20.000+ im App Store und über 18.000 bei Google Play — mehr Namen, aber weniger pro Name.</li>
-      <li><strong>Keine Werbung, Daten in der EU.</strong> Gehostet in Irland, kein Datenverkauf, kein Modelltraining mit euren Swipes.</li>
-    </ul>
-
-    <h2>Wann ihr welche nehmen solltet</h2>
-    <ul>
-      <li>Ihr wollt zu zweit wischen und möglichst wenig zahlen → <strong>Kinder</strong>, ein Paket für 0,99 €.</li>
-      <li>Ihr braucht die App auf einer Sprache, die sonst niemand anbietet → <strong>Kinder</strong>, 23 Oberflächensprachen.</li>
-      <li>Ihr wollt, dass niemand sieht, was der andere abgelehnt hat → <strong>Namore</strong>.</li>
-      <li>Ihr habt schon eine Trefferliste und müsst euch jetzt festlegen → <strong>Namore</strong>, wegen der Endrunde.</li>
-      <li>Ihr wollt gar keine Konten und keine E-Mail-Adresse hinterlassen → <strong>Namore</strong>.</li>
-    </ul>
+    <WhyNamore lang="de" heading='Was Namore macht' only={['decision-round', 'no-ads', 'no-account', 'name-depth', 'learning', 'no-repeats']} />
 
     <p class="cta-row">
       <a class="btn btn-ink" href={APP_STORE(campaign)}>Namore für iOS laden</a>

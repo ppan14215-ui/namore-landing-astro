@@ -1,47 +1,43 @@
 ---
 /**
- * /de/blog/babynamen-app-kostenlos
+ * /de/blog/babynamen-app-kostenlos — REBUILT 2026-08-19.
  *
- * Target queries: "Babynamen App kostenlos" and "Namens App kostenlos" — both
- * verbatim from Google's "Wird auch oft gesucht" block (DE, 2026-08-19).
+ * ⚠️ The first version got three price facts wrong by reading vendor websites
+ * instead of the store listings: it said Unser Baby Name costs 7,99 € (the
+ * German App Store says "Full Version 8,99 €"), said Kinder runs without ads
+ * (its listing says "Enthält Werbung"), and omitted that Unser Baby Name has
+ * a free tier at all — on a page whose entire subject is what "kostenlos"
+ * conceals. Every price row below is now a transcription with a source link.
  *
- * WHY THIS PAGE EARNS ITS PLACE: nobody has written it. Every app in the
- * category is listed as "kostenlos" in the stores and every one of them means
- * something different by it — ads, daily caps, per-set purchases, a monthly
- * subscription, a one-time unlock. A page that just states what each free tier
- * actually gives you is genuinely useful, which is the only defensible reason
- * to add a page to a domain that already has a crawl-budget problem.
- *
- * ⚠️ This page must NOT be a disguised pitch. Mini Marvin gives 500 free
- * swipes a day to our 100 per 24h — five times as many. Kinder's 0,99 € set
- * is the cheapest real unlock in the category. Both are stated plainly. If the
- * honest version of this table did not favour us in places, the page would not
- * be worth publishing.
+ * Prices are the single most Abmahnung-prone thing to get wrong about a
+ * competitor (§5 Abs. 2 Nr. 2 UWG names the price explicitly). If a price
+ * cannot be read off the store listing today, it does not go on this page.
  */
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Disclosure from '../../../components/Disclosure.astro';
+import WhyNamore from '../../../components/WhyNamore.astro';
 import ClusterFoot from '../../../components/ClusterFoot.astro';
-import { APPS, NAMORE, VERIFIED, APP_STORE, PLAY } from '../../../data/apps-de';
+import { APPS, VERIFIED, NO_STATEMENT, APP_STORE, PLAY } from '../../../data/apps-de';
 
 const canonical = 'https://www.namore.app/de/blog/babynamen-app-kostenlos';
 const campaign = 'app_kostenlos';
-const all = [NAMORE, ...APPS];
 
 const faqs = [
   {
     q: 'Gibt es eine wirklich kostenlose Babynamen-App?',
-    a: 'Alle großen Babynamen-Apps sind kostenlos herunterzuladen, aber keine ist unbegrenzt kostenlos. Die Unterschiede liegen darin, womit die Gratisversion bezahlt wird: Mini Marvin zeigt Werbung und erlaubt 500 Swipes am Tag, Namore zeigt keine Werbung und erlaubt 100 Swipes pro Person je 24 Stunden, Kinder verkauft einzelne Namenspakete ab 0,99 €, und Unser Baby Name bietet neben dem Einmalkauf ein Abo für 2,99 € im Monat an.',
+    a: 'Alle lassen sich kostenlos herunterladen, aber jede finanziert sich anders. Die Einträge von Kinder und BabyName weisen Werbung aus, CharliesNames gibt an, ohne Werbung zu laufen, und Mini Marvin zeigt Werbung nur im Gratistarif und begrenzt ihn auf 500 Swipes am Tag und einen eingeladenen Partner. Namore ist werbefrei mit 100 Swipes pro Person je 24 Stunden.',
   },
   {
     q: 'Welche Babynamen-App hat kein Abo?',
-    a: 'Namore, Kinder, CharliesNames, Mini Marvin und BabyName verkaufen Einmalkäufe statt Abonnements. Unser Baby Name bietet beides an — 7,99 € einmalig oder 2,99 € im Monat. Bei Namore gilt der Einmalkauf von 7,99 € für beide Handys zusammen.',
+    a: 'Die hier verglichenen Apps verkaufen laut ihren Einträgen Einmalkäufe statt Abonnements — bei Unser Baby Name weist der deutsche App Store „Full Version 8,99 €“ und „Unlock all features 1,99 €“ aus, bei Kinder Sets ab 0,99 €, bei CharliesNames Käufe von 1,99 € bis 14,99 €. Bei Namore schaltet ein einmaliger Kauf von 7,99 € beide Handys frei.',
   },
   {
     q: 'Was kostet Namore wirklich?',
-    a: 'Nichts, solange euch 100 Swipes pro Person je 24 Stunden reichen — ohne Werbung und ohne Konto. Wer unbegrenzt wischen und alle Filter nutzen will, zahlt einmalig 7,99 €, und das gilt für beide Handys zusammen. Es gibt kein Abo und keine wiederkehrende Zahlung.',
+    a: 'Nichts, solange euch 100 Swipes pro Person je 24 Stunden reichen — ohne Werbung und ohne Konto. Wer unbegrenzt wischen und alle Filter nutzen will, zahlt einmalig 7,99 €, und das gilt für beide Handys zusammen. Kein Abo, keine wiederkehrende Zahlung.',
   },
   {
-    q: 'Welche kostenlose Babynamen-App hat die meisten Gratis-Swipes?',
-    a: 'Mini Marvin mit 500 Swipes am Tag, allerdings mit Werbung in der kostenlosen Version. Namore erlaubt 100 Swipes pro Person je 24 Stunden, dafür werbefrei. Kinder und CharliesNames begrenzen nicht das Wischen, sondern verkaufen einzelne Namenspakete beziehungsweise finanzieren sich über freiwillige Käufe.',
+    q: 'Welche App hat die meisten Gratis-Swipes?',
+    a: 'Von den hier verglichenen nennt Mini Marvin die höchste Zahl: 500 Swipes pro Tag im Gratistarif, laut Preisseite mit Werbung und auf einen eingeladenen Partner begrenzt. Namore erlaubt 100 pro Person je 24 Stunden, dafür werbefrei. Die übrigen Anbieter machen zu einem Swipe-Limit keine Angabe.',
   },
 ];
 
@@ -50,9 +46,9 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'Article',
-      headline: 'Babynamen-Apps kostenlos: was hinter „gratis“ wirklich steckt',
+      headline: 'Babynamen-Apps kostenlos: was hinter „gratis“ steckt',
       description:
-        'Alle Babynamen-Apps sind kostenlos — und meinen damit etwas anderes. Werbung, Tageslimits, Namenspakete, Abo oder Einmalkauf, nebeneinander gestellt.',
+        'Jede Babynamen-App ist kostenlos und meint etwas anderes damit. Die Preisangaben aus den Store-Einträgen, verlinkt und mit Datum.',
       inLanguage: 'de-DE',
       datePublished: '2026-08-19',
       dateModified: '2026-08-19',
@@ -79,41 +75,49 @@ const jsonLd = {
 
 <BaseLayout
   lang="de"
-  title="Babynamen-Apps kostenlos: was hinter „gratis“ wirklich steckt | Namore"
-  description="Jede Babynamen-App ist kostenlos — und meint etwas anderes damit. Werbung, Tageslimits, Namenspakete, Abo oder Einmalkauf: alle Preismodelle nebeneinander."
+  title="Babynamen-Apps kostenlos: was hinter „gratis“ steckt | Namore"
+  description="Jede Babynamen-App ist kostenlos und meint etwas anderes damit. Werbung, Tageslimits, Sets, Einmalkauf — die Angaben aus den Store-Einträgen, verlinkt."
   canonical={canonical}
   jsonLd={jsonLd}
 >
   <article class="post" lang="de">
+    <Disclosure />
+
     <header class="post-head">
-      <p class="post-kicker">Ratgeber · Geprüft am {VERIFIED}</p>
+      <p class="post-kicker">Ratgeber · Abgerufen am {VERIFIED}</p>
       <h1>Babynamen-Apps kostenlos</h1>
     </header>
 
     <p class="post-standfirst">
       Jede App in dieser Kategorie steht im Store als „kostenlos“ — und jede meint etwas anderes
       damit. Die eine zeigt Werbung, die nächste begrenzt die Swipes pro Tag, die dritte verkauft
-      Namenspakete einzeln, die vierte ein Monatsabo. Hier steht, was ihr bei jeder tatsächlich
-      bekommt, ohne zu zahlen — und was der Einmalkauf jeweils kostet.
+      Namens-Sets einzeln. Hier stehen die Angaben aus den Einträgen selbst, wörtlich und verlinkt.
     </p>
 
     <p class="post-method">
-      Grundlage sind die Preisangaben in den öffentlich einsehbaren Einträgen im deutschen App Store
-      und bei Google Play sowie auf den Seiten der Anbieter, geprüft am {VERIFIED}. Preise ändern
-      sich; schaut vor dem Kauf in den aktuellen Eintrag.
+      Alle Preisangaben stammen aus den öffentlich einsehbaren Einträgen im deutschen App Store
+      beziehungsweise von der Preisseite des Anbieters, abgerufen am {VERIFIED}. Achtung: Auf den
+      eigenen Websites mancher Anbieter stehen andere Preise als im Store. Maßgeblich ist der
+      Eintrag, in dem ihr tatsächlich kauft — schaut vor dem Kauf dort nach.
     </p>
 
-    <h2>Was „kostenlos“ bei jeder App bedeutet</h2>
+    <h2>Preise und Werbung, wie sie im Eintrag stehen</h2>
     <div class="table-wrap">
       <table class="cmp">
         <thead>
-          <tr><th>App</th><th>Preismodell</th></tr>
+          <tr><th>App</th><th>Preisangabe</th><th>Werbung</th></tr>
         </thead>
         <tbody>
-          {all.map((a, i) => (
-            <tr class={i === 0 ? 'is-ours' : undefined}>
-              <td data-label="App">{a.name}</td>
-              <td data-label="Preismodell">{a.price}</td>
+          <tr class="is-ours">
+            <td data-label="App">Namore</td>
+            <td data-label="Preisangabe">Kostenlos mit 100 Swipes pro Person je 24 Stunden · 7,99 € einmalig für beide Handys, kein Abo</td>
+            <td data-label="Werbung">Keine, auch nicht im Gratistarif</td>
+          </tr>
+          {APPS.map((a) => (
+            <tr>
+              <td data-label="App"><a href={a.src} rel="nofollow noopener" target="_blank">{a.name}</a></td>
+              <td data-label="Preisangabe">{a.price ? <q>{a.price.q}</q> : <span class="sf-none">{NO_STATEMENT}</span>}</td>
+              <td data-label="Werbung">{a.ads ? <q>{a.ads.q}</q> : <span class="sf-none">{NO_STATEMENT}</span>}</td>
             </tr>
           ))}
         </tbody>
@@ -123,38 +127,31 @@ const jsonLd = {
     <h2>Die drei Dinge, auf die man achten sollte</h2>
     <p>
       <strong>Erstens: Werbung oder Limit.</strong> Eine kostenlose App finanziert sich irgendwie.
-      Mini Marvin ist hier am großzügigsten, was die Menge angeht — 500 Swipes am Tag sind fünfmal so
-      viele wie bei Namore — nimmt dafür aber Werbung in Kauf. Namore begrenzt auf 100 Swipes pro
-      Person je 24 Stunden und zeigt dafür keine Anzeigen. Beides ist vertretbar; ihr solltet nur
-      wissen, welchen Tausch ihr macht.
+      Manche Einträge weisen Werbung aus, andere begrenzen stattdessen die Nutzung. Beides ist
+      vertretbar — ihr solltet nur wissen, welchen Tausch ihr macht.
     </p>
     <p>
-      <strong>Zweitens: Abo oder einmalig.</strong> Ihr sucht neun Monate lang einen Namen, nicht
-      neun Jahre. Ein Monatsabo ist für diesen Zeitraum das teurere Modell, wenn ihr es vergesst zu
-      kündigen. Von den hier verglichenen Apps bietet nur Unser Baby Name ein Abo an — 2,99 € im
-      Monat neben dem Einmalkauf von 7,99 €. Alle anderen verkaufen ausschließlich Einmalkäufe.
+      <strong>Zweitens: Wo ihr den Preis nachlest.</strong> Bei mindestens einem Anbieter stehen auf
+      der eigenen Website andere Zahlen als im deutschen App Store. Der Store ist die Stelle, an der
+      ihr tatsächlich zahlt.
     </p>
     <p>
-      <strong>Drittens: gilt der Kauf für einen oder für beide?</strong> Das ist die Angabe, die am
-      häufigsten fehlt, und bei einer Paar-App die wichtigste. Bei Namore schaltet der Einmalkauf von
-      7,99 € beide Handys frei. Bei Kinder gelten gekaufte Namenspakete laut Anbieter ebenfalls für
-      beide Partner. Bei den übrigen haben wir dazu keine belastbare Angabe gefunden — rechnet im
-      Zweifel mit zwei Käufen.
+      <strong>Drittens: Gilt der Kauf für einen oder für beide?</strong> Das ist bei einer Paar-App
+      die wichtigste Angabe und fehlt am häufigsten. Bei Namore schaltet der Einmalkauf beide Handys
+      frei. Kinder gibt im Eintrag an, dass Käufe geteilt werden, wenn ihr verbunden seid. Bei den
+      übrigen haben wir dazu keine Angabe gefunden — rechnet im Zweifel mit zwei Käufen.
     </p>
 
-    <h2>Wenn ihr gar nichts ausgeben wollt</h2>
-    <ul>
-      <li>Möglichst viele Gratis-Swipes an einem Abend, Werbung ist okay → <strong>Mini Marvin</strong>, 500 am Tag im Browser.</li>
-      <li>Werbefrei wischen, ohne Konto, ohne etwas zu zahlen → <strong>Namore</strong>, 100 Swipes pro Person je 24 Stunden.</li>
-      <li>Nur stöbern und lesen, ohne Paar-Funktion → <strong>CharliesNames</strong>, kostenlos nutzbar mit freiwilligen Käufen.</li>
-      <li>Das billigste echte Freischalten überhaupt → <strong>Kinder</strong>, ein einzelnes Namenspaket ab 0,99 €.</li>
-    </ul>
+    <WhyNamore
+      lang="de"
+      heading="Was ihr bei Namore kostenlos bekommt"
+      only={['no-ads', 'no-account', 'name-depth', 'no-repeats']}
+    />
 
     <p>
-      Und wenn ihr am Ende doch etwas ausgebt: Der ehrlichste Test ist, die kostenlose Version so
-      lange zu benutzen, bis ihr ans Limit stoßt. Wenn ihr nie hinkommt, braucht ihr den Kauf nicht.
-      Wenn ihr an einem Abend hinkommt, wisst ihr, dass die App bei euch funktioniert — und dann ist
-      ein Einmalpreis die Sache wert.
+      Der ehrlichste Test bleibt: Benutzt die kostenlose Version, bis ihr ans Limit stoßt. Wenn ihr
+      nie hinkommt, braucht ihr den Kauf nicht. Wenn ihr an einem Abend hinkommt, wisst ihr, dass
+      die App bei euch funktioniert.
     </p>
 
     <p class="cta-row">

@@ -1,0 +1,38 @@
+---
+/**
+ * WhyNamore — the verified capability block, rendered from namore-features.ts.
+ *
+ * Added 2026-08-19 after Julian pointed out the cluster was underselling the
+ * product: the pages led on privacy and price and never mentioned the trend
+ * reads, the country ranks, the filters, adding your own names, the AI insight
+ * on a match, or the never-repeat guarantee.
+ *
+ * Pages pass `lang` and optionally `only` to show a subset. They must NOT
+ * restate a capability in their own words — every phrasing lives in the data
+ * file so a correction is one edit across all 21 pages.
+ */
+import { featuresFor, type Lang } from '../data/namore-features';
+
+export interface Props {
+  lang: Lang;
+  heading: string;
+  /** Optional subset of feature keys, in the order given. */
+  only?: string[];
+}
+const { lang, heading, only } = Astro.props;
+
+const all = featuresFor(lang);
+const items = only ? only.map((k) => all.find((f) => f.key === k)!).filter(Boolean) : all;
+---
+
+<section class="why">
+  <h2>{heading}</h2>
+  <div class="why-grid">
+    {items.map((f) => (
+      <div class={`why-item${f.distinct ? ' is-distinct' : ''}`}>
+        <h3>{f.title}</h3>
+        <p>{f.body}</p>
+      </div>
+    ))}
+  </div>
+</section>

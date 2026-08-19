@@ -1,103 +1,46 @@
 ---
 /**
- * /de/blog/beste-babynamen-apps — German comparison article.
+ * /de/blog/beste-babynamen-apps — the hub. REBUILT 2026-08-19.
  *
- * FORMAT: same structure as the EN piece (cold open → Methodik line →
- * "Kurz gesagt" + table → numbered "Am besten für…" sections → worauf es
- * ankommt → first-person Empfehlung → Quellen → nächster Schritt).
+ * ⚠️ This page ranks #1 on google.de for "beste babynamen apps" (verified
+ * in-browser 2026-08-19, four days after first publication). It was rebuilt
+ * anyway, because an independent pre-publication review found it carried the
+ * cluster's worst problems: an unsourced superlative about CharliesNames
+ * ("am schwächsten"), an aesthetic put-down of Kinder ("zeigt inzwischen ihr
+ * Alter"), a competitor's country coverage understated by roughly two thirds,
+ * a "largest name collection" claim contradicted by its own table, and no
+ * disclosure that the publisher sells the app ranked first.
  *
- * WHY DE MATTERS MOST: per channel-research-2026-08-13 no German
- * "beste Babynamen-Apps" listicle exists at all — the only comparison-shaped
- * German page is a broken machine-translated article on a dictation-software
- * domain. This page is written to become the category page. GSC 2026-08-16
- * also shows Germany at just 1,900 impressions (10th), so the DE surface is
- * wide open and currently unserved.
- *
- * CAUTION: Kinder's exact matching mechanics are NOT verified. Do NOT claim
- * "no German app does couples matching" — credit Kinder as the German swipe
- * pioneer and rank Namore on the combination of double-blind voting,
- * decision round, no account, one-time price and EU hosting.
- *
- * DO NOT claim AI superiority: CharliesNames markets "Meine KI lernt deinen
- * Geschmack kennen" in the German store.
- *
- * Catalog: 15.182 Namen. Pricing: free-first.
- *
- * ══════════════════════════════════════════════════════════════════════
- * UPDATE 2026-08-19 — this page reached #1 on google.de for
- * "beste babynamen apps" four days after publishing (verified in-browser,
- * DE locale, above Apple's own App Store page and FOCUS online).
- *
- * DO NOT REWRITE THE PROSE. Changes below are additive only:
- *   - Mini Marvin added. It was missing, it now ranks on the same query, and
- *     it is the ONLY other product with confirmed double-blind voting. A
- *     comparison that omits it is attackable.
- *   - "Baby Name Together" renamed to "Unser Baby Name" — same product by
- *     Linkinet (iOS id 918073224 / com.BabyName.start). Listing both would
- *     have been a factual error.
- *   - lang="de" added; every German page here shipped as lang="en" until now.
- *   - Spoke links added via ClusterFoot.
- * ══════════════════════════════════════════════════════════════════════
+ * The structure is now: neutral overview → each competitor as literal quotes
+ * from its own store listing, linked and dated → what Namore does → guidance.
+ * The page says nothing factual about a competitor outside the quoted blocks.
  */
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Disclosure from '../../../components/Disclosure.astro';
+import StoreFacts from '../../../components/StoreFacts.astro';
+import WhyNamore from '../../../components/WhyNamore.astro';
 import ClusterFoot from '../../../components/ClusterFoot.astro';
-import { VERIFIED } from '../../../data/apps-de';
+import { APPS, VERIFIED, APP_STORE, PLAY } from '../../../data/apps-de';
 
 const canonical = 'https://www.namore.app/de/blog/beste-babynamen-apps';
-const reviewed = VERIFIED;
-
-const APP_STORE = 'https://apps.apple.com/app/id6766572995?utm_source=blog&utm_medium=organic&utm_campaign=beste_babynamen_apps_de';
-const PLAY = 'https://play.google.com/store/apps/details?id=com.julian.namore&utm_source=blog&utm_medium=organic&utm_campaign=beste_babynamen_apps_de';
-
-const apps = [
-  {
-    name: 'Namore',
-    bestFor: 'Paare, die sich gegenseitig die Namen kaputtreden',
-    standout: 'Stimmen bleiben verdeckt, kein Konto, einmaliger Preis',
-  },
-  {
-    name: 'CharliesNames',
-    bestFor: 'Wer richtig über Namen lesen will',
-    standout: '15.000+ Namensseiten, Beliebtheitsdaten für 15 Länder',
-  },
-  {
-    name: 'Kinder',
-    bestFor: 'Den bekanntesten deutschen Wisch-Klassiker',
-    standout: 'Hat das Prinzip in Deutschland populär gemacht',
-  },
-  {
-    name: 'Unser Baby Name',
-    bestFor: 'Die Frage, wie häufig ein Name wirklich wird',
-    standout: 'Amtliche Namensstatistiken aus über 40 Ländern',
-  },
-  {
-    name: 'Mini Marvin',
-    bestFor: 'Wer nichts installieren will',
-    standout: 'Verdeckte Stimmen im Browser, auch mit Großeltern',
-  },
-  {
-    name: 'BabyName – find it together',
-    bestFor: 'Die größte internationale Nutzerbasis',
-    standout: 'Über 21.000 Bewertungen, seit 2014 am Markt',
-  },
-];
+const campaign = 'beste_babynamen_apps_de';
 
 const faqs = [
   {
     q: 'Welche Babynamen-App ist die beste für Paare?',
-    a: 'Für Paare lohnen sich die Apps, bei denen beide getrennt abstimmen und nur gemeinsame Treffer sichtbar werden. Namore arbeitet so: Die Stimmen bleiben verdeckt, bis ihr beide denselben Namen mögt, und ihr braucht kein Konto. CharliesNames ist die bessere Wahl, wenn ihr vor allem nachlesen wollt.',
+    a: 'Das hängt davon ab, woran es bei euch hakt. Wenn ihr vor allem lesen und stöbern wollt, nennt CharliesNames über 15.000 Namen aus über 40 Ländern und läuft werbefrei. Wenn ihr die größte Sammlung wollt, nennt Unser Baby Name mehr als 30.000. Wenn ihr nichts installieren wollt, läuft Mini Marvin im Browser. Namore ist auf den Fall gebaut, dass ihr euch nicht einigen könnt: Beide wischen getrennt, ein Name erscheint erst, wenn er beiden gefällt, und danach bringt eine Endrunde die gemeinsamen Treffer in eine Reihenfolge.',
   },
   {
     q: 'Braucht man für Babynamen-Apps ein Konto?',
-    a: 'Bei den meisten ja. Bei Namore nicht — einer startet eine Sitzung, der andere tritt mit einem sechsstelligen Code bei. Ohne E-Mail, ohne Registrierung.',
+    a: 'Das ist unterschiedlich und steht meist im Store-Eintrag. Unser Baby Name gibt an, dass beide Elternteile die App installieren und ihre Accounts verbinden; Mini Marvin verlangt eine kostenlose Registrierung; Kinder bietet einen Login per E-Mail an; BabyName beschreibt eine Kopplung per Link oder AirDrop. Namore braucht kein Konto — einer öffnet eine Sitzung, der andere tritt mit einem Code aus sechs Buchstaben bei.',
   },
   {
     q: 'Sind Babynamen-Apps kostenlos?',
-    a: 'Fast alle sind kostenlos mit In-App-Käufen. Namore gibt jedem Partner 100 kostenlose Swipes ohne Werbung, danach 24 Stunden Pause. Wer unbegrenzt wischen und alle Filter nutzen will, zahlt einmal 7,99 € für beide Handys zusammen, ohne Abo.',
+    a: 'Alle sind kostenlos herunterzuladen und finanzieren sich unterschiedlich. Die Einträge von Kinder und BabyName weisen Werbung aus, CharliesNames gibt an, ohne Werbung zu laufen, und Mini Marvin zeigt Werbung nur im Gratistarif. Namore ist werbefrei mit 100 Swipes pro Person je 24 Stunden; einmalig 7,99 € schalten unbegrenztes Wischen und alle Filter für beide Handys frei.',
   },
   {
     q: 'Wo werden meine Daten gespeichert?',
-    a: 'Das ist bei Babynamen-Apps selten transparent. Namore hostet in der EU (Irland), zeigt keine Werbung, verkauft keine Daten und trainiert keine Modelle mit euren Swipes. Inaktive Sitzungen werden automatisch gelöscht.',
+    a: 'Das steht bei den wenigsten Anbietern im Eintrag. Namore hostet in der EU (Irland), zeigt keine Werbung, verkauft keine Daten und trainiert keine Modelle mit euren Swipes. Inaktive Sitzungen werden automatisch gelöscht.',
   },
 ];
 
@@ -106,9 +49,9 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'Article',
-      headline: 'Die besten Babynamen-Apps 2026',
+      headline: 'Babynamen-Apps 2026 im Vergleich',
       description:
-        'Vergleich der Babynamen-Apps für Paare — getrennte Abstimmung, Datenschutz, Namensdaten und Preise.',
+        'Fünf Babynamen-Apps nebeneinander — mit den Angaben aus ihren eigenen Store-Einträgen, verlinkt und mit Datum.',
       inLanguage: 'de-DE',
       datePublished: '2026-08-16',
       dateModified: '2026-08-19',
@@ -135,187 +78,77 @@ const jsonLd = {
 
 <BaseLayout
   lang="de"
-  title="Die besten Babynamen-Apps 2026 | Namore"
-  description="Vergleich der Babynamen-Apps für Paare: getrennte Abstimmung, Datenschutz, Namensdaten und Preise — und was jede App besser kann als die anderen."
+  title="Babynamen-Apps 2026 im Vergleich | Namore"
+  description="Fünf Babynamen-Apps nebeneinander — jeweils mit den Angaben aus ihrem eigenen Store-Eintrag, verlinkt und mit Datum, plus was Namore anders macht."
   canonical={canonical}
   jsonLd={jsonLd}
 >
   <article class="post" lang="de">
+    <Disclosure />
+
     <header class="post-head">
-      <p class="post-kicker">App-Vergleich · Geprüft am {reviewed}</p>
-      <h1>Die besten Babynamen-Apps 2026</h1>
+      <p class="post-kicker">App-Vergleich · Abgerufen am {VERIFIED}</p>
+      <h1>Babynamen-Apps 2026 im Vergleich</h1>
     </header>
 
     <p class="post-standfirst">
       Wenn ihr abends auf dem Sofa einfach ein bisschen Namen durchblättern wollt, tut es fast jede
-      dieser Apps. Wenn ihr zu zweit von "der klingt ganz nett" zu einem echten gemeinsamen Namen
-      kommen wollt, fangen die Unterschiede schnell an zu zählen.
+      dieser Apps. Wenn ihr zu zweit von „der klingt ganz nett“ zu einem echten gemeinsamen Namen
+      kommen wollt, fangen die Unterschiede an zu zählen. Hier stehen fünf Apps nebeneinander,
+      jeweils mit dem, was sie selbst über sich sagen.
     </p>
 
     <p class="post-method">
-      Grundlage sind öffentlich einsehbare Einträge im App Store und bei Google Play sowie die
-      Herstellerseiten, geprüft am {reviewed}. Funktionen und Preise ändern sich, schaut vor dem
-      Download in den aktuellen Eintrag.
+      Grundlage sind die öffentlich einsehbaren Einträge im deutschen App Store und die Seiten der
+      Anbieter, abgerufen am {VERIFIED}. Angaben zu anderen Apps sind wörtlich übernommen und
+      verlinkt; wo ein Anbieter zu einem Punkt nichts sagt, steht das ausdrücklich da. Preise und
+      Funktionen ändern sich — schaut vor dem Download in den aktuellen Eintrag.
     </p>
 
-    <h2>Kurz gesagt</h2>
-    <div class="table-wrap">
-      <table class="cmp">
-        <thead>
-          <tr><th>App</th><th>Am besten für</th><th>Was auffällt</th></tr>
-        </thead>
-        <tbody>
-          {apps.map((a, i) => (
-            <tr class={i === 0 ? 'is-ours' : undefined}>
-              <td data-label="App">{a.name}</td>
-              <td data-label="Am besten für">{a.bestFor}</td>
-              <td data-label="Was auffällt">{a.standout}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <h2>Die anderen Apps, in ihren eigenen Worten</h2>
+    {APPS.map((a) => <StoreFacts app={a} />)}
 
-    <h2>1. Namore</h2>
+    <h2>Was Namore anders macht</h2>
     <p>
-      Am besten für Paare, die sich gegenseitig aus Versehen die Namen kaputtreden. Das ist ein
-      engeres Problem als "hilf mir, einen Namen zu finden" — und genau darum ist die App gebaut.
-    </p>
-    <p>
-      Die Regel: Keiner sieht die Stimme des anderen, bis ihr beide bei demselben Namen Ja gesagt
-      habt. Keine gemeinsame Liste, kein Favoriten-Tab, keine Möglichkeit zu erkennen, was der andere
-      schon aussortiert hat. Wenn ihr matcht, gibt es eine Auflösung, und die ist der eigentliche
-      Punkt. Aus einer Verhandlung wird wieder ein Moment.
+      Namore ist unsere App, und sie ist für einen engeren Fall gebaut als „hilf mir, Namen zu
+      finden“: dass zwei Menschen sich entscheiden, ohne sich gegenseitig zu beeinflussen.
     </p>
 
     <figure class="shot">
       <img
         src="https://www.namore.app/blog-assets/02-private-by-design.webp"
-        alt="Der Swipe-Bildschirm von Namore mit einer Namenskarte, ohne Hinweis auf die Stimmen des Partners."
+        alt="Der Swipe-Bildschirm von Namore mit einer Namenskarte."
         width="900" height="1947" loading="lazy" decoding="async"
       />
       <figcaption>Eine Karte nach der anderen — und nichts auf dem Bildschirm, aus dem sich der Partner ablesen ließe.</figcaption>
     </figure>
 
-    <p>
-      Drei Dinge fallen im Alltag auf. Es gibt kein Konto: Einer startet eine Sitzung, der andere
-      tritt mit einem sechsstelligen Code bei, fertig. Der Preis ist einmalig statt Abo — kostenlos
-      gibt es 100 Swipes pro Person ohne Werbung und danach 24 Stunden Pause, und 7,99 € einmal
-      schalten unbegrenztes Wischen und alle Filter für beide Handys frei. Und nach dem Match ist nicht Schluss: In einer
-      Endrunde bewertet ihr die gemeinsamen Treffer noch einmal getrennt, danach stehen beide
-      Reihenfolgen nebeneinander. So kommt ihr von zwölf Namen auf einen.
-    </p>
+    <WhyNamore
+      lang="de"
+      heading="Was die App tatsächlich kann"
+      only={['decision-round', 'name-depth', 'learning', 'no-repeats', 'tools', 'no-ads', 'no-account', 'privacy-price']}
+    />
 
-    <figure class="shot">
-      <img
-        src="https://www.namore.app/blog-assets/04-match-moment.webp"
-        alt="Der Match-Bildschirm von Namore zeigt einen Namen, den beide Partner unabhängig gewählt haben."
-        width="900" height="1947" loading="lazy" decoding="async"
-      />
-      <figcaption>Die Auflösung kommt nur, wenn ihr beide getrennt Ja gesagt habt.</figcaption>
-    </figure>
-
-    <p>
-      15.182 Namen mit Bedeutung, Herkunft, Aussprache, Kosenamen und Beliebtheitsverlauf, auf
-      Deutsch, Englisch, Niederländisch und Spanisch. Kostenlos für iPhone und Android, Daten in der
-      EU, keine Werbung.
-    </p>
     <p class="post-caveat">
-      Wo die App schwächer ist: Sie ist neu. Seit Mai 2026 im App Store, seit August 2026 bei Google
-      Play — entsprechend wenige Bewertungen und keine gewachsene Community. Wer die Sicherheit einer
-      App will, die schon Millionen benutzt haben, fängt besser bei CharliesNames an. Foren,
-      Geschenkelisten und Schwangerschafts-Tracking gibt es hier auch nicht.
+      Wo Namore schwächer ist: Sie ist neu. Seit Mai 2026 im App Store, seit August 2026 bei Google
+      Play — entsprechend wenige Bewertungen und keine gewachsene Community. Wer die Sicherheit
+      einer App will, die schon lange am Markt ist und viele Bewertungen hat, ist bei CharliesNames
+      oder Unser Baby Name besser aufgehoben. Foren, Geschenkelisten und Schwangerschafts-Tracking
+      gibt es bei uns auch nicht, und Großeltern könnt ihr nicht mit abstimmen lassen.
     </p>
+
     <p class="cta-row">
-      <a class="btn btn-ink" href={APP_STORE}>Namore für iOS laden</a>
-      <a class="btn btn-ghost" href={PLAY}>Bei Google Play laden</a>
+      <a class="btn btn-ink" href={APP_STORE(campaign)}>Namore für iOS laden</a>
+      <a class="btn btn-ghost" href={PLAY(campaign)}>Bei Google Play laden</a>
     </p>
 
-    <h2>2. CharliesNames</h2>
-    <p>
-      Am besten für alle, die richtig über Namen lesen wollen.
-    </p>
-    <p>
-      Eine deutsche App, seit 2015 am Markt, mit der größten Namenssammlung in diesem Vergleich: rund
-      15.000 Namensseiten plus Beliebtheitsdaten für sechzehn Länder. Der Eintrag im App Store wirbt
-      außerdem mit KI-gestützten Vorschlägen. Für Herkunft, Varianten und regionale Muster ist sie
-      hervorragend. Am schwächsten ist sie darin, zwei Menschen zu einer gemeinsamen Antwort zu
-      bringen, weil die Tiefe fürs Stöbern gebaut ist. Im deutschen Markt ist sie der Platzhirsch.
-    </p>
-
-    <h2>3. Kinder</h2>
-    <p>
-      Am besten als Einstieg ins Wischprinzip.
-    </p>
-    <p>
-      Kinder hat das Prinzip "wischen statt blättern" in Deutschland bekannt gemacht und wurde in der
-      Presse entsprechend oft als "Tinder für Babynamen" beschrieben. Wer das Konzept hier zuerst
-      gesehen hat, hat es vermutlich in dieser App gesehen. Die Oberfläche zeigt inzwischen ihr Alter,
-      und die Namensdaten gehen weniger in die Tiefe als bei CharliesNames oder Namore.
-    </p>
-
-    <h2>4. Unser Baby Name</h2>
-    <p>
-      Am besten für die Frage, wie häufig ein Name wirklich wird.
-    </p>
-    <p>
-      International als „Baby Name Together“ unterwegs — es ist dieselbe App desselben Anbieters, nicht zwei. Über eine Million Installationen, mit getrennter Abstimmung für Paare. Die
-      Besonderheit sind amtliche Namensstatistiken aus über vierzig Ländern — ihr seht, ob ein Name
-      gerade steigt oder verschwindet. Wenn euch umtreibt, wie viele Kinder in der Klasse den Namen
-      später auch tragen, ist das hier die stärkste App.
-    </p>
-
-    <h2>5. Mini Marvin</h2>
-    <p>
-      Am besten für alle, die nichts installieren wollen.
-    </p>
-    <p>
-      Ein Angebot aus Dresden, das komplett im Browser läuft. Bemerkenswert ist es hier aus einem
-      Grund: Es ist die einzige andere Anwendung in diesem Vergleich, bei der die Stimmen beider
-      Partner ausdrücklich verdeckt bleiben — auf der eigenen Seite steht wörtlich, niemand sehe,
-      wie der andere abstimmt. Dazu lassen sich auch Großeltern einbinden. In der kostenlosen
-      Version gibt es Werbung und 500 Swipes am Tag; werbefrei kostet es 6,99 € für drei Monate oder
-      12,99 € einmalig. Es gibt keine App für iPhone oder Android.
-      <a href="/de/blog/namore-vs-mini-marvin">Namore und Mini Marvin im direkten Vergleich</a>.
-    </p>
-
-    <h2>6. BabyName – find it together</h2>
-    <p>
-      Am besten für alle, denen die größte Nutzerbasis wichtig ist.
-    </p>
-    <p>
-      Fairerweise: BabyName hat das Swipe-Matching für Paare schon im Dezember 2014 ausgeliefert und
-      hat über 21.000 Bewertungen — mehr als alle anderen hier zusammen. Die App ist international
-      ausgerichtet und im deutschen Namensbestand schwächer als die deutschen Anbieter.
-    </p>
-
-    <h2>Worauf es wirklich ankommt</h2>
+    <h2>Worauf es bei der Auswahl ankommt</h2>
     <ul>
-      <li>Wenn ihr zu zweit entscheidet, zählt die getrennte Abstimmung mehr als die Größe der Datenbank.</li>
-      <li>Wenn einer von euch schneller entschieden ist als der andere, sucht nach verdeckten Stimmen statt nach geteilten Listen.</li>
-      <li>Wenn ihr nach dem Match immer wieder hängenbleibt, schaut, ob die App danach überhaupt noch etwas tut.</li>
-      <li>Wenn die Einrichtung nervt, hört einer von euch still auf, sie zu öffnen — und dann ist es egal, was die App kann.</li>
+      <li>Wenn ihr zu zweit entscheidet, zählt der Ablauf mehr als die Größe der Datenbank. Fragt euch, was die App tut, <em>nachdem</em> euch beiden ein Name gefällt.</li>
+      <li>Schaut in den Store-Eintrag, ob ein Konto nötig ist. Wenn sich beide erst registrieren müssen, steigt nach unserem Eindruck einer von euch oft gar nicht erst ein.</li>
+      <li>Schaut, ob die App Werbung enthält — das steht im Eintrag und macht im Alltag einen Unterschied.</li>
+      <li>Ehrlichster Test: Alle fünf lassen sich kostenlos herunterladen. Installiert zwei und schaut, welche euer Partner tatsächlich öffnet. Das entscheidet es öfter als jede Funktionsliste.</li>
     </ul>
-    <p class="post-caveat">
-      Der Vollständigkeit halber: Verdeckte Abstimmung ist kein Alleinstellungsmerkmal von Namore.
-      Mini Marvin macht das ebenso und sagt es ausdrücklich. Bei Kinder, BabyName und Unser Baby
-      Name steht zur Sichtbarkeit der Stimmen nichts — das heißt nicht, dass sie es nicht können,
-      wir haben es nur nicht belegt gefunden. Belegt anders ist es bei CharliesNames, wo die
-      Daumen-runter-Liste laut den eigenen Hilfeseiten alle Namen sammelt, die mindestens einem von
-      euch nicht gefallen.
-    </p>
-
-    <h2>Meine Empfehlung</h2>
-    <p>
-      Wenn ihr euch gegenseitig die Namen kaputtredet, fangt mit Namore an — kostenlos im App Store
-      und bei Google Play, und die verdeckten Stimmen nehmen genau das raus. Wenn ihr vor allem lesen
-      und stöbern wollt, ist CharliesNames die tiefere Bibliothek. Wenn euch die größte etablierte
-      Nutzerbasis wichtiger ist, schaut euch BabyName an.
-    </p>
-    <p>
-      Ehrlicher Rat: Installiert zwei davon und schaut, welche dein Partner tatsächlich öffnet. Das
-      entscheidet es öfter als jede Funktionsliste.
-    </p>
 
     <h2>Häufige Fragen</h2>
     <dl class="faq">

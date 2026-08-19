@@ -13,6 +13,22 @@
  * duplicating the chrome.
  */
 
+/*
+ * Fonts are SELF-HOSTED. Do not reintroduce fonts.googleapis.com or
+ * fonts.gstatic.com here or anywhere else in this project.
+ *
+ * Loading them from Google's servers transmits the visitor's IP address to
+ * Google without consent. LG München I, 20.01.2022 – 3 O 17493/20 awarded
+ * damages for exactly that and set off a mass-Abmahnung wave. These pages
+ * additionally tell readers "keine Weitergabe von Daten", so the old setup
+ * paired the exposure with a contradicting claim. Changed 2026-08-19.
+ *
+ * Licences (SIL OFL 1.1) ship inside each package; keep the packages rather
+ * than copying loose .woff2 files around.
+ */
+import '@fontsource-variable/fraunces';
+import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
 
 export interface Props {
@@ -84,12 +100,6 @@ const googlePlayUrl = 'https://play.google.com/store/apps/details?id=com.julian.
     <meta name="apple-itunes-app" content="app-id=6766572995" />
 
     {/* Fonts — same preconnect + Google Fonts URL as the marketing site */}
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
 
     {/* JSON-LD structured data (per-page) */}
     {jsonLd && (
@@ -144,7 +154,22 @@ const googlePlayUrl = 'https://play.google.com/store/apps/details?id=com.julian.
         <a href="/blog/best-baby-name-apps">Best baby name apps</a> ·
         <a href="/de/blog/beste-babynamen-apps">Beste Babynamen-Apps</a>
       </span>
-      <span><a href={appStoreUrl}>App Store</a> · <a href={googlePlayUrl}>Google Play</a> · © 2026 Namore</span>
+      <span><a href={appStoreUrl}>App Store</a> · <a href={googlePlayUrl}>Google Play</a></span>
+      {/*
+        ⚠️ IMPRESSUM + DATENSCHUTZ ARE LEGALLY REQUIRED ON EVERY PAGE, NOT OPTIONAL.
+        §5 DDG (ex §5 TMG) requires the provider identification to be "leicht
+        erkennbar, unmittelbar erreichbar und ständig verfügbar" from every page
+        of a commercial site. Until 2026-08-19 this footer had neither, which
+        meant roughly 7,900 indexed /names/* pages plus the blog were reachable
+        with no Impressum link anywhere on them — while namore.app's own root
+        footer had both. A missing Impressum is the single most frequently
+        abgemahnte defect on German websites. Do not remove these two links.
+      */}
+      <span>
+        <a href="/impressum.html">Impressum</a> ·
+        <a href="/privacy.html">Datenschutz</a> ·
+        <a href="/terms.html">AGB</a> · © 2026 Namore
+      </span>
     </footer>
   </body>
 </html>

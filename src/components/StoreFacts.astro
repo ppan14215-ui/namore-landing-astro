@@ -1,0 +1,77 @@
+---
+/**
+ * StoreFacts — one competitor, rendered only as sourced literal transcriptions.
+ *
+ * ⚠️ Two rules this component exists to enforce, both from pre-publication
+ * reviews that rejected earlier versions:
+ *
+ * 1. A page may never characterise a competitor in its own words. Every value
+ *    here comes from the listing, with a link and a date.
+ * 2. A COMPILATION IS NOT A QUOTATION. Where a listing prints ten separate
+ *    in-app-purchase rows, merging them into one sentence inside „ “ is a
+ *    paraphrase wearing a quotation's clothes — the exact defect class the
+ *    second review flagged. Compiled facts render as a bulleted list of
+ *    individually literal lines, explicitly labelled as assembled.
+ *
+ * §6 Abs. 2 UWG requires compared characteristics to be objectively
+ * verifiable; §4 Nr. 2 UWG puts the burden of proof on us. Dated literal
+ * quotes with links meet both.
+ */
+import { NO_STATEMENT, VERIFIED, type App, type Sourced } from '../data/apps-de';
+
+export interface Props { app: App; }
+const { app } = Astro.props;
+
+const rows: [string, Sourced][] = [
+  ['Bewertung', app.rating],
+  ['Preise', app.price],
+  ['Namen', app.names],
+  ['Zusammen mit dem Partner', app.partner],
+  ['Konto', app.account],
+  ['Werbung', app.ads],
+  ['KI', app.ai],
+];
+
+const lines = (v: NonNullable<Sourced>) =>
+  [v.q, v.q2, v.q3, v.q4, v.q5].filter(Boolean) as string[];
+
+/** Mini Marvin has no store listing at all, so "im Store-Eintrag" would lie. */
+const isWeb = !app.rating && app.src.includes('mini-marvin');
+const noneLabel = isWeb ? 'Keine Angabe auf der Anbieterseite' : NO_STATEMENT;
+---
+
+<div class="storefacts">
+  <h3>Was {app.name} über sich selbst sagt</h3>
+  <p class="storefacts-meta">
+    {app.vendor ? <>Anbieter: {app.vendor} · </> : null}{app.updated} · abgerufen am {VERIFIED}
+  </p>
+  <dl>
+    {rows.map(([label, v]) => (
+      <div class="sf-row">
+        <dt>{label}</dt>
+        <dd>
+          {v ? (
+            v.compiled ? (
+              <>
+                <ul class="sf-list">{lines(v).map((l) => <li><q>{l}</q></li>)}</ul>
+                <span class="sf-note">
+                  Einzelne Angaben aus derselben Quelle, von uns untereinander gestellt — nicht ein
+                  zusammenhängender Satz des Anbieters.{v.note ? ` ${v.note}.` : ''}{' '}
+                  <a class="sf-src" href={v.src} rel="nofollow noopener" target="_blank">Quelle</a>
+                </span>
+              </>
+            ) : (
+              <>
+                <q>{v.q}</q>{' '}
+                {v.note ? <span class="sf-note">({v.note})</span> : null}{' '}
+                <a class="sf-src" href={v.src} rel="nofollow noopener" target="_blank">Quelle</a>
+              </>
+            )
+          ) : (
+            <span class="sf-none">{noneLabel}</span>
+          )}
+        </dd>
+      </div>
+    ))}
+  </dl>
+</div>

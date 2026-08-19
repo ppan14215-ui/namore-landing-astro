@@ -1,29 +1,17 @@
 ---
 /**
- * /de/blog/namore-vs-mini-marvin
+ * namore-vs-mini-marvin — rebuilt 2026-08-19 under the post-review evidence rule.
  *
- * ⚠️ THE ONLY OTHER CONFIRMED DOUBLE-BLIND PRODUCT IN THE GERMAN MARKET.
- * Mini Marvin (Dresden, browser-based) states it in plain German on
- * mini-marvin.com/de/babynamen-zu-zweit:
- *   "Niemand sieht, wie der andere abstimmt, also bleibt jede Bewertung
- *    ehrlich und unvoreingenommen."
- * Because of this page, nothing anywhere on namore.app may claim that Namore
- * is the only app with hidden voting. This page exists partly to make that
- * concession explicit and findable, which is also what makes the rest of the
- * cluster credible.
- *
- * They also run their own "Babynamen Apps im Vergleich" page which ranks
- * themselves and omits Namore — the same self-ranking move Baby Name Genius
- * pulls in English. We do NOT point that out on the page; complaining about a
- * competitor's SEO reads badly and is not the reader's problem.
- *
- * Honest split: they have MORE free swipes (500/day vs our 100/24h) but carry
- * ads; we have fewer but none. They do group matching with grandparents, which
- * we do not. We are native on both platforms, they are web-only. Their lifetime
- * unlock is 12,99 € to our 7,99 €.
+ * Competitor content on this page is ONLY literal transcriptions from the
+ * store listing, rendered by <StoreFacts> with a source link and a date.
+ * This page's own prose says nothing factual about the competitor that is
+ * not in that block. Do not add characterisation, superlatives, or claims
+ * about what a competitor does internally — see the header of apps-de.ts.
  */
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import VsTable from '../../../components/VsTable.astro';
+import Disclosure from '../../../components/Disclosure.astro';
+import StoreFacts from '../../../components/StoreFacts.astro';
+import WhyNamore from '../../../components/WhyNamore.astro';
 import ClusterFoot from '../../../components/ClusterFoot.astro';
 import { byslug, VERIFIED, APP_STORE, PLAY } from '../../../data/apps-de';
 
@@ -33,20 +21,16 @@ const campaign = 'vs_mini_marvin';
 
 const faqs = [
   {
-    q: 'Was ist der Unterschied zwischen Namore und Mini Marvin?',
-    a: 'Beide halten die Stimmen beider Partner verdeckt, bis ein Match entsteht — das ist die Gemeinsamkeit. Mini Marvin läuft im Browser, braucht eine kostenlose Registrierung, zeigt in der Gratisversion Werbung und erlaubt bis zu 500 Swipes am Tag. Namore ist eine native App für iPhone und Android, braucht kein Konto, zeigt keine Werbung und erlaubt 100 Swipes pro Person je 24 Stunden. Mini Marvin kann zusätzlich Großeltern einbinden, Namore hat dafür eine Endrunde nach dem Match.',
-  },
-  {
-    q: 'Gibt es außer Namore noch eine App mit verdeckter Abstimmung?',
-    a: 'Ja. Mini Marvin aus Dresden macht das ebenfalls und schreibt es ausdrücklich auf die eigene Seite: Niemand sieht, wie der andere abstimmt. Bei Kinder, BabyName und Unser Baby Name ist zur Sichtbarkeit der Stimmen nichts belegt. CharliesNames arbeitet dagegen mit gemeinsamen Listen, in denen sichtbar wird, wenn einer von euch einen Namen abgelehnt hat.',
+    q: 'Was unterscheidet Namore von Mini Marvin?',
+    a: 'Mini Marvin läuft im Browser, verlangt eine kostenlose Registrierung und erlaubt im Gratistarif 500 Swipes am Tag mit Werbung und einem eingeladenen Partner. Namore ist eine App für iPhone und Android, braucht kein Konto, zeigt keine Werbung und erlaubt 100 Swipes pro Person je 24 Stunden. Nach dem Match hat Namore eine Endrunde, die aus den gemeinsamen Treffern eine Reihenfolge macht.',
   },
   {
     q: 'Was kostet Mini Marvin?',
-    a: 'Mini Marvin ist kostenlos mit Werbung und 500 Swipes am Tag. Werbefrei und unbegrenzt kostet es 6,99 € für drei Monate oder 12,99 € einmalig auf Dauer. Namore ist kostenlos mit 100 Swipes pro Person je 24 Stunden und ohne Werbung; einmalig 7,99 € schalten unbegrenztes Wischen und alle Filter für beide Handys frei.',
+    a: 'Laut Preisseite: kostenlos mit Werbung und 500 Swipes am Tag, „Für Paare“ 6,99 € einmalig für drei Monate, „Familie & Freunde“ 12,99 € einmalig, laut Preisseite lebenslang und mit der Angabe „Familie & Freunde einladen“. Namore kostet einmalig 7,99 € für beide Handys, ohne Abo.',
   },
   {
     q: 'Brauche ich eine App oder reicht der Browser?',
-    a: 'Für Mini Marvin reicht der Browser, es muss nichts installiert werden — das ist der große Vorteil, wenn ihr keine App wollt. Namore gibt es nur als App für iPhone und Android. Dafür funktioniert sie offline gestartet flüssiger, hat keine Werbung und braucht keine Registrierung.',
+    a: 'Für Mini Marvin reicht der Browser, es muss nichts installiert werden — das ist der Vorteil, wenn ihr keine App wollt. Namore gibt es nur als App für iPhone und Android, dafür ohne Registrierung und ohne Werbung.',
   },
 ];
 
@@ -55,9 +39,8 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'Article',
-      headline: 'Namore vs. Mini Marvin: zwei Apps mit verdeckter Abstimmung',
-      description:
-        'Namore und Mini Marvin im Vergleich — beide halten die Stimmen verdeckt. Wo die Unterschiede liegen: App oder Browser, Konto, Werbung, Preis und Endrunde.',
+      headline: 'Namore und Mini Marvin im Vergleich',
+      description: 'Namore und Mini Marvin nebeneinander: was Mini Marvin über sich sagt, was Namore macht, und wofür welche Lösung die passendere ist.',
       inLanguage: 'de-DE',
       datePublished: '2026-08-19',
       dateModified: '2026-08-19',
@@ -84,67 +67,40 @@ const jsonLd = {
 
 <BaseLayout
   lang="de"
-  title="Namore vs. Mini Marvin: zwei Apps mit verdeckter Abstimmung | Namore"
-  description="Namore und Mini Marvin halten beide die Stimmen der Partner verdeckt. Der Vergleich: App oder Browser, Konto, Werbung, Swipe-Limits, Preis und was nach dem Match kommt."
+  title='Namore und Mini Marvin im Vergleich | Namore'
+  description='Namore und Kinder nebeneinander: was im Store-Eintrag von Kinder steht, was Namore macht, und wofür welche App die passendere ist.'
   canonical={canonical}
   jsonLd={jsonLd}
 >
   <article class="post" lang="de">
+    <Disclosure />
+
     <header class="post-head">
-      <p class="post-kicker">App-Vergleich · Geprüft am {VERIFIED}</p>
-      <h1>Namore vs. Mini Marvin</h1>
+      <p class="post-kicker">App-Vergleich · Abgerufen am {VERIFIED}</p>
+      <h1>Namore und Mini Marvin</h1>
     </header>
 
     <p class="post-standfirst">
-      Das ist der ehrlichste Vergleich in dieser Reihe, weil beide dasselbe Grundprinzip haben:
-      Keiner sieht, wie der andere abstimmt. Mini Marvin aus Dresden schreibt das ausdrücklich auf
-      die eigene Seite, und wir sagen deshalb an keiner Stelle, Namore sei die einzige App mit
-      verdeckter Abstimmung. Ist sie nicht. Der Unterschied liegt bei Browser gegen App, Konto,
-      Werbung — und bei dem, was nach dem Match kommt.
+      Mini Marvin kommt aus Dresden und läuft komplett im Browser — es muss nichts installiert
+      werden. Namore gibt es nur als App für iPhone und Android. Unten steht zuerst, was Mini
+      Marvin über sich selbst sagt, wörtlich und verlinkt.
     </p>
 
-    <p class="post-method">
-      Grundlage sind die öffentlich einsehbaren Seiten des Anbieters sowie die Store-Einträge,
-      geprüft am {VERIFIED}.
-    </p>
+    <StoreFacts app={rival} />
 
-    <h2>Die Zahlen nebeneinander</h2>
-    <VsTable rival={rival} />
-
-    <h2>Wo Mini Marvin besser ist</h2>
+    <h2>Wofür Mini Marvin die bessere Wahl sein kann</h2>
     <p>
-      <strong>Es muss nichts installiert werden.</strong> Mini Marvin läuft im Browser. Wenn einer
-      von euch keine weitere App auf dem Handy will — und das ist ein völlig vernünftiger Wunsch —
-      ist das der ganze Vorteil in einem Satz. Namore gibt es nur als App.
+      Wenn einer von euch keine weitere App auf dem Handy will, ist das der ganze Vorteil in einem
+      Satz — Mini Marvin läuft im Browser. Der kostenlose Tarif erlaubt außerdem 500 Swipes am Tag,
+      also deutlich mehr als unsere 100 pro Person je 24 Stunden; dafür ist er laut Preisseite mit
+      Werbung und auf einen eingeladenen Partner begrenzt.
     </p>
     <p>
-      <strong>Mehr Gratis-Swipes.</strong> 500 am Tag gegenüber unseren 100 pro Person je 24
-      Stunden. Der Preis dafür ist Werbung in der kostenlosen Version; Namore zeigt keine. Was einem
-      lieber ist, ist Geschmackssache, aber die Zahl allein spricht für Mini Marvin.
+      Und wenn ihr Großeltern oder Freunde mit abstimmen lassen wollt: Dafür führt die Preisseite den Tarif
+      „Familie &amp; Freunde“ für 12,99 € einmalig. Namore ist bewusst auf zwei Personen ausgelegt
+      und kann das nicht.
     </p>
-    <p>
-      <strong>Matching mit mehr als zwei Personen.</strong> Mini Marvin kann auch Großeltern
-      einbinden. Namore ist bewusst auf zwei Personen ausgelegt — wir halten das für die richtige
-      Entscheidung, aber wer die Oma dabeihaben will, bekommt das bei uns nicht.
-    </p>
-
-    <h2>Wo Namore besser ist</h2>
-    <ul>
-      <li><strong>Kein Konto.</strong> Mini Marvin verlangt eine kostenlose Registrierung. Bei Namore startet einer eine Sitzung und der andere tritt mit einem sechsstelligen Code bei — ohne E-Mail-Adresse.</li>
-      <li><strong>Keine Werbung, auch nicht gratis.</strong> Die kostenlose Version von Namore zeigt keine Anzeigen.</li>
-      <li><strong>Die Endrunde.</strong> Nach dem Match bewertet ihr die gemeinsamen Treffer noch einmal getrennt von 1 bis 5, danach stehen beide Reihenfolgen nebeneinander. Verdeckte Abstimmung bringt euch zu einer Trefferliste; die Endrunde bringt euch von der Liste zu einem Namen.</li>
-      <li><strong>Mehr Namen, mit mehr dran.</strong> 15.182 gegenüber 10.000+, jeweils mit Bedeutung, Herkunft, Aussprache, Kosenamen und Beliebtheitsverlauf.</li>
-      <li><strong>Günstiger auf Dauer.</strong> 7,99 € einmalig für beide Handys gegenüber 12,99 € einmalig.</li>
-    </ul>
-
-    <h2>Wann ihr welche nehmen solltet</h2>
-    <ul>
-      <li>Einer von euch will keine App installieren → <strong>Mini Marvin</strong>.</li>
-      <li>Ihr wollt die Großeltern mit abstimmen lassen → <strong>Mini Marvin</strong>.</li>
-      <li>Ihr wollt an einem Abend sehr viel wischen und Werbung stört euch nicht → <strong>Mini Marvin</strong>.</li>
-      <li>Ihr wollt keine Registrierung und keine Werbung → <strong>Namore</strong>.</li>
-      <li>Ihr habt eine Trefferliste und braucht daraus einen Namen → <strong>Namore</strong>.</li>
-    </ul>
+    <WhyNamore lang="de" heading='Was Namore macht' only={['decision-round', 'no-ads', 'no-account', 'name-depth', 'no-repeats', 'privacy-price']} />
 
     <p class="cta-row">
       <a class="btn btn-ink" href={APP_STORE(campaign)}>Namore für iOS laden</a>

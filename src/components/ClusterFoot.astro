@@ -1,11 +1,16 @@
 ---
 /**
- * ClusterFoot — shared sources + internal-link block for the German cluster.
+ * ClusterFoot — "Weiterlesen" block + sources note for the German cluster.
  *
- * The link list is the hub-and-spoke wiring. Every spoke links to the hub and
- * to its siblings; the hub links down. This exists because URL Inspection on
- * 2026-08-16 reported "Referring page: None detected" for the hub — orphaned
- * pages on a domain with a crawl-budget problem do not get fetched.
+ * ⚠️ REBUILT 2026-08-19 on Julian's feedback: the first version dumped six
+ * sibling links in one line separated by "·", jammed against the sources
+ * paragraph. It read as SEO plumbing, not navigation. Now each link carries a
+ * one-line reason to click, under its own heading, with the sources note
+ * visually demoted below it.
+ *
+ * The hub-and-spoke wiring is the point: URL Inspection on 2026-08-16 reported
+ * "Referring page: None detected" for the hub. Orphaned pages on a domain with
+ * a crawl-budget problem do not get fetched.
  */
 import { VERIFIED } from '../data/apps-de';
 
@@ -15,30 +20,67 @@ export interface Props {
 }
 const { current } = Astro.props;
 
-const links: [string, string][] = [
-  ['/de/blog/beste-babynamen-apps', 'Alle Babynamen-Apps im Vergleich'],
-  ['/de/blog/babynamen-app-fuer-paare', 'Babynamen-App für Paare'],
-  ['/de/blog/babynamen-app-kostenlos', 'Babynamen-Apps kostenlos'],
-  ['/de/blog/namore-vs-charliesnames', 'Namore vs. CharliesNames'],
-  ['/de/blog/namore-vs-kinder', 'Namore vs. Kinder'],
-  ['/de/blog/namore-vs-unser-baby-name', 'Namore vs. Unser Baby Name'],
-  ['/de/blog/namore-vs-mini-marvin', 'Namore vs. Mini Marvin'],
+const links: { href: string; label: string; blurb: string }[] = [
+  {
+    href: '/de/blog/beste-babynamen-apps',
+    label: 'Babynamen-Apps 2026 im Vergleich',
+    blurb: 'Fünf Apps nebeneinander, jeweils mit ihren eigenen Angaben.',
+  },
+  {
+    href: '/de/blog/babynamen-app-fuer-paare',
+    label: 'Babynamen-App für Paare',
+    blurb: 'Worauf es ankommt, wenn ihr zu zweit entscheidet.',
+  },
+  {
+    href: '/de/blog/babynamen-app-kostenlos',
+    label: 'Was „kostenlos“ wirklich heißt',
+    blurb: 'Werbung, Tageslimits, Abo oder Einmalkauf — alle Preismodelle.',
+  },
+  {
+    href: '/de/blog/namore-vs-charliesnames',
+    label: 'Namore und CharliesNames',
+    blurb: 'Über 15.000 Namen aus über 40 Ländern, werbefrei.',
+  },
+  {
+    href: '/de/blog/namore-vs-kinder',
+    label: 'Namore und Kinder',
+    blurb: 'Namens-Sets einzeln kaufbar, Käufe gelten für beide.',
+  },
+  {
+    href: '/de/blog/namore-vs-unser-baby-name',
+    label: 'Namore und Unser Baby Name',
+    blurb: 'Mehr als 30.000 Namen, Kopplung über verbundene Accounts.',
+  },
+  {
+    href: '/de/blog/namore-vs-mini-marvin',
+    label: 'Namore und Mini Marvin',
+    blurb: 'Läuft im Browser, keine Installation nötig.',
+  },
 ];
+
+const rest = links.filter((l) => !l.href.endsWith(current));
 ---
 
 <footer class="post-foot">
-  <p>
-    Quellen: die öffentlich einsehbaren Einträge im deutschen App Store und bei Google Play sowie
-    die Seiten der Anbieter, geprüft am {VERIFIED}. Wo eine Angabe dort nicht steht, steht hier
-    „nicht belegt“ — das heißt, wir haben es nicht gefunden, nicht, dass die App es nicht kann.
-    Funktionen und Preise ändern sich; schaut vor dem Download in den aktuellen Eintrag.
-  </p>
-  <p class="more-to-read">
-    {links
-      .filter(([href]) => !href.endsWith(current))
-      .map(([href, label], i) => (
-        <>{i > 0 ? ' · ' : ''}<a href={href}>{label}</a></>
-      ))}
-     · <a href="/names">Vornamen durchstöbern</a>
+  <h2 class="foot-head">Weiterlesen</h2>
+  <ul class="cluster-links">
+    {rest.map((l) => (
+      <li>
+        <a href={l.href}>{l.label}</a>
+        <span>{l.blurb}</span>
+      </li>
+    ))}
+    <li>
+      <a href="/names">Vornamen durchstöbern</a>
+      <span>15.182 Namen mit Bedeutung, Herkunft und Aussprache.</span>
+    </li>
+  </ul>
+
+  <p class="sources-note">
+    <strong>Quellen und Methode.</strong> Grundlage sind die öffentlich einsehbaren Einträge im
+    deutschen App Store und bei Google Play sowie die Seiten der Anbieter, geprüft am {VERIFIED}.
+    Wo eine Angabe dort nicht steht, steht hier „Keine Angabe im Store-Eintrag“ — das heißt,
+    wir haben dazu nichts gefunden, nicht, dass die App es nicht kann. Funktionen und Preise ändern sich; schaut vor dem
+    Download in den aktuellen Eintrag.
   </p>
 </footer>
