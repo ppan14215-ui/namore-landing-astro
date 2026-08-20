@@ -204,8 +204,8 @@ export const FEATURES: Feature[] = [
     key: 'tools',
     proof: 'Emitted events: name_added, name_searched, name_shared, super_like_attempted, ai_insight_viewed, filter_applied + six further filter events including zero-result and deck-exhausted handling.',
     de: {
-      title: 'Filter, Suche, eigene Namen, KI-Einordnung zum Match',
-      body: 'Ihr könnt nach Stil, Herkunft, Länge und Klang filtern, gezielt suchen, eigene Namen einwerfen, die im Deck des Partners auftauchen, Favoriten mit einem Super-Like markieren und euch zu einem Match erklären lassen, warum er zu euch beiden passt.',
+      title: 'Filter, Super-Likes und KI-Einordnung zum Match',
+      body: 'Ihr könnt nach Stil, Herkunft, Länge und Klang filtern, Favoriten mit einem Super-Like markieren und euch zu einem Match erklären lassen, warum er zu euch beiden passt.',
     },
     en: {
       title: 'Filters, search, your own names, AI insight on a match',
@@ -214,6 +214,54 @@ export const FEATURES: Feature[] = [
     es: {
       title: 'Filtros, búsqueda, vuestros nombres y contexto con IA',
       body: 'Filtrad por estilo, origen, longitud y sonido, buscad directamente, añadid vuestros propios nombres para que aparezcan en el mazo de la pareja y, al hacer match, recibid una explicación de por qué encaja con los dos.',
+    },
+  },
+  {
+    key: 'search-add',
+    proof: 'Events name_searched and name_added are emitted by the app (code-derived inventory in CURRENT.md). None of the five German store listings transcribed on 2026-08-19 mentions searching or adding your own names — which is not proof they cannot, only that they do not say so.',
+    de: {
+      title: 'Suchen — und eigene Namen einwerfen',
+      body: 'Wenn euch ein Name einfällt, der nicht im Deck war — von der Oma, aus einem Buch, aus dem Nichts —, könnt ihr ihn suchen oder selbst hinzufügen. Er landet dann im Deck eures Partners wie jeder andere Name, und ihr seht erst beim Match, was er davon hält. Kein Nachfragen, kein „und, wie findest du …?“ In den Store-Einträgen der anderen Apps haben wir dazu nichts gefunden.',
+    },
+    en: {
+      title: 'Search — and add your own names',
+      body: 'When a name occurs to you that was never in the deck — from a grandmother, a book, out of nowhere — you can search for it or add it yourself. It then appears in your partner\u2019s deck like any other name, and you only find out what they think when it matches. No asking, no "so… what do you reckon?" We found nothing about this in the other apps\u2019 listings.',
+    },
+    es: {
+      title: 'Buscar — y añadir vuestros propios nombres',
+      body: 'Si se os ocurre un nombre que no estaba en el mazo, podéis buscarlo o añadirlo. Aparecerá en el mazo de vuestra pareja como cualquier otro, y solo sabréis qué opina cuando haya coincidencia.',
+    },
+  },
+  {
+    key: 'content-languages',
+    proof: 'Counted in Supabase 2026-08-19: meaning_short, longevity_read and trend_context each populated 15,182/15,182 in EN, DE and ES. ⚠️ This is CONTENT, not UI count — Kinder\u2019s own listing advertises 23 interface languages, Baby Name Together 9, Baby Name Genius 10. NEVER claim more languages than they have; claim that the name material itself is written, not machine-translated UI over an English database.',
+    de: {
+      title: 'Drei Sprachen, und zwar der Inhalt',
+      body: 'Andere Apps bieten mehr Oberflächensprachen als wir — Kinder etwa 23. Bei uns sind dafür nicht nur die Knöpfe übersetzt: Bedeutung, Herkunft, Trend-Einordnung und die Einschätzung, ob ein Name Bestand hat, sind auf Deutsch, Englisch und Spanisch jeweils vollständig geschrieben. Alle 15.182 Namen, dreimal. Kein englischer Datensatz mit deutscher Beschriftung.',
+    },
+    en: {
+      title: 'Three languages — of the content, not the buttons',
+      body: 'Other apps offer more interface languages than we do; Kinder lists 23. What we have instead is written material: meaning, origin, trend read and the assessment of whether a name lasts, complete in English, German and Spanish. All 15,182 names, three times over — not an English dataset with translated labels.',
+    },
+    es: {
+      title: 'Tres idiomas — del contenido, no de los botones',
+      body: 'Otras apps ofrecen más idiomas de interfaz que nosotros. Lo que tenemos es contenido escrito: significado, origen, tendencia y durabilidad, completos en español, alemán e inglés. Los 15.182 nombres, tres veces.',
+    },
+  },
+  {
+    key: 'design',
+    proof: 'OPINION, and must always be phrased as ours. Design quality is not a verifiable characteristic under §6 Abs. 2 UWG, so it cannot be asserted as a comparative fact — and an unsourced negative about a competitor\u2019s interface is exactly the §4 Nr. 1 Herabsetzung surface an earlier review flagged ("Die Oberfläche zeigt inzwischen ihr Alter"). Never say another app looks dated. Say what we aimed for and let the screenshots carry it.',
+    de: {
+      title: 'Eine App, die man abends noch aufmacht',
+      body: 'Das ist Geschmack, also sagen wir es als das, was es ist: Wir wollten etwas bauen, das sich nicht wie ein Formular anfühlt. Eine Karte nach der anderen, ruhige Farben, nichts blinkt, nichts drängelt, keine Werbung dazwischen. Ob das für euch aufgeht, entscheidet ihr in zwei Minuten selbst — deshalb sind die Bildschirmfotos hier echt und nicht gestellt.',
+    },
+    en: {
+      title: 'An app you still open in the evening',
+      body: 'This is taste, so we say it as taste: we wanted something that does not feel like a form. One card at a time, quiet colours, nothing flashing, nothing nagging, no ads in between. Whether that works for you is a two-minute question — which is why the screenshots here are real rather than staged.',
+    },
+    es: {
+      title: 'Una app que todavía abrís por la noche',
+      body: 'Esto es cuestión de gusto y lo decimos como tal: queríamos algo que no pareciera un formulario. Una tarjeta cada vez, colores tranquilos, nada que parpadee, sin publicidad de por medio.',
     },
   },
   {
