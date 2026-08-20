@@ -15,7 +15,7 @@
  *
  * DATABASE (Supabase `names`, n = 15,182, counted not sampled):
  *   meaning EN/DE/ES ........ 15,182 / 15,182   ✅ complete
- *   meaning NL .............. 11,182            ⚠️ 73.6% — never say "all"
+ *   meaning NL .............. 11,182            ⛔ LEGACY DATA — NOT A SHIPPED LANGUAGE
  *   longevity_read EN/DE/ES . 15,182            ✅ complete
  *   trend_context EN/DE/ES .. 15,182            ✅ complete, written prose
  *   trend_label ............. 15,182            ✅
@@ -56,6 +56,17 @@
  *    Name Genius, BabyCenter, CharliesNames — all quoted verbatim in
  *    apps-de.ts). Never claim a better AI. Claim only the COMBINATION:
  *    learns from both partners while neither sees the other's votes.
+ *
+ * ⛔ DUTCH IS NOT A SUPPORTED LANGUAGE. The catalogue holds 11,182 Dutch
+ *    meanings, and that is legacy data only. The app UI and both store listings
+ *    ship EN/DE/ES. The vault says so repeatedly and has since July 2026:
+ *    "Dutch remains a separate legacy/data language and is not part of the
+ *    current store-localization launch", "Dutch was intentionally untouched",
+ *    "Dutch remains out of scope", "Dutch is untouched".
+ *    A populated database column is NOT a shipped language. This mistake was
+ *    made on 2026-08-19 — llms.txt and the English article had both been
+ *    telling readers (and assistants) that Dutch was supported. Corrected.
+ *    Do NOT plan Dutch pages and do NOT list Dutch among the languages.
  *
  * NOT VERIFIED — do not put these in a page until someone reads the code:
  *    "similar names", partner-sync stability, "more filters than anyone else".
