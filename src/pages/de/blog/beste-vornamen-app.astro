@@ -1,0 +1,203 @@
+---
+/**
+ * /de/blog/beste-vornamen-app
+ *
+ * Targets the entire "Vornamen" vocabulary, which the cluster had ignored
+ * completely — every other page says "Babynamen" throughout. Verified in
+ * Google's German autocomplete 2026-08-19: the seed `vornamen app` returns ten
+ * suggestions of its own (beste vornamen app · vornamen app partner ·
+ * vornamen app kostenlos · vornamen app tinder · app vornamen swipen ·
+ * app vornamen finden · kinder vornamen app). "beste vornamen app" is a head
+ * query in its own right.
+ *
+ * ⚠️ DUPLICATE-CONTENT RISK, and the reason this page is structured the way it
+ * is: a synonym-swapped copy of /de/blog/beste-babynamen-apps would be thin
+ * content pointed at the same intent, and Google would pick one and drop the
+ * other. So this page is organised by DECISION CRITERION (database, couples,
+ * price, ads) rather than app-by-app, and answers a different question: not
+ * "which app is best" but "what actually differs between them". It links to
+ * the app-by-app hub rather than repeating it.
+ *
+ * Same evidence rules as the rest of the cluster — see apps-de.ts.
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Disclosure from '../../../components/Disclosure.astro';
+import WhyNamore from '../../../components/WhyNamore.astro';
+import ClusterFoot from '../../../components/ClusterFoot.astro';
+import { APPS, VERIFIED, NO_STATEMENT, APP_STORE, PLAY } from '../../../data/apps-de';
+
+const canonical = 'https://www.namore.app/de/blog/beste-vornamen-app';
+const campaign = 'beste_vornamen_app';
+
+const faqs = [
+  {
+    q: 'Was ist die beste Vornamen-App?',
+    a: 'Es gibt keine, die für alle die beste ist, weil die Apps unterschiedliche Probleme lösen. Für das Nachlesen über Namen nennt CharliesNames über 15.000 Vornamen aus über 40 Ländern und läuft ohne Werbung. Für die größte Sammlung nennt Unser Baby Name mehr als 30.000. Wer nichts installieren will, nutzt Mini Marvin im Browser. Namore ist auf die Entscheidung zu zweit gebaut: getrennt wischen, Treffer erst bei Übereinstimmung, danach eine Endrunde.',
+  },
+  {
+    q: 'Gibt es eine Vornamen-App für Paare?',
+    a: 'Mehrere. Kinder, BabyName, Unser Baby Name, Mini Marvin und Namore haben alle eine Funktion für zwei Personen. Sie unterscheiden sich darin, wie ihr euch verbindet — per Konto, per Link, per Code — und darin, was nach einem gemeinsamen Treffer passiert.',
+  },
+  {
+    q: 'Welche Vornamen-App ist kostenlos?',
+    a: 'Alle lassen sich kostenlos herunterladen. Der Unterschied liegt darin, wie sie sich finanzieren: Die Einträge von Kinder und BabyName weisen Werbung aus, CharliesNames gibt „Ohne Werbung“ an, Mini Marvin zeigt Werbung nur im Gratistarif. Namore ist werbefrei mit 100 Swipes pro Person je 24 Stunden.',
+  },
+  {
+    q: 'Was ist der Unterschied zwischen einer Vornamen-App und einem Namensbuch?',
+    a: 'Ein Buch ist nach Alphabet oder Herkunft sortiert und ihr blättert allein. Eine App kann nach Stil, Klang und Länge filtern, den Verlauf der Beliebtheit zeigen und vor allem zwei Personen gleichzeitig einbeziehen. Wenn ihr zu zweit entscheidet, ist das der eigentliche Unterschied.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: 'Beste Vornamen-App: was zwischen den Apps wirklich unterschiedlich ist',
+      description:
+        'Vornamen-Apps unterscheiden sich in vier Dingen: Datenbank, Paar-Funktion, Preis und Werbung. Die Angaben aus den Store-Einträgen, verlinkt und mit Datum.',
+      inLanguage: 'de-DE',
+      datePublished: '2026-08-19',
+      dateModified: '2026-08-19',
+      author: { '@type': 'Person', name: 'Julian Ziegler' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Namore',
+        logo: { '@type': 'ImageObject', url: 'https://www.namore.app/logo@2x.png' },
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: 'de-DE',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  lang="de"
+  title="Beste Vornamen-App: was wirklich unterschiedlich ist | Namore"
+  description="Vornamen-Apps unterscheiden sich in vier Dingen: Datenbank, Paar-Funktion, Preis und Werbung. Mit den Angaben aus den Store-Einträgen, verlinkt und datiert."
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <article class="post" lang="de">
+    <Disclosure />
+
+    <header class="post-head">
+      <p class="post-kicker">Ratgeber · Abgerufen am {VERIFIED}</p>
+      <h1>Beste Vornamen-App</h1>
+    </header>
+
+    <p class="post-standfirst">
+      Die ehrliche Antwort ist, dass es die eine beste nicht gibt — die Apps lösen unterschiedliche
+      Probleme, und welches davon eures ist, wisst nur ihr. Was sich dagegen sagen lässt: Sie
+      unterscheiden sich in genau vier Dingen. Wenn ihr die durchgeht, habt ihr eure Antwort in
+      fünf Minuten.
+    </p>
+
+    <p class="post-method">
+      Alle Angaben zu anderen Apps stammen aus deren öffentlich einsehbaren Einträgen im deutschen
+      App Store beziehungsweise von den Anbieterseiten, abgerufen am {VERIFIED}, wörtlich übernommen
+      und verlinkt. Wenn ihr lieber App für App vergleichen wollt statt nach Kriterien:
+      <a href="/de/blog/beste-babynamen-apps">hier stehen alle fünf nebeneinander</a>.
+    </p>
+
+    <h2>1. Wie groß die Datenbank ist — und warum das am wenigsten zählt</h2>
+    <p>
+      Die Zahlen reichen von 10.000 bis über 30.000. Das klingt nach einem großen Unterschied und ist
+      im Alltag der kleinste: Kein Paar sieht sich 30.000 Namen an. Nach etwa zweihundert habt ihr
+      ein Gefühl dafür, was euch gefällt, und ab da entscheidet die Sortierung, nicht die Menge.
+    </p>
+    <p>
+      Nützlicher als die Gesamtzahl ist, was an einem einzelnen Namen dranhängt. Bedeutung und
+      Herkunft haben alle. Aussprache, Länderplatzierungen und eine Einschätzung, ob ein Name Bestand
+      hat oder gerade eine Welle reitet, haben deutlich weniger.
+    </p>
+
+    <h2>2. Ob die App für zwei Personen gebaut ist</h2>
+    <p>
+      Fast alle haben inzwischen eine Paar-Funktion. Der Unterschied liegt darin, wie aufwendig der
+      Start ist und was am Ende dabei herauskommt. Hier steht, was die Anbieter selbst dazu schreiben.
+    </p>
+    <div class="table-wrap">
+      <table class="cmp">
+        <thead>
+          <tr><th>App</th><th>Angabe zum Zusammenspiel</th></tr>
+        </thead>
+        <tbody>
+          <tr class="is-ours">
+            <td data-label="App">Namore <span class="sf-note">(unsere App)</span></td>
+            <td data-label="Angabe">Sitzung öffnen, Partner tritt mit einem Code aus sechs Buchstaben bei. Kein Konto. <span class="sf-note">Beschreibung von uns, nicht zitiert.</span></td>
+          </tr>
+          {APPS.map((a) => (
+            <tr>
+              <td data-label="App"><a href={a.src} rel="nofollow noopener" target="_blank">{a.name}</a></td>
+              <td data-label="Angabe">{a.partner ? <q>{a.partner.q}</q> : <span class="sf-none">{NO_STATEMENT}</span>}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Achtet auf die Stelle, an der ein Konto verlangt wird. Das ist der häufigste Punkt, an dem
+      einer von euch beiden aussteigt und die App danach nicht mehr öffnet — und dann ist es egal,
+      wie gut sie ist.
+    </p>
+
+    <h2>3. Was sie kostet, und wofür genau</h2>
+    <p>
+      Alle sind kostenlos ladbar und meinen Unterschiedliches damit. Manche verkaufen einzelne
+      Pakete, manche eine Vollversion, eine bietet zusätzlich ein Monatsabo an. Wichtiger als der
+      Betrag ist die Frage, ob ein Kauf für ein Handy gilt oder für beide — bei einer Paar-App ist
+      das der Unterschied zwischen einem Preis und zwei. Die Einzelheiten stehen auf der
+      <a href="/de/blog/babynamen-app-kostenlos">Seite über die Preismodelle</a>.
+    </p>
+
+    <h2>4. Ob Werbung läuft</h2>
+    <p>
+      Das steht im Store-Eintrag und wird selten gelesen. Von den fünf verglichenen Apps weisen die
+      Einträge von Kinder, BabyName und Unser Baby Name Werbung aus, CharliesNames gibt „Ohne
+      Werbung“ an, und Mini Marvin zeigt sie laut Preisseite nur im Gratistarif. Zwischen zwei Namen
+      eine Anzeige zu sehen, ist Geschmackssache — ihr solltet nur vorher wissen, worauf ihr euch
+      einlasst.
+    </p>
+
+    <h2>Und wo wir stehen</h2>
+    <WhyNamore
+      lang="de"
+      heading="Was Namore aus diesen vier Punkten macht"
+      only={['design', 'decision-round', 'no-ads', 'no-account', 'name-depth', 'search-add', 'content-languages', 'no-repeats']}
+    />
+
+    <p class="post-caveat">
+      Wo Namore schwächer ist: Wir sind neu — seit Mai 2026 im App Store, seit August bei Google
+      Play — und haben entsprechend wenige Bewertungen und keine gewachsene Community. Wer eine
+      lange erprobte App will, ist bei CharliesNames oder Unser Baby Name besser aufgehoben, und
+      wenn ihr nur stöbern wollt, sowieso.
+    </p>
+
+    <p class="cta-row">
+      <a class="btn btn-ink" href={APP_STORE(campaign)}>Namore für iOS laden</a>
+      <a class="btn btn-ghost" href={PLAY(campaign)}>Bei Google Play laden</a>
+    </p>
+
+    <h2>Häufige Fragen</h2>
+    <dl class="faq">
+      {faqs.map((f) => (
+        <div class="faq-item">
+          <dt>{f.q}</dt>
+          <dd>{f.a}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <ClusterFoot current="beste-vornamen-app" />
+  </article>
+</BaseLayout>

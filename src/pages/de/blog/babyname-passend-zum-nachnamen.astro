@@ -1,0 +1,169 @@
+---
+/**
+ * /de/blog/babyname-passend-zum-nachnamen
+ *
+ * Targets "babynamen finden mit nachnamen", returned by Google's German
+ * autocomplete for the seed `babynamen finden` on 2026-08-19.
+ *
+ * DIFFERENT IN KIND from the rest of the cluster: this is a useful-advice page,
+ * not an app comparison. It earns its place because we hold the data behind the
+ * advice — syllable_count is populated on all 15,182 names and phonetic_key on
+ * 11,246 — and because a page that is genuinely useful is the kind of thing
+ * that gets linked to, which is the actual bottleneck (one followed editorial
+ * link on the whole domain).
+ *
+ * ⚠️ Do NOT turn the rules below into a claim that the app scores name/surname
+ * fit. It does not. The app holds syllable counts and phonetic keys; the fit
+ * rules here are ordinary naming craft, not an app feature. Keep the product
+ * mention at the end and small.
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Disclosure from '../../../components/Disclosure.astro';
+import ClusterFoot from '../../../components/ClusterFoot.astro';
+import { VERIFIED, APP_STORE, PLAY } from '../../../data/apps-de';
+
+const canonical = 'https://www.namore.app/de/blog/babyname-passend-zum-nachnamen';
+const campaign = 'passend_zum_nachnamen';
+
+const faqs = [
+  {
+    q: 'Wie finde ich einen Vornamen, der zum Nachnamen passt?',
+    a: 'Sprecht den ganzen Namen laut aus, mehrmals und in normalem Tempo. Achtet auf drei Dinge: ob Vor- und Nachname denselben Rhythmus haben (kurz-kurz klingt oft abgehackt, lang-lang schwerfällig), ob der Vorname auf denselben Laut endet, mit dem der Nachname beginnt, und ob die Betonung an zwei Stellen kollidiert. Was sich beim dritten Aussprechen noch gut anfühlt, passt meistens.',
+  },
+  {
+    q: 'Wie viele Silben sollte der Vorname haben?',
+    a: 'Es gibt keine richtige Zahl, aber einen brauchbaren Anhaltspunkt: Ein Kontrast klingt in der Regel runder als ein Gleichklang. Zu einem einsilbigen Nachnamen passt ein längerer Vorname oft besser, zu einem langen Nachnamen ein kurzer. Zwei gleich lange Namen können gut klingen, brauchen aber eine unterschiedliche Betonung.',
+  },
+  {
+    q: 'Worauf sollte man bei Initialen achten?',
+    a: 'Schreibt die Initialen auf und lest sie als Wort. Ungewollte Abkürzungen fallen erst auf, wenn das Kind sie irgendwann selbst schreiben muss. Ebenso lohnt der Blick auf die Kombination in einer E-Mail-Adresse oder als Unterschrift.',
+  },
+  {
+    q: 'Was ist mit dem Doppelnamen des Partners?',
+    a: 'Dieselben Regeln, nur strenger — bei einem Doppelnachnamen wird der Gesamtname schnell lang, und ein kurzer, klar betonter Vorname trägt das besser. Sprecht auch die Variante durch, die im Alltag benutzt wird, nicht nur die im Ausweis.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: 'Babyname passend zum Nachnamen: worauf es beim Klang ankommt',
+      description:
+        'Rhythmus, Silben, Endlaute und Betonung — wie ihr prüft, ob ein Vorname zu eurem Nachnamen passt, bevor ihr euch festlegt.',
+      inLanguage: 'de-DE',
+      datePublished: '2026-08-19',
+      dateModified: '2026-08-19',
+      author: { '@type': 'Person', name: 'Julian Ziegler' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Namore',
+        logo: { '@type': 'ImageObject', url: 'https://www.namore.app/logo@2x.png' },
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: 'de-DE',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  lang="de"
+  title="Babyname passend zum Nachnamen: worauf es ankommt | Namore"
+  description="Rhythmus, Silben, Endlaute, Betonung, Initialen: die Prüfungen, mit denen ihr merkt, ob ein Vorname zu eurem Nachnamen passt — bevor ihr euch festlegt."
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <article class="post" lang="de">
+    <Disclosure />
+
+    <header class="post-head">
+      <p class="post-kicker">Ratgeber · Stand {VERIFIED}</p>
+      <h1>Babyname passend zum Nachnamen</h1>
+    </header>
+
+    <p class="post-standfirst">
+      Ein Name, der allein wunderbar klingt, kann neben eurem Nachnamen holpern — und umgekehrt.
+      Das merkt man nicht beim Lesen, sondern erst beim Sprechen. Hier sind die fünf Prüfungen, die
+      im Alltag tatsächlich etwas bringen, in der Reihenfolge, in der sie sich lohnen.
+    </p>
+
+    <h2>1. Sprecht ihn dreimal laut</h2>
+    <p>
+      Nicht einmal, dreimal, in normalem Tempo. Der erste Durchgang klingt bei fast allem gut, weil
+      ihr den Namen gerade erst mögt. Beim dritten hört ihr, ob etwas hakt. Und sprecht ihn so, wie
+      er wirklich vorkommen wird: beim Rufen durch die Wohnung, bei der Vorstellung im Kindergarten,
+      im Wartezimmer aufgerufen.
+    </p>
+
+    <h2>2. Achtet auf den Rhythmus, nicht auf die Länge</h2>
+    <p>
+      Die häufigste Regel lautet, ein kurzer Nachname brauche einen langen Vornamen. Das stimmt
+      ungefähr, trifft es aber nicht ganz — entscheidend ist die <strong>Betonung</strong>. Wenn
+      Vor- und Nachname auf derselben Silbenposition betont werden, entsteht ein Stolpern, unabhängig
+      von der Länge. Zwei Namen mit unterschiedlicher Betonung tragen sich fast immer besser.
+    </p>
+
+    <h2>3. Schaut auf den Übergang</h2>
+    <p>
+      Endet der Vorname auf denselben Laut, mit dem der Nachname beginnt, verschmelzen die beiden
+      beim Sprechen. Manchmal ist das schön, oft verschluckt es eine Silbe. Das gilt für gleiche
+      Konsonanten ebenso wie für einen Vokal, der auf einen Vokal trifft. Auch hier hilft nur
+      Aussprechen, nicht Anschauen.
+    </p>
+
+    <h2>4. Lest die Initialen als Wort</h2>
+    <p>
+      Schreibt sie auf. Ungewollte Abkürzungen sieht man in dem Moment, in dem man sie zum ersten
+      Mal zusammen aufschreibt — und das sollte nicht das Kind in der dritten Klasse sein. Denkt
+      auch an die spätere E-Mail-Adresse aus Vorname und Nachname.
+    </p>
+
+    <h2>5. Prüft die Alltagsform, nicht die Ausweisform</h2>
+    <p>
+      Kaum jemand wird ein Leben lang mit dem vollen Vornamen gerufen. Prüft deshalb auch die
+      Kurzform neben eurem Nachnamen — und bei einem Doppelnachnamen die Variante, die ihr
+      tatsächlich benutzt, nicht die vollständige.
+    </p>
+
+    <h2>Was das mit einer Namens-App zu tun hat</h2>
+    <p>
+      Wenig, ehrlich gesagt, und wir wollen euch hier nichts verkaufen, das wir nicht haben:
+      <strong>Keine App entscheidet für euch, ob ein Name zu eurem Nachnamen passt.</strong> Das
+      geht nur laut und nur bei euch zu Hause.
+    </p>
+    <p>
+      Was eine App abnehmen kann, ist die Vorarbeit. Bei Namore steht auf jedem der 15.182 Namen die
+      Silbenzahl und die Aussprache, sodass ihr vor dem Lautlesen schon aussortieren könnt, was von
+      der Länge her ohnehin nicht neben euren Nachnamen passt. Und wenn euch beim Sprechen ein Name
+      einfällt, der nicht im Deck war, könnt ihr ihn suchen oder selbst hinzufügen — er taucht dann
+      im Deck eures Partners auf wie jeder andere.
+    </p>
+
+    <p class="cta-row">
+      <a class="btn btn-ink" href={APP_STORE(campaign)}>Namore für iOS laden</a>
+      <a class="btn btn-ghost" href={PLAY(campaign)}>Bei Google Play laden</a>
+    </p>
+
+    <h2>Häufige Fragen</h2>
+    <dl class="faq">
+      {faqs.map((f) => (
+        <div class="faq-item">
+          <dt>{f.q}</dt>
+          <dd>{f.a}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <ClusterFoot current="babyname-passend-zum-nachnamen" />
+  </article>
+</BaseLayout>

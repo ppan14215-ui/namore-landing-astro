@@ -1,0 +1,176 @@
+---
+/**
+ * /de/blog/namensfinder-app
+ *
+ * Targets the "namensfinder" family — a ten-deep seed in Google's German
+ * autocomplete (2026-08-19): namensfinder baby · namensfinder app ·
+ * namensfinder baby app · namensfinder ki · namensfinder junge/mädchen.
+ * The cluster had no page using this word at all.
+ *
+ * ⚠️ "namensfinder ki" is why the AI section here is dangerous. Four
+ * competitors advertise taste-learning in their own words (quoted in
+ * apps-de.ts and namore-features.ts): CharliesNames "Meine KI lernt deinen
+ * Geschmack kennen", Nameberry, Baby Name Genius, BabyCenter. We may NOT claim
+ * a better AI. What is defensible and measured: the deck learns from BOTH
+ * partners while neither sees the other's votes, and the signal accumulates
+ * across the couple's whole session (216 sessions, 114 multi-day, max 17,260
+ * votes over 95 days, measured in the production database 2026-08-19).
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Disclosure from '../../../components/Disclosure.astro';
+import StoreFacts from '../../../components/StoreFacts.astro';
+import WhyNamore from '../../../components/WhyNamore.astro';
+import ClusterFoot from '../../../components/ClusterFoot.astro';
+import { byslug, VERIFIED, APP_STORE, PLAY } from '../../../data/apps-de';
+
+const canonical = 'https://www.namore.app/de/blog/namensfinder-app';
+const campaign = 'namensfinder';
+const charlies = byslug('charliesnames');
+
+const faqs = [
+  {
+    q: 'Was ist ein Namensfinder?',
+    a: 'Ein Werkzeug, das euch Vornamen vorschlägt, statt euch eine alphabetische Liste zum Durchblättern zu geben. Die meisten arbeiten mit Filtern — Geschlecht, Herkunft, Länge, Stil — und manche zusätzlich mit euren bisherigen Bewertungen, um die Vorschläge zu schärfen.',
+  },
+  {
+    q: 'Gibt es einen Namensfinder mit KI?',
+    a: 'Mehrere Apps werben damit. CharliesNames schreibt im App Store wörtlich: „Meine KI lernt deinen Geschmack kennen und so schlage ich dir genau die Namen vor, die zu dir passen.“ Unser Baby Name bietet einen KI-Chat-Assistenten an. Auch Nameberry, Baby Name Genius und BabyCenter bewerben in ihren englischen Einträgen, dass die Vorschläge mit jedem Wisch besser werden. Wer euch erzählt, seine App sei die einzige mit KI, hat die anderen Einträge nicht gelesen.',
+  },
+  {
+    q: 'Wie lernt Namore, welche Namen mir gefallen?',
+    a: 'Aus euren eigenen Bewertungen: Stil, Klang, Herkunft und Silbenfluss der Namen, die ihr mögt, schärfen die Auswahl. Das läuft über die gesamte Zeit, die ihr sucht — in echten Sitzungen sind das bis zu 17.000 Swipes, und die längste lief über drei Monate. Die Besonderheit ist nicht die Technik, sondern dass aus den Bewertungen beider Partner gelernt wird, ohne dass einer die Stimmen des anderen sieht.',
+  },
+  {
+    q: 'Ist ein Namensfinder besser als eine Namensliste?',
+    a: 'Wenn ihr allein stöbert, tut eine gute Liste es auch. Der Unterschied wird erst zu zweit relevant: Eine Liste kann nicht dafür sorgen, dass ihr euch unbeeinflusst entscheidet, und sie kann euch am Ende nicht helfen, aus zwölf Favoriten einen zu machen.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: 'Namensfinder-App: was die Vorschläge wirklich steuert',
+      description:
+        'Namensfinder-Apps im Überblick — wie Filter und KI-Vorschläge funktionieren, wer was verspricht, und woran ihr einen brauchbaren Finder erkennt.',
+      inLanguage: 'de-DE',
+      datePublished: '2026-08-19',
+      dateModified: '2026-08-19',
+      author: { '@type': 'Person', name: 'Julian Ziegler' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Namore',
+        logo: { '@type': 'ImageObject', url: 'https://www.namore.app/logo@2x.png' },
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: 'de-DE',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  lang="de"
+  title="Namensfinder-App: was die Vorschläge wirklich steuert | Namore"
+  description="Wie Namensfinder-Apps ihre Vorschläge machen, was hinter den KI-Versprechen steckt und woran ihr einen brauchbaren Finder erkennt."
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <article class="post" lang="de">
+    <Disclosure />
+
+    <header class="post-head">
+      <p class="post-kicker">Ratgeber · Abgerufen am {VERIFIED}</p>
+      <h1>Namensfinder-App</h1>
+    </header>
+
+    <p class="post-standfirst">
+      Ein Namensfinder schlägt vor, statt euch blättern zu lassen. Wie gut er das tut, hängt an zwei
+      Dingen: woraus er lernt und ob er merkt, wenn ihr zu zweit sucht. Beim zweiten Punkt hören die
+      meisten auf.
+    </p>
+
+    <h2>Woraus die Vorschläge entstehen</h2>
+    <p>
+      Im Kern gibt es zwei Verfahren. Das erste sind <strong>Filter</strong>: Ihr sagt Geschlecht,
+      Herkunft, Länge und Stil vor, und der Finder zeigt, was passt. Das ist ehrlich, nachvollziehbar
+      und langweilig — es findet nichts, woran ihr nicht schon gedacht habt.
+    </p>
+    <p>
+      Das zweite ist <strong>Lernen aus Bewertungen</strong>. Je mehr Namen ihr mögt oder ablehnt,
+      desto genauer wird die Auswahl: nicht nur Herkunft, sondern Klang, Silbenzahl, Betonung,
+      Endungen. Das ist das, was die meisten Anbieter inzwischen KI nennen.
+    </p>
+
+    <h2>Was hinter den KI-Versprechen steckt</h2>
+    <p>
+      Hier lohnt eine Warnung, auch gegen uns selbst: <strong>KI-Vorschläge sind kein
+      Unterscheidungsmerkmal mehr.</strong> Fast jede größere App wirbt damit. CharliesNames zum
+      Beispiel schreibt es so in seinen App-Store-Eintrag:
+    </p>
+
+    <StoreFacts app={charlies} />
+
+    <p>
+      Auch Unser Baby Name bewirbt einen KI-Assistenten, und in den englischsprachigen Einträgen
+      versprechen Nameberry, Baby Name Genius und BabyCenter jeweils, dass die Vorschläge mit jeder
+      Bewertung besser werden. Wenn euch also eine App erzählt, sie sei die einzige mit KI, dann hat
+      sie die Einträge der anderen nicht gelesen — und das gilt für uns genauso.
+    </p>
+    <p>
+      Die nützlichere Frage ist deshalb nicht <em>ob</em> eine App lernt, sondern <em>woraus</em>.
+      Aus deinen Bewertungen allein? Aus denen beider Partner? Und sieht dabei jemand, was der andere
+      gedrückt hat?
+    </p>
+
+    <h2>Wie Namore es macht</h2>
+    <WhyNamore
+      lang="de"
+      heading="Was bei uns die Auswahl steuert"
+      only={['learning', 'design', 'name-depth', 'search-add', 'decision-round', 'no-repeats', 'content-languages']}
+    />
+
+    <p class="post-caveat">
+      Was wir <em>nicht</em> behaupten: dass unsere Technik besser ist als die der anderen. Das
+      können wir nicht belegen, und wir haben ihre Modelle nicht gesehen. Belegen können wir, woraus
+      unser Deck lernt und dass dabei niemand die Stimmen des anderen sieht. Und: Die App ist neu,
+      mit entsprechend wenigen Bewertungen — wer eine lange erprobte Bibliothek sucht, ist bei
+      CharliesNames besser aufgehoben.
+    </p>
+
+    <h2>Woran ihr einen brauchbaren Namensfinder erkennt</h2>
+    <ul>
+      <li>Er zeigt euch nach zweihundert Namen andere Vorschläge als am Anfang.</li>
+      <li>Weggewischte Namen kommen nicht wieder.</li>
+      <li>Ihr könnt einen Namen, der euch selbst einfällt, hinzufügen — der Finder ist keine Einbahnstraße.</li>
+      <li>Wenn ihr zu zweit sucht, führt er beide Meinungen zusammen, statt zwei getrennte Listen zu verwalten.</li>
+      <li>Und er sagt euch, was ihr nach dem Finden mit zwölf Favoriten anfangen sollt.</li>
+    </ul>
+
+    <p class="cta-row">
+      <a class="btn btn-ink" href={APP_STORE(campaign)}>Namore für iOS laden</a>
+      <a class="btn btn-ghost" href={PLAY(campaign)}>Bei Google Play laden</a>
+    </p>
+
+    <h2>Häufige Fragen</h2>
+    <dl class="faq">
+      {faqs.map((f) => (
+        <div class="faq-item">
+          <dt>{f.q}</dt>
+          <dd>{f.a}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <ClusterFoot current="namensfinder-app" />
+  </article>
+</BaseLayout>
