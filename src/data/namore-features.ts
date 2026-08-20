@@ -250,18 +250,21 @@ export const FEATURES: Feature[] = [
   },
   {
     key: 'design',
-    proof: 'OPINION, and must always be phrased as ours. Design quality is not a verifiable characteristic under §6 Abs. 2 UWG, so it cannot be asserted as a comparative fact — and an unsourced negative about a competitor\u2019s interface is exactly the §4 Nr. 1 Herabsetzung surface an earlier review flagged ("Die Oberfläche zeigt inzwischen ihr Alter"). Never say another app looks dated. Say what we aimed for and let the screenshots carry it.',
+    // NOT `distinct` — that flag renders the highlight meaning "no competitor
+    // claims this", which for design would be exactly the comparative claim we
+    // may not make. Design leads by ORDER on the pages, not by a badge.
+    proof: 'Design is a LEAD differentiator, not a footnote — it was part of the positioning locked in the 2026-08-16 audit (interface quality, double-blind, no account, one-time price). ⚠️ The line runs at COMPARISON, not at confidence: "Namore hat ein modernes Design" is a statement about our own product and is entirely permissible. What is not: "moderner als X", or any claim that a named competitor looks dated — that is the §4 Nr. 1 Herabsetzung surface an earlier review already caught on this cluster ("Die Oberfläche zeigt inzwischen ihr Alter", removed). Say ours plainly. Say nothing about theirs. A first draft of this card opened with "das ist Geschmack" and apologised before it claimed anything; that was over-correction, not caution.',
     de: {
-      title: 'Eine App, die man abends noch aufmacht',
-      body: 'Das ist Geschmack, also sagen wir es als das, was es ist: Wir wollten etwas bauen, das sich nicht wie ein Formular anfühlt. Eine Karte nach der anderen, ruhige Farben, nichts blinkt, nichts drängelt, keine Werbung dazwischen. Ob das für euch aufgeht, entscheidet ihr in zwei Minuten selbst — deshalb sind die Bildschirmfotos hier echt und nicht gestellt.',
+      title: 'Modernes Design, und das ist kein Beiwerk',
+      body: 'Namen aussuchen ist etwas, das ihr abends auf dem Sofa macht, nicht am Schreibtisch. Also haben wir eine App gebaut, die sich danach anfühlt: eine Karte nach der anderen, ruhige Farben, große Typografie, nichts blinkt, nichts drängelt, keine Werbung dazwischen. Kein Formular, keine Trefferliste, kein Karussell aus Freischalt-Angeboten. Die Bildschirmfotos auf dieser Seite sind echt — schaut sie euch an und entscheidet in zwei Minuten selbst.',
     },
     en: {
-      title: 'An app you still open in the evening',
-      body: 'This is taste, so we say it as taste: we wanted something that does not feel like a form. One card at a time, quiet colours, nothing flashing, nothing nagging, no ads in between. Whether that works for you is a two-minute question — which is why the screenshots here are real rather than staged.',
+      title: 'A modern interface, and that is not decoration',
+      body: 'Choosing a name is something you do on the sofa in the evening, not at a desk. So we built an app that feels like that: one card at a time, quiet colours, large type, nothing flashing, nothing nagging, no ads in between. No forms, no results list, no carousel of unlock offers. The screenshots on this page are real — look at them and decide for yourself in two minutes.',
     },
     es: {
-      title: 'Una app que todavía abrís por la noche',
-      body: 'Esto es cuestión de gusto y lo decimos como tal: queríamos algo que no pareciera un formulario. Una tarjeta cada vez, colores tranquilos, nada que parpadee, sin publicidad de por medio.',
+      title: 'Diseño moderno, y no como adorno',
+      body: 'Elegir un nombre es algo que hacéis en el sofá por la noche, no en un escritorio. Así que hicimos una app que se siente así: una tarjeta cada vez, colores tranquilos, tipografía grande, nada que parpadee, sin publicidad de por medio. Las capturas de esta página son reales.',
     },
   },
   {
