@@ -186,7 +186,43 @@ export const byslug = (s: string): App => {
 /** What a page prints when a listing simply does not address something. */
 export const NO_STATEMENT = 'Keine Angabe im Store-Eintrag';
 
-export const APP_STORE = (c: string) =>
-  `https://apps.apple.com/app/id6766572995?utm_source=blog&utm_medium=organic&utm_campaign=${c}`;
-export const PLAY = (c: string) =>
-  `https://play.google.com/store/apps/details?id=com.julian.namore&utm_source=blog&utm_medium=organic&utm_campaign=${c}`;
+/**
+ * Store links with attribution that ACTUALLY WORKS.
+ *
+ * ⚠️ FIXED 2026-08-19. Both links were previously untracked, and nobody had
+ * noticed — including on the page that is currently ranking #1 on google.de.
+ * Every install driven by this cluster since day one has been invisible.
+ *
+ *   ✗ Apple ignores utm_* completely. App Store Connect reads `ct` (campaign
+ *     token, ≤40 chars) and `pt` (provider token) — utm parameters are simply
+ *     dropped, so "?utm_source=blog&utm_campaign=x" measured nothing at all.
+ *   ✗ Google Play ignores utm_* placed directly on the details URL. They must
+ *     be URL-ENCODED INSIDE a single `referrer` parameter. A bare
+ *     "&utm_source=blog" is discarded before it ever reaches Play Console.
+ *
+ * This matters more than any wording on these pages: without it there is no
+ * way to answer "does the comparison cluster actually produce installs?", and
+ * that is the question that decides whether any of this was worth doing.
+ *
+ * ⚠️ STILL NEEDED FROM JULIAN: the numeric Provider Token (`pt`) from
+ * App Store Connect → App Analytics → Campaigns → "Create Campaign".
+ * Apple's campaign reporting is unreliable without it. Set PROVIDER_TOKEN
+ * below and the links pick it up. Until then `ct` is sent alone, which some
+ * setups still record and some do not — treat iOS numbers as indicative only.
+ */
+const PROVIDER_TOKEN = ''; // ← paste the pt value from App Store Connect
+
+export const APP_STORE = (c: string) => {
+  const params = [PROVIDER_TOKEN ? `pt=${PROVIDER_TOKEN}` : '', `ct=${c}`, 'mt=8']
+    .filter(Boolean)
+    .join('&');
+  return `https://apps.apple.com/app/id6766572995?${params}`;
+};
+
+export const PLAY = (c: string) => {
+  // Play wants one `referrer` value, itself a URL-encoded query string.
+  const referrer = encodeURIComponent(
+    `utm_source=namore_blog&utm_medium=organic&utm_campaign=${c}`,
+  );
+  return `https://play.google.com/store/apps/details?id=com.julian.namore&referrer=${referrer}`;
+};
