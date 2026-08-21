@@ -218,14 +218,14 @@ export const FEATURES: Feature[] = [
   },
   {
     key: 'search-add',
-    proof: 'Events name_searched and name_added are emitted by the app (code-derived inventory in CURRENT.md). None of the five German store listings transcribed on 2026-08-19 mentions searching or adding your own names — which is not proof they cannot, only that they do not say so.',
+    proof: '⚠️ SCOPED TO THE GERMAN LISTINGS on 2026-08-19 after a US-storefront pass showed how easily this breaks: a research agent had reported a double-blind quote as coming from Baby Name Together\u2019s APPLE listing; a direct read found it is on the GOOGLE PLAY listing instead. Same product, different store, different text. Never say "the other apps\u2019 listings" when only one storefront was read. Events name_searched and name_added are emitted by the app (code-derived inventory in CURRENT.md). None of the five German store listings transcribed on 2026-08-19 mentions searching or adding your own names — which is not proof they cannot, only that they do not say so.',
     de: {
       title: 'Suchen, und eigene Namen einwerfen',
-      body: 'Wenn euch ein Name einfällt, der nicht im Deck war, von der Oma, aus einem Buch, aus dem Nichts, könnt ihr ihn suchen oder selbst hinzufügen. Er landet dann im Deck eures Partners wie jeder andere Name, und ihr seht erst beim Match, was er davon hält. Kein Nachfragen, kein „und, wie findest du …?“ In den Store-Einträgen der anderen Apps haben wir dazu nichts gefunden.',
+      body: 'Wenn euch ein Name einfällt, der nicht im Deck war, von der Oma, aus einem Buch, aus dem Nichts, könnt ihr ihn suchen oder selbst hinzufügen. Er landet dann im Deck eures Partners wie jeder andere Name, und ihr seht erst beim Match, was er davon hält. Kein Nachfragen, kein „und, wie findest du …?“ In den deutschen Store-Einträgen der anderen Apps haben wir dazu nichts gefunden.',
     },
     en: {
       title: 'Search, and add your own names',
-      body: 'When a name occurs to you that was never in the deck, from a grandmother, a book, out of nowhere, you can search for it or add it yourself. It then appears in your partner\u2019s deck like any other name, and you only find out what they think when it matches. No asking, no "so… what do you reckon?" We found nothing about this in the other apps\u2019 listings.',
+      body: 'When a name occurs to you that was never in the deck, from a grandmother, a book, out of nowhere, you can search for it or add it yourself. It then appears in your partner\u2019s deck like any other name, and you only find out what they think when it matches. No asking, no "so… what do you reckon?" We found nothing about this in the other apps\u2019 store listings.',
     },
     es: {
       title: 'Buscar, y añadir vuestros propios nombres',
