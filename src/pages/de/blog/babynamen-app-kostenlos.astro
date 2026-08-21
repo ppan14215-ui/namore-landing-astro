@@ -17,6 +17,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Disclosure from '../../../components/Disclosure.astro';
 import WhyNamore from '../../../components/WhyNamore.astro';
 import ClusterFoot from '../../../components/ClusterFoot.astro';
+import Shot from '../../../components/Shot.astro';
 import { APPS, VERIFIED, NO_STATEMENT, APP_STORE, PLAY } from '../../../data/apps-de';
 
 const canonical = 'https://www.namore.app/de/blog/babynamen-app-kostenlos';
@@ -143,6 +144,12 @@ const jsonLd = {
       frei. Kinder gibt im Eintrag an, dass Käufe geteilt werden, wenn ihr verbunden seid. Bei den
       übrigen haben wir dazu keine Angabe gefunden; rechnet im Zweifel mit zwei Käufen.
     </p>
+
+    <Shot
+      shots={['bloom-moment']}
+      alts={['Der Match-Moment in Namore: Der Name Penelope erscheint, nachdem beide Partner Ja gesagt haben']}
+      caption="Der Gratistarif reicht zum Entscheiden: 100 Swipes pro Person je 24 Stunden. Einmal zahlen schaltet unbegrenztes Wischen für beide frei."
+    />
 
     <WhyNamore
       lang="de"

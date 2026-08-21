@@ -21,6 +21,7 @@ import Disclosure from '../../../components/Disclosure.astro';
 import CompareTable from '../../../components/CompareTable.astro';
 import WhyNamore from '../../../components/WhyNamore.astro';
 import ClusterFoot from '../../../components/ClusterFoot.astro';
+import Shot from '../../../components/Shot.astro';
 import { APPS, VERIFIED, APP_STORE, PLAY } from '../../../data/apps-de';
 
 const canonical = 'https://www.namore.app/de/blog/namensfinder-app';
@@ -136,6 +137,12 @@ const jsonLd = {
     </p>
 
     <h2>Wie Namore es macht</h2>
+    <Shot
+      shots={['swipe-deck', 'name-detail']}
+      alts={['Eine Namenskarte in Namore mit dem Namen Theodora, Bedeutung, Popularitätskurve, Spitznamen und Klang-Tags', 'Ein Namenseintrag in Namore mit Bedeutung, Herkunft, Aussprache, Popularitätsverlauf und ähnlichen Namen']}
+      caption="Das Deck lernt aus dem, was ihr mögt, und hinter jeder Karte steht ein voller Namenseintrag mit Bedeutung, Verlauf und ähnlichen Namen."
+    />
+
     <WhyNamore
       lang="de"
       heading="Was bei uns die Auswahl steuert"

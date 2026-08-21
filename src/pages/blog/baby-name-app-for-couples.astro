@@ -13,6 +13,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import DisclosureEn from '../../components/DisclosureEn.astro';
 import WhyNamore from '../../components/WhyNamore.astro';
 import ClusterFootEn from '../../components/ClusterFootEn.astro';
+import Shot from '../../components/Shot.astro';
 import { APPS_EN, VERIFIED_EN, NO_STATEMENT_EN, APP_STORE_EN, PLAY_EN } from '../../data/apps-en';
 
 const canonical = 'https://www.namore.app/blog/baby-name-app-for-couples';
@@ -132,6 +133,12 @@ const jsonLd = {
     </p>
 
     <h2>How Namore handles it</h2>
+    <Shot
+      shots={['welcome', 'bloom-moment']}
+      alts={['Namore\'s invite screen with a six-letter code that connects both phones', 'The match moment in Namore: the name Penelope appears after both partners said yes']}
+      caption="A six-letter code connects both phones, no account. And a name only appears once you have both said yes."
+    />
+
     <WhyNamore
       lang="en"
       heading="What helps when two people decide"

@@ -875,3 +875,44 @@ footer.site-footer {
     margin-left: calc((100% - 1060px) / 2);
   }
 }
+
+/* ── App screenshots in the landing page's phone-frame style ─────────────
+   Added 2026-08-21. Raw app screens (no marketing text baked in), rounded
+   bezel + soft shadow like the landing's .phone-embed. One or two phones. */
+.appshots {
+  margin: 32px 0 36px;
+  text-align: center;
+}
+.appshots-row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.appshot-phone {
+  width: 250px;
+  border-radius: 34px;
+  overflow: hidden;
+  box-shadow:
+    0 30px 80px rgba(58, 40, 28, 0.22),
+    0 0 0 1px rgba(58, 40, 28, 0.1),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+.appshot-phone img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.appshots figcaption {
+  font-size: 14px;
+  color: var(--ink-3);
+  margin-top: 16px;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+@media (max-width: 560px) {
+  .appshot-phone { width: 210px; }
+}

@@ -31,6 +31,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Disclosure from '../../../components/Disclosure.astro';
 import WhyNamore from '../../../components/WhyNamore.astro';
 import ClusterFoot from '../../../components/ClusterFoot.astro';
+import Shot from '../../../components/Shot.astro';
 import { APPS, VERIFIED, NO_STATEMENT, APP_STORE, PLAY } from '../../../data/apps-de';
 
 const canonical = 'https://www.namore.app/de/blog/babynamen-app-wie-tinder';
@@ -163,6 +164,12 @@ const jsonLd = {
       <li>ihr keine Werbung zwischen den Namen wollt.</li>
       <li>ihr euch nirgends registrieren möchtet.</li>
     </ul>
+
+    <Shot
+      shots={['swipe-deck']}
+      alts={['Eine Namenskarte in Namore mit dem Namen Theodora, Bedeutung, Popularitätskurve, Spitznamen und Klang-Tags']}
+      caption="So sieht das Wischen bei uns aus: Bedeutung, Popularität seit 1970, Spitznamen und Klang direkt auf der Karte."
+    />
 
     <WhyNamore
       lang="de"

@@ -14,6 +14,7 @@ import StoreFacts from '../../../components/StoreFacts.astro';
 import VsTable from '../../../components/VsTable.astro';
 import WhyNamore from '../../../components/WhyNamore.astro';
 import ClusterFoot from '../../../components/ClusterFoot.astro';
+import Shot from '../../../components/Shot.astro';
 import { byslug, VERIFIED, APP_STORE, PLAY } from '../../../data/apps-de';
 
 const rival = byslug('charliesnames');
@@ -95,6 +96,12 @@ const jsonLd = {
         <StoreFacts app={rival} />
       </div>
     </details>
+
+    <Shot
+      shots={['swipe-deck']}
+      alts={['Eine Namenskarte in Namore mit dem Namen Theodora, Bedeutung, Popularitätskurve, Spitznamen und Klang-Tags']}
+      caption="Unsere Karte im Detail: Bedeutung, Popularität, Spitznamen, Klang. So sieht Namore aus."
+    />
 
     <h2>Wann wir euch zu CharliesNames raten würden</h2>
     <p>

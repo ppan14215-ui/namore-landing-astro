@@ -18,6 +18,7 @@ import StoreFactsEn from '../../components/StoreFactsEn.astro';
 import CompareTableEn from '../../components/CompareTableEn.astro';
 import WhyNamore from '../../components/WhyNamore.astro';
 import ClusterFootEn from '../../components/ClusterFootEn.astro';
+import Shot from '../../components/Shot.astro';
 import { APPS_EN, VERIFIED_EN, APP_STORE_EN, PLAY_EN } from '../../data/apps-en';
 
 const canonical = 'https://www.namore.app/blog/best-baby-name-apps';
@@ -127,14 +128,11 @@ const jsonLd = {
       elsewhere, and we say so below.
     </p>
 
-    <figure class="shot">
-      <img
-        src="https://www.namore.app/blog-assets/02-private-by-design.webp"
-        alt="Namore's swipe screen showing a single name card."
-        width="900" height="1947" loading="lazy" decoding="async"
-      />
-      <figcaption>One card at a time, and nothing on screen that would give your partner's vote away.</figcaption>
-    </figure>
+    <Shot
+      shots={['swipe-deck', 'shortlist-reveal']}
+      alts={['A Namore name card showing Theodora with meaning, popularity curve, nicknames and sound tags', 'The reveal in Namore: both rankings combined, favourites at the top']}
+      caption="The deck on the left, the ending on the right: the final round's reveal, both rankings combined."
+    />
 
     <WhyNamore
       lang="en"

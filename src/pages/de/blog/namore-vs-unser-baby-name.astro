@@ -14,6 +14,7 @@ import StoreFacts from '../../../components/StoreFacts.astro';
 import VsTable from '../../../components/VsTable.astro';
 import WhyNamore from '../../../components/WhyNamore.astro';
 import ClusterFoot from '../../../components/ClusterFoot.astro';
+import Shot from '../../../components/Shot.astro';
 import { byslug, VERIFIED, APP_STORE, PLAY } from '../../../data/apps-de';
 
 const rival = byslug('unser-baby-name');
@@ -95,6 +96,12 @@ const jsonLd = {
         <StoreFacts app={rival} />
       </div>
     </details>
+
+    <Shot
+      shots={['shortlist-round']}
+      alts={['Die Endrunde in Namore: Treffer werden einzeln mit Sternen bewertet, die Bewertung des Partners bleibt verdeckt']}
+      caption="Was nach dem Match kommt: die Endrunde, in der jeder die Treffer für sich bewertet."
+    />
 
     <h2>Wann wir euch zu Unser Baby Name raten würden</h2>
     <p>

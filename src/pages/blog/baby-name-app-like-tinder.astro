@@ -11,6 +11,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import DisclosureEn from '../../components/DisclosureEn.astro';
 import WhyNamore from '../../components/WhyNamore.astro';
 import ClusterFootEn from '../../components/ClusterFootEn.astro';
+import Shot from '../../components/Shot.astro';
 import { APPS_EN, VERIFIED_EN, NO_STATEMENT_EN, APP_STORE_EN, PLAY_EN } from '../../data/apps-en';
 
 const canonical = 'https://www.namore.app/blog/baby-name-app-like-tinder';
@@ -137,6 +138,12 @@ const jsonLd = {
       <li>you do not want ads between the names.</li>
       <li>you do not want to register anywhere.</li>
     </ul>
+
+    <Shot
+      shots={['swipe-deck']}
+      alts={['A Namore name card showing Theodora with meaning, popularity curve, nicknames and sound tags']}
+      caption="Swiping in Namore: meaning, popularity since 1970, nicknames and sound, right on the card."
+    />
 
     <WhyNamore
       lang="en"

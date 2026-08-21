@@ -20,6 +20,7 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Disclosure from '../../../components/Disclosure.astro';
 import ClusterFoot from '../../../components/ClusterFoot.astro';
+import Shot from '../../../components/Shot.astro';
 import { VERIFIED, APP_STORE, PLAY } from '../../../data/apps-de';
 
 const canonical = 'https://www.namore.app/de/blog/babyname-passend-zum-nachnamen';
@@ -141,6 +142,12 @@ const jsonLd = {
       <strong>Keine App entscheidet für euch, ob ein Name zu eurem Nachnamen passt.</strong> Das
       geht nur laut und nur bei euch zu Hause.
     </p>
+
+    <Shot
+      shots={['name-detail']}
+      alts={['Ein Namenseintrag in Namore mit Bedeutung, Herkunft, Aussprache, Popularitätsverlauf und ähnlichen Namen']}
+      caption="Klang, Silben und Alltagsform stehen bei uns direkt auf dem Namenseintrag, den Rest des Tests macht ihr laut."
+    />
     <p>
       Was eine App abnehmen kann, ist die Vorarbeit. Bei Namore steht auf jedem der 15.182 Namen die
       Silbenzahl und die Aussprache, sodass ihr vor dem Lautlesen schon aussortieren könnt, was von

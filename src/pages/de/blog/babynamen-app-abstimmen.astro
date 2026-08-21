@@ -16,6 +16,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Disclosure from '../../../components/Disclosure.astro';
 import WhyNamore from '../../../components/WhyNamore.astro';
 import ClusterFoot from '../../../components/ClusterFoot.astro';
+import Shot from '../../../components/Shot.astro';
 import { APPS, VERIFIED, NO_STATEMENT, APP_STORE, PLAY } from '../../../data/apps-de';
 
 const canonical = 'https://www.namore.app/de/blog/babynamen-app-abstimmen';
@@ -146,6 +147,12 @@ const jsonLd = {
       und steht damit ungefähr da, wo ihr vorher standet, nur mit einer kürzeren Liste zum
       Streiten. Genau dafür gibt es bei uns die Endrunde.
     </p>
+
+    <Shot
+      shots={['shortlist-round', 'shortlist-reveal']}
+      alts={['Die Endrunde in Namore: Treffer werden einzeln mit Sternen bewertet, die Bewertung des Partners bleibt verdeckt', 'Die Auflösung in Namore: beide Bewertungen zusammengeführt, die Favoriten oben']}
+      caption="Nach dem Match: Jeder bewertet die Treffer für sich, die Sterne des anderen bleiben bis zur Auflösung verdeckt. Danach steigen die Favoriten nach oben."
+    />
 
     <WhyNamore
       lang="de"

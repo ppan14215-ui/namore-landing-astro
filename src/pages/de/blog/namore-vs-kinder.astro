@@ -14,6 +14,7 @@ import StoreFacts from '../../../components/StoreFacts.astro';
 import VsTable from '../../../components/VsTable.astro';
 import WhyNamore from '../../../components/WhyNamore.astro';
 import ClusterFoot from '../../../components/ClusterFoot.astro';
+import Shot from '../../../components/Shot.astro';
 import { byslug, VERIFIED, APP_STORE, PLAY } from '../../../data/apps-de';
 
 const rival = byslug('kinder');
@@ -95,6 +96,12 @@ const jsonLd = {
         <StoreFacts app={rival} />
       </div>
     </details>
+
+    <Shot
+      shots={['name-detail']}
+      alts={['Ein Namenseintrag in Namore mit Bedeutung, Herkunft, Aussprache, Popularitätsverlauf und ähnlichen Namen']}
+      caption="Ein Namenseintrag bei Namore: Bedeutung, Herkunft, Aussprache und Verlauf, gepflegt auf Deutsch, Englisch und Spanisch."
+    />
 
     <h2>Wann wir euch zu Kinder raten würden</h2>
     <p>

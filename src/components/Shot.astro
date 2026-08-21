@@ -1,0 +1,37 @@
+---
+/**
+ * Shot — app screenshots in the landing page's phone-frame style.
+ * Added 2026-08-21 after Julian's review: every page shows the app itself,
+ * the same raw screens the landing page uses (served live from
+ * /screenshots/), framed like the landing's .phone-embed.
+ *
+ * The design argument is made by SHOWING our own product, never by a
+ * comparative sentence — captions describe what is on OUR screen and stop.
+ * Do not put claims about competitors in a caption.
+ */
+export interface Props {
+  /** One or two screenshot base names, e.g. ['swipe-deck', 'shortlist-reveal'] */
+  shots: string[];
+  alts: string[];
+  caption: string;
+}
+const { shots, alts, caption } = Astro.props;
+---
+
+<figure class="appshots">
+  <div class="appshots-row">
+    {shots.map((s, i) => (
+      <div class="appshot-phone">
+        <img
+          src={`https://www.namore.app/screenshots/${s}.png`}
+          alt={alts[i]}
+          width="864"
+          height="1939"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    ))}
+  </div>
+  <figcaption>{caption}</figcaption>
+</figure>

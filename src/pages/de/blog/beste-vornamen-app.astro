@@ -24,6 +24,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Disclosure from '../../../components/Disclosure.astro';
 import WhyNamore from '../../../components/WhyNamore.astro';
 import ClusterFoot from '../../../components/ClusterFoot.astro';
+import Shot from '../../../components/Shot.astro';
 import { APPS, VERIFIED, NO_STATEMENT, APP_STORE, PLAY } from '../../../data/apps-de';
 
 const canonical = 'https://www.namore.app/de/blog/beste-vornamen-app';
@@ -170,6 +171,12 @@ const jsonLd = {
     </p>
 
     <h2>Und wo wir stehen</h2>
+    <Shot
+      shots={['name-detail']}
+      alts={['Ein Namenseintrag in Namore mit Bedeutung, Herkunft, Aussprache, Popularitätsverlauf und ähnlichen Namen']}
+      caption="Zu jedem Namen: Bedeutung, Herkunft, Aussprache, Popularitätsverlauf und ähnliche Namen."
+    />
+
     <WhyNamore
       lang="de"
       heading="Was Namore aus diesen vier Punkten macht"
