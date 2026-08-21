@@ -1,0 +1,169 @@
+---
+/**
+ * /blog/baby-name-app-like-tinder
+ *
+ * Target: the "baby name app like tinder" family — 9 autocomplete suggestions
+ * of their own (verified 2026-08-19, hl=en&gl=us), plus "baby name app swipe"
+ * and "baby name app tinder" from the head seed. English twin of the German
+ * Tinder page, written natively, not translated. Same evidence rules.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DisclosureEn from '../../components/DisclosureEn.astro';
+import WhyNamore from '../../components/WhyNamore.astro';
+import ClusterFootEn from '../../components/ClusterFootEn.astro';
+import { APPS_EN, VERIFIED_EN, NO_STATEMENT_EN, APP_STORE_EN, PLAY_EN } from '../../data/apps-en';
+
+const canonical = 'https://www.namore.app/blog/baby-name-app-like-tinder';
+const campaign = 'app_like_tinder';
+
+const faqs = [
+  {
+    q: 'Is there a baby name app like Tinder?',
+    a: 'Several. BabyName, Baby Name Together, Baby Name Genius, Nameberry, BabyCenter, NameHatch and Namore all work with swiping: right if you like a name, left if you do not, and a match when you both said yes. The comparison with Tinder holds up to the match; after that the apps differ a lot in what they do with your matches.',
+  },
+  {
+    q: 'What is the best baby name swipe app?',
+    a: 'It depends on what you need after the swiping. If you just want to get through a lot of names, almost any of them works. If you need to end up with one name, look at what happens after the match. In Namore a final round follows, where you each rate the mutual matches again separately until an order emerges.',
+  },
+  {
+    q: 'Why does my baby name app keep showing the same names?',
+    a: 'Because many apps stop reliably excluding already-rated names once there are a lot of them. It is the most common complaint about swipe apps. In Namore a name you swiped away does not come back, not after a thousand swipes and not after weeks. It was the bug that cost us the most work.',
+  },
+  {
+    q: 'Can couples swipe baby names together?',
+    a: 'Yes, that is what these apps are built for. How you connect differs: BabyName describes pairing by shareable link or AirDrop, Baby Name Together links accounts through email, BabyCenter uses personal codes. In Namore one of you opens a session and the other joins with a six-letter code, with no account.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: 'Baby name app like Tinder: what swiping actually solves',
+      description:
+        'Swiping baby names like Tinder: which apps do it, where the comparison stops working, and what matters after the match.',
+      inLanguage: 'en',
+      datePublished: '2026-08-20',
+      dateModified: '2026-08-20',
+      author: { '@type': 'Person', name: 'Julian Ziegler' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Namore',
+        logo: { '@type': 'ImageObject', url: 'https://www.namore.app/logo@2x.png' },
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: 'en',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="Baby name app like Tinder: what swiping actually solves | Namore"
+  description="Swiping baby names like Tinder: which apps do it, where the comparison stops working, and why what happens after the match decides everything."
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <article class="post">
+    <DisclosureEn />
+
+    <header class="post-head">
+      <p class="post-kicker">Guide · Retrieved {VERIFIED_EN}</p>
+      <h1>Baby name app like Tinder</h1>
+    </header>
+
+    <p class="post-standfirst">
+      Yes, there are several. Right if you like the name, left if you do not, and when you both
+      swiped right on the same name, it is a match. The principle works surprisingly well, right
+      up to the point where the Tinder comparison stops carrying.
+    </p>
+
+    <h2>Where the Tinder comparison ends</h2>
+    <p>
+      On Tinder, the match is the goal. You found each other; life takes over from there. With
+      names, the match is only the shortlist. At some point we had fourteen mutual matches and
+      stood exactly where we started, just with a shorter list to argue about.
+    </p>
+    <p>
+      So the most useful question to ask a swipe app is not how nicely it swipes, but what happens
+      afterwards. And the second, underrated one: whether a name you swiped away actually stays
+      away. In many apps it resurfaces after a few hundred swipes, and that is the moment couples
+      stop trusting the app.
+    </p>
+
+    <h2>Which apps swipe</h2>
+    <p>Here is what the vendors themselves say, typed out and linked, so you do not have to take our word for it.</p>
+    <div class="table-wrap">
+      <table class="cmp">
+        <thead>
+          <tr><th>App</th><th>What the vendor says about swiping together</th></tr>
+        </thead>
+        <tbody>
+          <tr class="is-ours">
+            <td data-label="App">Namore <span class="sf-note">(our app)</span></td>
+            <td data-label="What the vendor says">You swipe separately; a name only appears as a match once you have both said yes independently. A final round follows. <span class="sf-note">Our description, not quoted from a listing.</span></td>
+          </tr>
+          {APPS_EN.map((a) => (
+            <tr>
+              <td data-label="App"><a href={a.src} rel="nofollow noopener" target="_blank">{a.name}</a></td>
+              <td data-label="What the vendor says">{a.partner ? <q>{a.partner.q}</q> : <span class="sf-none">{NO_STATEMENT_EN}</span>}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Pick any swipe app if …</h2>
+    <ul>
+      <li>you are at the start and just want to see a lot of names.</li>
+      <li>you want to try the principle first; all of these are free to download.</li>
+      <li>database size matters more to you than what follows.</li>
+      <li>you are searching alone and do not need the couples part at all.</li>
+    </ul>
+
+    <h2>Pick Namore if …</h2>
+    <ul>
+      <li>you have already swiped plenty and still have no decision.</li>
+      <li>it bothers you when names you swiped away come back.</li>
+      <li>you do not want ads between the names.</li>
+      <li>you do not want to register anywhere.</li>
+    </ul>
+
+    <WhyNamore
+      lang="en"
+      heading="What happens after the swiping, in our app"
+      only={['design', 'decision-round', 'no-repeats', 'search-add', 'no-ads']}
+    />
+
+    <p class="post-caveat">
+      Where Namore is weaker: it is new, with few ratings. If you want the reassurance of a long
+      established app, the bigger ones above are the safer pick.
+    </p>
+
+    <p class="cta-row">
+      <a class="btn btn-ink" href={APP_STORE_EN(campaign)}>Get Namore for iOS</a>
+      <a class="btn btn-ghost" href={PLAY_EN(campaign)}>Get it on Google Play</a>
+    </p>
+
+    <h2>Common questions</h2>
+    <dl class="faq">
+      {faqs.map((f) => (
+        <div class="faq-item">
+          <dt>{f.q}</dt>
+          <dd>{f.a}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <ClusterFootEn current="baby-name-app-like-tinder" />
+  </article>
+</BaseLayout>

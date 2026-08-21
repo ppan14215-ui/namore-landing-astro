@@ -442,7 +442,11 @@ a.subtle:hover {
   border-radius: 14px;
 }
 
-footer {
+/* ⚠️ Scoped to .site-footer on 2026-08-20. This used to be a bare `footer`
+   element selector, which also captured the article's <footer class="post-foot">:
+   the Weiterlesen block rendered as a squeezed flex row in 11px mono — the
+   broken layout Julian screenshotted. Never style bare `footer` here. */
+footer.site-footer {
   max-width: 1080px;
   margin: 0 auto;
   padding: 48px 28px 32px;
@@ -695,6 +699,13 @@ footer {
 /* ── Cluster footer: "Weiterlesen" + sources ──────────────────────────────
    Added 2026-08-19. Replaces the middot-separated link run that read as a
    link dump. Links get room and a reason to click; sources are demoted. */
+.post-foot {
+  display: block;
+  font-family: var(--sans);
+  font-size: 15.5px;
+  letter-spacing: normal;
+  color: var(--ink);
+}
 .post-foot .foot-head {
   font-family: var(--serif);
   font-size: 1.25rem;

@@ -1,0 +1,58 @@
+---
+/**
+ * StoreFactsEn — one competitor, rendered only as sourced literal quotes.
+ * English twin of StoreFacts.astro; same rules, see that file's header.
+ */
+import { NO_STATEMENT_EN, VERIFIED_EN, type AppEn, type Sourced } from '../data/apps-en';
+
+export interface Props { app: AppEn; compact?: boolean; }
+const { app, compact } = Astro.props;
+
+const allRows: [string, Sourced][] = [
+  ['Rating', app.rating],
+  ['Pricing', app.price],
+  ['Names', app.names],
+  ['With your partner', app.partner],
+  ['AI', app.ai],
+  ['Ads', app.ads],
+];
+const compactKeys = ['Pricing', 'Names', 'With your partner', 'Ads'];
+const rows = compact ? allRows.filter(([k]) => compactKeys.includes(k)) : allRows;
+const lines = (v: NonNullable<Sourced>) => [v.q, v.q2, v.q3, v.q4, v.q5].filter(Boolean) as string[];
+const isWeb = !app.rating && app.src.includes('namehatch');
+const noneLabel = isWeb ? 'No statement on the vendor site' : NO_STATEMENT_EN;
+---
+
+<div class="storefacts">
+  <h3>What {app.name} says about itself</h3>
+  <p class="storefacts-meta">{app.vendor} · {app.updated} · retrieved {VERIFIED_EN}</p>
+  <dl>
+    {rows.map(([label, v]) => (
+      <div class="sf-row">
+        <dt>{label}</dt>
+        <dd>
+          {v ? (
+            v.compiled ? (
+              <>
+                <ul class="sf-list">{lines(v).map((l) => <li><q>{l}</q></li>)}</ul>
+                <span class="sf-note">
+                  Separate lines from the same source, stacked by us; not one continuous sentence
+                  by the vendor.{v.note ? ` ${v.note}.` : ''}{' '}
+                  <a class="sf-src" href={v.src} rel="nofollow noopener" target="_blank">Source</a>
+                </span>
+              </>
+            ) : (
+              <>
+                <q>{v.q}</q>{' '}
+                {v.note ? <span class="sf-note">({v.note})</span> : null}{' '}
+                <a class="sf-src" href={v.src} rel="nofollow noopener" target="_blank">Source</a>
+              </>
+            )
+          ) : (
+            <span class="sf-none">{noneLabel}</span>
+          )}
+        </dd>
+      </div>
+    ))}
+  </dl>
+</div>

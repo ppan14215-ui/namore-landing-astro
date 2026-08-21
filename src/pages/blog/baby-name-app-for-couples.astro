@@ -1,0 +1,163 @@
+---
+/**
+ * /blog/baby-name-app-for-couples
+ *
+ * Target: the "baby name app for couples" family — 8 autocomplete suggestions
+ * of its own (verified 2026-08-19, hl=en&gl=us), including "baby name app
+ * match with partner", "baby name swiping app for couples", "baby name picker
+ * app for couples". The US SERP for the head phrase is store listings and
+ * Reddit threads (one eight years old); only two vendor blogs compete
+ * editorially. Same evidence rules as the whole cluster.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DisclosureEn from '../../components/DisclosureEn.astro';
+import WhyNamore from '../../components/WhyNamore.astro';
+import ClusterFootEn from '../../components/ClusterFootEn.astro';
+import { APPS_EN, VERIFIED_EN, NO_STATEMENT_EN, APP_STORE_EN, PLAY_EN } from '../../data/apps-en';
+
+const canonical = 'https://www.namore.app/blog/baby-name-app-for-couples';
+const campaign = 'app_for_couples';
+
+const faqs = [
+  {
+    q: 'What is the best baby name app for couples?',
+    a: 'Several apps are built for two people: Namore, Baby Name Together, Nameberry, Baby Name Genius, BabyCenter and NameHatch all match partners on mutual likes. The real differences are how you connect (account, email, code), whether the free tier carries ads, and what happens once you have a pile of matches. Namore connects with a six-letter code instead of an account, shows no ads, and adds a final round that turns matches into a ranked shortlist.',
+  },
+  {
+    q: 'How do couples match on baby names in an app?',
+    a: 'Both partners swipe through the same pool of names, each on their own phone. When you both like the same name, the app shows it as a match. In Namore neither of you sees the other one’s votes at any point before the match, so nobody anchors or vetoes anyone.',
+  },
+  {
+    q: 'Can my partner see which names I rejected?',
+    a: 'It depends on the app, and most listings do not say. Baby Name Together’s Play listing states that each parent swipes privately and only mutual likes are revealed, and Nameberry says you see only the names you both love. Namore works the same way: your passes stay yours.',
+  },
+  {
+    q: 'What happens when we match on too many names?',
+    a: 'That is the normal case, and where most apps stop. Twelve matches are not a decision. Namore adds a final round: you each rate the mutual matches again, separately, and out of that comes an order instead of a list. We did not find a comparable stage between the two partners in the apps compared here.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: 'Baby name app for couples: what actually matters',
+      description:
+        'What a baby name app has to get right when two people decide together: private voting, easy pairing, no ads in between, and a way from matches to one name.',
+      inLanguage: 'en',
+      datePublished: '2026-08-20',
+      dateModified: '2026-08-20',
+      author: { '@type': 'Person', name: 'Julian Ziegler' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Namore',
+        logo: { '@type': 'ImageObject', url: 'https://www.namore.app/logo@2x.png' },
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: 'en',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="Baby name app for couples: what actually matters | Namore"
+  description="Private voting, easy pairing, no ads, and a way from twelve matches to one name: what a baby name app has to get right when two people decide together."
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <article class="post">
+    <DisclosureEn />
+
+    <header class="post-head">
+      <p class="post-kicker">Guide · Retrieved {VERIFIED_EN}</p>
+      <h1>Baby name app for couples</h1>
+    </header>
+
+    <p class="post-standfirst">
+      Almost every baby name app does the same first job: show you lots of names with meanings and
+      origins. No couple fails at that part. Couples fail because knowing what your partner thinks
+      changes what you think, and because twelve shared favourites are still not a name.
+    </p>
+
+    <h2>The real problem is not a list</h2>
+    <p>
+      Whoever hears first that their partner loves a name rates it differently from then on.
+      Whoever gave in on the last suggestion is more likely to say no to the next one. A few weeks
+      in, you are no longer discussing names; you are keeping score. That is why "which app has
+      the most names" is the wrong question for couples.
+    </p>
+
+    <h2>The four questions that count</h2>
+    <ul>
+      <li><strong>Do you swipe separately?</strong> And does a name only appear once you both like it, or can you see where your partner stands along the way?</li>
+      <li><strong>How much setup does it take?</strong> If both of you have to register first, one of you often never gets started, in our experience.</li>
+      <li><strong>What happens after the match?</strong> Ask whether the app does anything at all once you have matches.</li>
+      <li><strong>What does it really cost?</strong> Subscription or one-time, with or without ads, and does a purchase cover one phone or both?</li>
+    </ul>
+
+    <h2>What the vendors say about swiping together</h2>
+    <div class="table-wrap">
+      <table class="cmp">
+        <thead>
+          <tr><th>App</th><th>What the vendor says</th></tr>
+        </thead>
+        <tbody>
+          <tr class="is-ours">
+            <td data-label="App">Namore <span class="sf-note">(our app)</span></td>
+            <td data-label="What the vendor says">You swipe separately; a name only appears as a match once you have both said yes independently. A final round follows. <span class="sf-note">Our description, not quoted from a listing.</span></td>
+          </tr>
+          {APPS_EN.map((a) => (
+            <tr>
+              <td data-label="App"><a href={a.src} rel="nofollow noopener" target="_blank">{a.name}</a></td>
+              <td data-label="What the vendor says">{a.partner ? <><q>{a.partner.q}</q>{a.partner.note ? <span class="sf-note"> ({a.partner.note})</span> : null}</> : <span class="sf-none">{NO_STATEMENT_EN}</span>}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="post-caveat">
+      Worth noting openly: hidden-until-match voting is not unique to us. Baby Name Together and
+      Nameberry both state it in their own listings, quoted above. What we did not find anywhere
+      is the stage after the match, and that is where the next section starts.
+    </p>
+
+    <h2>How Namore handles it</h2>
+    <WhyNamore
+      lang="en"
+      heading="What helps when two people decide"
+      only={['decision-round', 'design', 'no-account', 'search-add', 'no-repeats']}
+    />
+
+    <p class="post-caveat">
+      Where Namore is weaker: it is new, on the App Store since May 2026 and on Google Play since
+      August 2026, with few ratings and no community around it yet.
+    </p>
+
+    <p class="cta-row">
+      <a class="btn btn-ink" href={APP_STORE_EN(campaign)}>Get Namore for iOS</a>
+      <a class="btn btn-ghost" href={PLAY_EN(campaign)}>Get it on Google Play</a>
+    </p>
+
+    <h2>Common questions</h2>
+    <dl class="faq">
+      {faqs.map((f) => (
+        <div class="faq-item">
+          <dt>{f.q}</dt>
+          <dd>{f.a}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <ClusterFootEn current="baby-name-app-for-couples" />
+  </article>
+</BaseLayout>

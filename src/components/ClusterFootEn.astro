@@ -1,0 +1,40 @@
+---
+/**
+ * ClusterFootEn — read-next block + sources note for the English cluster.
+ * English twin of ClusterFoot.astro.
+ */
+import { VERIFIED_EN } from '../data/apps-en';
+
+export interface Props { current: string; }
+const { current } = Astro.props;
+
+const links: { href: string; label: string; blurb: string }[] = [
+  { href: '/blog/best-baby-name-apps', label: 'Best baby name apps in 2026', blurb: 'All six side by side.' },
+  { href: '/blog/baby-name-app-for-couples', label: 'Baby name app for couples', blurb: 'What matters when two people decide.' },
+  { href: '/blog/baby-name-app-like-tinder', label: 'Baby name app like Tinder', blurb: 'Swiping, and what comes after the match.' },
+  { href: '/de/blog/beste-babynamen-apps', label: 'Auf Deutsch lesen', blurb: 'The German comparison hub.' },
+];
+const rest = links.filter((l) => !l.href.endsWith(current));
+---
+
+<footer class="post-foot">
+  <h2 class="foot-head">Read next</h2>
+  <ul class="cluster-links">
+    {rest.map((l) => (
+      <li>
+        <a href={l.href}>{l.label}</a>
+        <span>{l.blurb}</span>
+      </li>
+    ))}
+    <li>
+      <a href="/names">Browse baby names</a>
+      <span>15,182 names with meaning, origin and pronunciation.</span>
+    </li>
+  </ul>
+  <p class="sources-note">
+    <strong>Sources.</strong> Statements about other apps are quoted word for word from their US
+    App Store or Google Play listings, or from the vendor's own site, retrieved {VERIFIED_EN}.
+    Where a listing says nothing, we say so. Prices and features change; check the current
+    listing before you buy.
+  </p>
+</footer>
