@@ -30,7 +30,7 @@ const charlies = byslug('charliesnames');
 const faqs = [
   {
     q: 'Was ist ein Namensfinder?',
-    a: 'Ein Werkzeug, das euch Vornamen vorschlägt, statt euch eine alphabetische Liste zum Durchblättern zu geben. Die meisten arbeiten mit Filtern — Geschlecht, Herkunft, Länge, Stil — und manche zusätzlich mit euren bisherigen Bewertungen, um die Vorschläge zu schärfen.',
+    a: 'Ein Werkzeug, das euch Vornamen vorschlägt, statt euch eine alphabetische Liste zum Durchblättern zu geben. Die meisten arbeiten mit Filtern. Geschlecht, Herkunft, Länge, Stil, und manche zusätzlich mit euren bisherigen Bewertungen, um die Vorschläge zu schärfen.',
   },
   {
     q: 'Gibt es einen Namensfinder mit KI?',
@@ -38,7 +38,7 @@ const faqs = [
   },
   {
     q: 'Wie lernt Namore, welche Namen mir gefallen?',
-    a: 'Aus euren eigenen Bewertungen: Stil, Klang, Herkunft und Silbenfluss der Namen, die ihr mögt, schärfen die Auswahl. Das läuft über die gesamte Zeit, die ihr sucht — in echten Sitzungen sind das bis zu 17.000 Swipes, und die längste lief über drei Monate. Die Besonderheit ist nicht die Technik, sondern dass aus den Bewertungen beider Partner gelernt wird, ohne dass einer die Stimmen des anderen sieht.',
+    a: 'Aus euren eigenen Bewertungen: Stil, Klang, Herkunft und Silbenfluss der Namen, die ihr mögt, schärfen die Auswahl. Das läuft über die gesamte Zeit, die ihr sucht, in echten Sitzungen sind das bis zu 17.000 Swipes, und die längste lief über drei Monate. Die Besonderheit ist nicht die Technik, sondern dass aus den Bewertungen beider Partner gelernt wird, ohne dass einer die Stimmen des anderen sieht.',
   },
   {
     q: 'Ist ein Namensfinder besser als eine Namensliste?',
@@ -103,7 +103,7 @@ const jsonLd = {
     <p>
       Im Kern gibt es zwei Verfahren. Das erste sind <strong>Filter</strong>: Ihr sagt Geschlecht,
       Herkunft, Länge und Stil vor, und der Finder zeigt, was passt. Das ist ehrlich, nachvollziehbar
-      und langweilig — es findet nichts, woran ihr nicht schon gedacht habt.
+      und langweilig, es findet nichts, woran ihr nicht schon gedacht habt.
     </p>
     <p>
       Das zweite ist <strong>Lernen aus Bewertungen</strong>. Je mehr Namen ihr mögt oder ablehnt,
@@ -124,7 +124,7 @@ const jsonLd = {
       Auch Unser Baby Name bewirbt einen KI-Assistenten, und in den englischsprachigen Einträgen
       versprechen Nameberry, Baby Name Genius und BabyCenter jeweils, dass die Vorschläge mit jeder
       Bewertung besser werden. Wenn euch also eine App erzählt, sie sei die einzige mit KI, dann hat
-      sie die Einträge der anderen nicht gelesen — und das gilt für uns genauso.
+      sie die Einträge der anderen nicht gelesen, und das gilt für uns genauso.
     </p>
     <p>
       Die nützlichere Frage ist deshalb nicht <em>ob</em> eine App lernt, sondern <em>woraus</em>.
@@ -136,14 +136,14 @@ const jsonLd = {
     <WhyNamore
       lang="de"
       heading="Was bei uns die Auswahl steuert"
-      only={['learning', 'design', 'name-depth', 'search-add', 'decision-round', 'no-repeats', 'content-languages']}
+      only={['learning', 'design', 'name-depth', 'search-add', 'decision-round']}
     />
 
     <p class="post-caveat">
       Was wir <em>nicht</em> behaupten: dass unsere Technik besser ist als die der anderen. Das
       können wir nicht belegen, und wir haben ihre Modelle nicht gesehen. Belegen können wir, woraus
       unser Deck lernt und dass dabei niemand die Stimmen des anderen sieht. Und: Die App ist neu,
-      mit entsprechend wenigen Bewertungen — wer eine lange erprobte Bibliothek sucht, ist bei
+      mit entsprechend wenigen Bewertungen, wer eine lange erprobte Bibliothek sucht, ist bei
       CharliesNames besser aufgehoben.
     </p>
 
@@ -151,7 +151,7 @@ const jsonLd = {
     <ul>
       <li>Er zeigt euch nach zweihundert Namen andere Vorschläge als am Anfang.</li>
       <li>Weggewischte Namen kommen nicht wieder.</li>
-      <li>Ihr könnt einen Namen, der euch selbst einfällt, hinzufügen — der Finder ist keine Einbahnstraße.</li>
+      <li>Ihr könnt einen Namen, der euch selbst einfällt, hinzufügen, der Finder ist keine Einbahnstraße.</li>
       <li>Wenn ihr zu zweit sucht, führt er beide Meinungen zusammen, statt zwei getrennte Listen zu verwalten.</li>
       <li>Und er sagt euch, was ihr nach dem Finden mit zwölf Favoriten anfangen sollt.</li>
     </ul>

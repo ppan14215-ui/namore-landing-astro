@@ -27,11 +27,11 @@ const campaign = 'app_fuer_paare';
 const faqs = [
   {
     q: 'Welche Babynamen-App ist die beste für Paare?',
-    a: 'Es gibt mehrere, bei denen beide getrennt wischen und die App die gemeinsamen Treffer zeigt — unter anderem Namore, Unser Baby Name, Mini Marvin, Kinder und BabyName. Der Unterschied liegt im Drumherum: ob ein Konto nötig ist, ob Werbung läuft und ob nach dem Match noch etwas passiert. Namore braucht kein Konto, zeigt keine Werbung und hat eine Endrunde, in der ihr die gemeinsamen Treffer noch einmal getrennt bewertet, bis eine Reihenfolge dasteht.',
+    a: 'Es gibt mehrere, bei denen beide getrennt wischen und die App die gemeinsamen Treffer zeigt, unter anderem Namore, Unser Baby Name, Mini Marvin, Kinder und BabyName. Der Unterschied liegt im Drumherum: ob ein Konto nötig ist, ob Werbung läuft und ob nach dem Match noch etwas passiert. Namore braucht kein Konto, zeigt keine Werbung und hat eine Endrunde, in der ihr die gemeinsamen Treffer noch einmal getrennt bewertet, bis eine Reihenfolge dasteht.',
   },
   {
     q: 'Warum ist getrenntes Abstimmen für Paare wichtig?',
-    a: 'Weil man sonst nicht mehr wählt, sondern verhandelt. Sobald ihr wisst, was der andere mag, verschiebt sich die eigene Bewertung — man stimmt zu, weil der Partner begeistert war, oder lehnt ab, weil man beim letzten Namen schon nachgegeben hat. Bei Namore erscheint ein Name erst, wenn ihr beide unabhängig voneinander Ja gesagt habt.',
+    a: 'Weil man sonst nicht mehr wählt, sondern verhandelt. Sobald ihr wisst, was der andere mag, verschiebt sich die eigene Bewertung, man stimmt zu, weil der Partner begeistert war, oder lehnt ab, weil man beim letzten Namen schon nachgegeben hat. Bei Namore erscheint ein Name erst, wenn ihr beide unabhängig voneinander Ja gesagt habt.',
   },
   {
     q: 'Muss mein Partner dieselbe App installieren?',
@@ -39,7 +39,7 @@ const faqs = [
   },
   {
     q: 'Was passiert, wenn wir uns auf mehrere Namen einigen?',
-    a: 'Bei den meisten Apps ist die Trefferliste das Ergebnis — und zwölf gemeinsame Treffer sind keine Entscheidung. Namore hat dafür eine Endrunde: Ihr bewertet die Treffer noch einmal getrennt von 1 bis 5, danach stehen beide Reihenfolgen nebeneinander. Eine vergleichbare Stufe zwischen den beiden Partnern haben wir bei den hier verglichenen Apps nicht gefunden.',
+    a: 'Bei den meisten Apps ist die Trefferliste das Ergebnis, und zwölf gemeinsame Treffer sind keine Entscheidung. Namore hat dafür eine Endrunde: Ihr bewertet die Treffer noch einmal getrennt von 1 bis 5, danach stehen beide Reihenfolgen nebeneinander. Eine vergleichbare Stufe zwischen den beiden Partnern haben wir bei den hier verglichenen Apps nicht gefunden.',
   },
 ];
 
@@ -78,7 +78,7 @@ const jsonLd = {
 <BaseLayout
   lang="de"
   title="Babynamen-App für Paare: worauf es ankommt | Namore"
-  description="Was eine Babynamen-App für Paare taugen muss: getrennt abstimmen, Konto, Werbung — und was passiert, wenn ihr euch auf zwölf Namen einigt."
+  description="Was eine Babynamen-App für Paare taugen muss: getrennt abstimmen, Konto, Werbung, und was passiert, wenn ihr euch auf zwölf Namen einigt."
   canonical={canonical}
   jsonLd={jsonLd}
 >
@@ -93,7 +93,7 @@ const jsonLd = {
     <p class="post-standfirst">
       Fast jede Babynamen-App macht dasselbe: viele Namen zeigen, mit Bedeutung und Herkunft. Daran
       scheitert kein Paar. Paare scheitern daran, dass die Meinung des anderen die eigene verändert,
-      sobald man sie kennt — und daran, dass zwölf gemeinsame Favoriten immer noch keine Entscheidung
+      sobald man sie kennt, und daran, dass zwölf gemeinsame Favoriten immer noch keine Entscheidung
       sind.
     </p>
 
@@ -107,7 +107,7 @@ const jsonLd = {
 
     <h2>Die vier Fragen, die wirklich zählen</h2>
     <ul>
-      <li><strong>Wischt ihr getrennt?</strong> Und erscheint ein Name erst, wenn er beiden gefällt — oder seht ihr unterwegs schon, wo der andere steht?</li>
+      <li><strong>Wischt ihr getrennt?</strong> Und erscheint ein Name erst, wenn er beiden gefällt, oder seht ihr unterwegs schon, wo der andere steht?</li>
       <li><strong>Wie aufwendig ist der Start?</strong> Wenn sich beide erst registrieren müssen, steigt nach unserem Eindruck einer von euch oft gar nicht erst ein.</li>
       <li><strong>Was passiert nach dem Match?</strong> Fragt euch, ob die App danach noch etwas tut.</li>
       <li><strong>Was kostet es wirklich?</strong> Abo oder einmalig, mit oder ohne Werbung, und gilt der Kauf für ein Handy oder für beide? Details: <a href="/de/blog/babynamen-app-kostenlos">Was „kostenlos“ bei diesen Apps heißt</a>.</li>
@@ -136,7 +136,7 @@ const jsonLd = {
     <p class="post-caveat">
       Bewusst nicht in dieser Tabelle: eine Spalte dazu, ob die Stimme des Partners verborgen
       bleibt. Wir haben am {VERIFIED} jeden dieser Einträge daraufhin gelesen und <strong>keiner
-      der Anbieter sagt dazu etwas</strong> — weder in die eine noch in die andere Richtung. Wir
+      der Anbieter sagt dazu etwas</strong>, weder in die eine noch in die andere Richtung. Wir
       können deshalb nur beschreiben, wie Namore es macht, und euch die übrigen Angaben im
       Originalwortlaut zeigen.
     </p>
@@ -145,11 +145,11 @@ const jsonLd = {
     <WhyNamore
       lang="de"
       heading="Was dabei hilft, wenn ihr zu zweit entscheidet"
-      only={['decision-round', 'design', 'no-account', 'search-add', 'learning', 'no-repeats', 'name-depth', 'no-ads', 'privacy-price']}
+      only={['decision-round', 'design', 'no-account', 'search-add', 'no-repeats']}
     />
 
     <p class="post-caveat">
-      Wo Namore schwächer ist: Die App ist neu — seit Mai 2026 im App Store, seit August 2026 bei
+      Wo Namore schwächer ist: Die App ist neu, seit Mai 2026 im App Store, seit August 2026 bei
       Google Play. Entsprechend wenige Bewertungen und keine gewachsene Community.
     </p>
 

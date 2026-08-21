@@ -19,10 +19,20 @@
  */
 import { NO_STATEMENT, VERIFIED, type App, type Sourced } from '../data/apps-de';
 
-export interface Props { app: App; }
-const { app } = Astro.props;
+export interface Props {
+  app: App;
+  /**
+   * Compact = only the four rows a reader actually decides on. Added
+   * 2026-08-19: the hub carried five full blocks and they were 56% of the
+   * page (1,384 of 2,475 words), pushing it past the 850–2,000 range that
+   * consumer comparison pages rank in. The full seven-row block still runs on
+   * each head-to-head page, which is where someone wants the detail.
+   */
+  compact?: boolean;
+}
+const { app, compact } = Astro.props;
 
-const rows: [string, Sourced][] = [
+const allRows: [string, Sourced][] = [
   ['Bewertung', app.rating],
   ['Preise', app.price],
   ['Namen', app.names],
@@ -31,6 +41,8 @@ const rows: [string, Sourced][] = [
   ['Werbung', app.ads],
   ['KI', app.ai],
 ];
+const compactKeys = ['Preise', 'Namen', 'Zusammen mit dem Partner', 'Werbung'];
+const rows = compact ? allRows.filter(([k]) => compactKeys.includes(k)) : allRows;
 
 const lines = (v: NonNullable<Sourced>) =>
   [v.q, v.q2, v.q3, v.q4, v.q5].filter(Boolean) as string[];
@@ -55,7 +67,7 @@ const noneLabel = isWeb ? 'Keine Angabe auf der Anbieterseite' : NO_STATEMENT;
               <>
                 <ul class="sf-list">{lines(v).map((l) => <li><q>{l}</q></li>)}</ul>
                 <span class="sf-note">
-                  Einzelne Angaben aus derselben Quelle, von uns untereinander gestellt — nicht ein
+                  Einzelne Angaben aus derselben Quelle, von uns untereinander gestellt, nicht ein
                   zusammenhängender Satz des Anbieters.{v.note ? ` ${v.note}.` : ''}{' '}
                   <a class="sf-src" href={v.src} rel="nofollow noopener" target="_blank">Quelle</a>
                 </span>

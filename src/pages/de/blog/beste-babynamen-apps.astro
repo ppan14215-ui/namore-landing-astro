@@ -32,7 +32,7 @@ const faqs = [
   },
   {
     q: 'Braucht man für Babynamen-Apps ein Konto?',
-    a: 'Das ist unterschiedlich und steht meist im Store-Eintrag. Unser Baby Name gibt an, dass beide Elternteile die App installieren und ihre Accounts verbinden; Mini Marvin verlangt eine kostenlose Registrierung; Kinder bietet einen Login per E-Mail an; BabyName beschreibt eine Kopplung per Link oder AirDrop. Namore braucht kein Konto — einer öffnet eine Sitzung, der andere tritt mit einem Code aus sechs Buchstaben bei.',
+    a: 'Das ist unterschiedlich und steht meist im Store-Eintrag. Unser Baby Name gibt an, dass beide Elternteile die App installieren und ihre Accounts verbinden; Mini Marvin verlangt eine kostenlose Registrierung; Kinder bietet einen Login per E-Mail an; BabyName beschreibt eine Kopplung per Link oder AirDrop. Namore braucht kein Konto, einer öffnet eine Sitzung, der andere tritt mit einem Code aus sechs Buchstaben bei.',
   },
   {
     q: 'Sind Babynamen-Apps kostenlos?',
@@ -79,7 +79,7 @@ const jsonLd = {
 <BaseLayout
   lang="de"
   title="Babynamen-Apps 2026 im Vergleich | Namore"
-  description="Fünf Babynamen-Apps nebeneinander — jeweils mit den Angaben aus ihrem eigenen Store-Eintrag, verlinkt und mit Datum, plus was Namore anders macht."
+  description="Fünf Babynamen-Apps nebeneinander, jeweils mit den Angaben aus ihrem eigenen Store-Eintrag, verlinkt und mit Datum, plus was Namore anders macht."
   canonical={canonical}
   jsonLd={jsonLd}
 >
@@ -93,14 +93,14 @@ const jsonLd = {
 
     <p class="post-standfirst">
       Irgendwann sagt einer von euch einen Namen, und der andere zieht kurz das Gesicht zusammen.
-      Nur ganz kurz. Aber der Name ist danach weg — nicht weil er schlecht war, sondern weil er jetzt
+      Nur ganz kurz. Aber der Name ist danach weg, nicht weil er schlecht war, sondern weil er jetzt
       an dieser Reaktion klebt. So gehen die meisten Namen kaputt, und keine noch so große Datenbank
       hilft dagegen.
     </p>
     <p>
       Wenn ihr abends auf dem Sofa nur ein bisschen blättern wollt, tut es ehrlich gesagt fast jede
       dieser Apps. Interessant wird es erst bei der Frage, was passiert, wenn euch beiden derselbe
-      Name gefällt — und was passiert, wenn nicht. Fünf Apps, jeweils mit dem, was sie selbst über
+      Name gefällt, und was passiert, wenn nicht. Fünf Apps, jeweils mit dem, was sie selbst über
       sich sagen, und dahinter, was wir davon halten.
     </p>
 
@@ -108,22 +108,26 @@ const jsonLd = {
       Grundlage sind die öffentlich einsehbaren Einträge im deutschen App Store und die Seiten der
       Anbieter, abgerufen am {VERIFIED}. Angaben zu anderen Apps sind wörtlich übernommen und
       verlinkt; wo ein Anbieter zu einem Punkt nichts sagt, steht das ausdrücklich da. Preise und
-      Funktionen ändern sich — schaut vor dem Download in den aktuellen Eintrag.
+      Funktionen ändern sich, schaut vor dem Download in den aktuellen Eintrag.
     </p>
 
     <h2>Die anderen Apps, in ihren eigenen Worten</h2>
     <p>
       Wir könnten euch jetzt erzählen, was die anderen Apps können und was nicht. Das Problem: Wir
       verkaufen selbst eine, und ihr habt keinen Grund, uns das abzunehmen. Deshalb steht hier, was
-      jeder Anbieter in seinem eigenen Store-Eintrag schreibt — abgetippt, verlinkt, mit Datum. Wo
+      jeder Anbieter in seinem eigenen Store-Eintrag schreibt, abgetippt, verlinkt, mit Datum. Wo
       einer zu etwas nichts sagt, steht das auch. Unsere Meinung kommt danach.
     </p>
-    {APPS.map((a) => <StoreFacts app={a} />)}
+    {APPS.map((a) => <StoreFacts app={a} compact />)}
+    <p class="post-caveat">
+      Gekürzt auf die vier Punkte, an denen sich Paare entscheiden. Bewertungen, Konto und
+      KI-Angaben stehen vollständig auf der jeweiligen Vergleichsseite unten.
+    </p>
 
     <h2>Und dann gibt es noch unsere</h2>
     <p>
       Namore ist entstanden, weil wir selbst monatelang keinen Namen gefunden haben. Nicht weil uns
-      keiner eingefallen wäre — wir hatten Dutzende. Sondern weil wir nach ein paar Wochen nicht mehr
+      keiner eingefallen wäre, wir hatten Dutzende. Sondern weil wir nach ein paar Wochen nicht mehr
       über Namen geredet haben, sondern darüber, wer wie oft nachgegeben hat.
     </p>
     <p>
@@ -138,18 +142,18 @@ const jsonLd = {
         alt="Der Swipe-Bildschirm von Namore mit einer Namenskarte."
         width="900" height="1947" loading="lazy" decoding="async"
       />
-      <figcaption>Eine Karte nach der anderen — und nichts auf dem Bildschirm, aus dem sich der Partner ablesen ließe.</figcaption>
+      <figcaption>Eine Karte nach der anderen, und nichts auf dem Bildschirm, aus dem sich der Partner ablesen ließe.</figcaption>
     </figure>
 
     <WhyNamore
       lang="de"
       heading="Was die App tatsächlich kann"
-      only={['design', 'decision-round', 'name-depth', 'search-add', 'learning', 'no-repeats', 'content-languages', 'tools', 'no-ads', 'no-account', 'privacy-price']}
+      only={['design', 'decision-round', 'search-add', 'no-repeats', 'no-account', 'privacy-price']}
     />
 
     <p class="post-caveat">
       Wo Namore schwächer ist: Sie ist neu. Seit Mai 2026 im App Store, seit August 2026 bei Google
-      Play — entsprechend wenige Bewertungen und keine gewachsene Community. Wer die Sicherheit
+      Play, entsprechend wenige Bewertungen und keine gewachsene Community. Wer die Sicherheit
       einer App will, die schon lange am Markt ist und viele Bewertungen hat, ist bei CharliesNames
       oder Unser Baby Name besser aufgehoben. Foren, Geschenkelisten und Schwangerschafts-Tracking
       gibt es bei uns auch nicht, und Großeltern könnt ihr nicht mit abstimmen lassen.
@@ -162,7 +166,7 @@ const jsonLd = {
 
     <h2>Was wir empfehlen würden</h2>
     <p>
-      Ab hier ist alles Meinung, und zwar die eines Anbieters — nehmt sie entsprechend.
+      Ab hier ist alles Meinung, und zwar die eines Anbieters, nehmt sie entsprechend.
     </p>
     <ul>
       <li>Ihr wollt vor allem lesen, stöbern und euch inspirieren lassen: <strong>CharliesNames</strong>. Über 15.000 Namen, über 40 Länder, keine Werbung. Für den Zweck die runderer Sache als unsere.</li>
@@ -174,14 +178,14 @@ const jsonLd = {
     <p>
       Und der ehrlichste Rat, den wir haben: Alle fünf lassen sich kostenlos herunterladen.
       Installiert zwei und schaut, welche euer Partner nach drei Tagen noch öffnet. Das entscheidet
-      es öfter als jede Funktionsliste — auch gegen uns.
+      es öfter als jede Funktionsliste, auch gegen uns.
     </p>
 
     <h2>Worauf ihr beim Vergleichen achten solltet</h2>
     <ul>
       <li>Wenn ihr zu zweit entscheidet, zählt der Ablauf mehr als die Größe der Datenbank. Fragt euch, was die App tut, <em>nachdem</em> euch beiden ein Name gefällt.</li>
       <li>Schaut in den Store-Eintrag, ob ein Konto nötig ist. Wenn sich beide erst registrieren müssen, steigt nach unserem Eindruck einer von euch oft gar nicht erst ein.</li>
-      <li>Schaut, ob die App Werbung enthält — das steht im Eintrag und macht im Alltag einen Unterschied.</li>
+      <li>Schaut, ob die App Werbung enthält, das steht im Eintrag und macht im Alltag einen Unterschied.</li>
     </ul>
 
     <h2>Häufige Fragen</h2>

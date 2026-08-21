@@ -61,6 +61,18 @@
  * ══════════════════════════════════════════════════════════════════════════
  */
 
+/**
+ * ⚠️ EM-DASHES IN `q:` FIELDS ARE PART OF THE QUOTATION. Julian asked for no
+ * em-dashes in our copy on 2026-08-19, and every one was removed from the
+ * pages, the feature cards and the components. The two that remain live inside
+ * Kinder's transcribed store text:
+ *   'Partner-Verbindung — Käufe werden geteilt, wenn ihr verbunden seid'
+ *   'Mit E-Mail anmelden — Du kannst jetzt ein Konto erstellen …'
+ * Those are Kinder's own punctuation. Editing a quotation to match our house
+ * style would make it no longer a quotation, which is the exact defect two
+ * reviews already rejected this cluster for. Leave them.
+ */
+
 export const VERIFIED = '19. August 2026';
 
 /** A single sourced fact: literal transcription + where it was read. */
