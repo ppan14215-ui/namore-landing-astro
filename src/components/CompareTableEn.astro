@@ -1,0 +1,72 @@
+---
+/**
+ * CompareTableEn — English counterpart of CompareTable: one row per app,
+ * one column per criterion, everything about competitors a literal
+ * transcription from apps-en.ts or "No statement in the listing".
+ * The Namore row is our own description and the footnote says so.
+ * AppEn has no `account` field, so that column is not offered here.
+ */
+import { NO_STATEMENT_EN, VERIFIED_EN, type AppEn, type Sourced } from '../data/apps-en';
+import { NAMORE_EN, LABELS_EN, type CellKey } from '../data/namore-cells';
+
+export type ColKeyEn = Exclude<CellKey, 'account'>;
+
+export interface Props {
+  apps: AppEn[];
+  cols?: ColKeyEn[];
+  withNote?: boolean;
+}
+const { apps, cols = ['price', 'names', 'partner', 'ads'], withNote = true } = Astro.props;
+
+const lines = (v: NonNullable<Sourced>) =>
+  [v.q, v.q2, v.q3, v.q4, v.q5].filter(Boolean) as string[];
+
+/** NameHatch is a website, not a store listing. */
+const isWeb = (a: AppEn) => a.src.includes('namehatch');
+const anyCompiled = apps.some((a) => cols.some((c) => a[c]?.compiled));
+---
+
+<div class={`table-wrap${cols.length >= 4 ? ' table-wrap-wide' : ''}`}>
+  <table class="cmp cmp-overview">
+    <thead>
+      <tr>
+        <th>App</th>
+        {cols.map((c) => <th>{LABELS_EN[c]}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="is-ours">
+        <td data-label="App">Namore <span class="sf-note">(our app)</span></td>
+        {cols.map((c) => <td data-label={LABELS_EN[c]}>{NAMORE_EN[c]}</td>)}
+      </tr>
+      {apps.map((a) => (
+        <tr>
+          <td data-label="App">
+            <a href={a.src} rel="nofollow noopener" target="_blank">{a.name}</a>
+          </td>
+          {cols.map((c) => (
+            <td data-label={LABELS_EN[c]}>
+              {a[c] ? (
+                <>
+                  {lines(a[c]!).map((l, i) => <>{i > 0 ? ' · ' : ''}<q>{l}</q></>)}
+                  {a[c]!.note ? <span class="sf-note"> ({a[c]!.note})</span> : null}
+                  {a[c]!.src !== a.src ? <> <a class="sf-src" href={a[c]!.src} rel="nofollow noopener" target="_blank">source</a></> : null}
+                </>
+              ) : (
+                <span class="sf-none">{isWeb(a) ? 'No statement on the vendor site' : NO_STATEMENT_EN}</span>
+              )}
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+{withNote ? (
+  <p class="post-caveat">
+    The Namore row is our own description, not quoted from a listing. Everything else is taken
+    word for word from each vendor's store listing or website, linked per app, retrieved {VERIFIED_EN}.{anyCompiled
+      ? ' Where a cell holds more than one entry, those are separate lines from the same source, placed side by side by us.'
+      : ''} The full wordings sit further down this page.
+  </p>
+) : null}

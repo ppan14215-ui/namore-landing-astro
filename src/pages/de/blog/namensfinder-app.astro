@@ -18,14 +18,13 @@
  */
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Disclosure from '../../../components/Disclosure.astro';
-import StoreFacts from '../../../components/StoreFacts.astro';
+import CompareTable from '../../../components/CompareTable.astro';
 import WhyNamore from '../../../components/WhyNamore.astro';
 import ClusterFoot from '../../../components/ClusterFoot.astro';
-import { byslug, VERIFIED, APP_STORE, PLAY } from '../../../data/apps-de';
+import { APPS, VERIFIED, APP_STORE, PLAY } from '../../../data/apps-de';
 
 const canonical = 'https://www.namore.app/de/blog/namensfinder-app';
 const campaign = 'namensfinder';
-const charlies = byslug('charliesnames');
 
 const faqs = [
   {
@@ -114,15 +113,19 @@ const jsonLd = {
     <h2>Was hinter den KI-Versprechen steckt</h2>
     <p>
       Hier lohnt eine Warnung, auch gegen uns selbst: <strong>KI-Vorschläge sind kein
-      Unterscheidungsmerkmal mehr.</strong> Fast jede größere App wirbt damit. CharliesNames zum
-      Beispiel schreibt es so in seinen App-Store-Eintrag:
+      Unterscheidungsmerkmal mehr.</strong> Fast jede größere App wirbt damit. So steht es in den
+      deutschen Einträgen:
     </p>
 
-    <StoreFacts app={charlies} />
+    <CompareTable apps={APPS} cols={['ai']} withNote={false} />
+    <p class="post-caveat">
+      Die Namore-Zeile ist unsere eigene Beschreibung. Die übrigen Angaben sind wörtlich aus dem
+      jeweiligen Eintrag beziehungsweise von der Anbieterseite übernommen, abgerufen am {VERIFIED}.
+    </p>
 
     <p>
-      Auch Unser Baby Name bewirbt einen KI-Assistenten, und in den englischsprachigen Einträgen
-      versprechen Nameberry, Baby Name Genius und BabyCenter jeweils, dass die Vorschläge mit jeder
+      Dazu kommen die englischsprachigen Einträge: Dort versprechen auch Nameberry, Baby Name
+      Genius und BabyCenter jeweils, dass die Vorschläge mit jeder
       Bewertung besser werden. Wenn euch also eine App erzählt, sie sei die einzige mit KI, dann hat
       sie die Einträge der anderen nicht gelesen, und das gilt für uns genauso.
     </p>

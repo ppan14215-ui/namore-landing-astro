@@ -15,6 +15,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import DisclosureEn from '../../components/DisclosureEn.astro';
 import StoreFactsEn from '../../components/StoreFactsEn.astro';
+import CompareTableEn from '../../components/CompareTableEn.astro';
 import WhyNamore from '../../components/WhyNamore.astro';
 import ClusterFootEn from '../../components/ClusterFootEn.astro';
 import { APPS_EN, VERIFIED_EN, APP_STORE_EN, PLAY_EN } from '../../data/apps-en';
@@ -106,11 +107,13 @@ const jsonLd = {
       own listing, typed out, linked, dated. Where a listing says nothing on a point, we say that
       too. Our opinion comes afterwards.
     </p>
-    {APPS_EN.map((a) => <StoreFactsEn app={a} compact />)}
-    <p class="post-caveat">
-      Trimmed to the four rows couples decide on. Every block links its listing as the source, where
-      the ratings and AI statements sit in full.
-    </p>
+    <CompareTableEn apps={APPS_EN} cols={['price', 'names', 'partner', 'ads']} />
+    <details class="sf-details">
+      <summary>The listings in full, word for word</summary>
+      <div class="sf-details-inner">
+        {APPS_EN.map((a) => <StoreFactsEn app={a} />)}
+      </div>
+    </details>
 
     <h2>And then there is ours</h2>
     <p>

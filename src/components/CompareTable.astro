@@ -1,0 +1,78 @@
+---
+/**
+ * CompareTable — the scannable overview: one row per app, one column per
+ * criterion. Added 2026-08-21 after Julian's review note: every page that
+ * compares needs a table, the stacked quote blocks forced endless scrolling.
+ *
+ * Evidence rule unchanged: every competitor cell is a literal transcription
+ * from the listing (multi-line entries are separate lines from the same
+ * source, joined with · and flagged in the footnote below the table), or
+ * "Keine Angabe". The Namore row is our own description and says so.
+ * The full StoreFacts wordings stay on the page inside a collapsed
+ * <details> so nothing is less verifiable than before, just less tall.
+ */
+import { NO_STATEMENT, VERIFIED, type App, type Sourced } from '../data/apps-de';
+import { NAMORE_DE as NAMORE, LABELS_DE as LABELS, type CellKey } from '../data/namore-cells';
+
+export type ColKey = CellKey;
+
+export interface Props {
+  apps: App[];
+  cols?: ColKey[];
+  /** Set false on pages that already carry their own methodology note. */
+  withNote?: boolean;
+}
+const { apps, cols = ['price', 'names', 'partner', 'ads'], withNote = true } = Astro.props;
+
+const lines = (v: NonNullable<Sourced>) =>
+  [v.q, v.q2, v.q3, v.q4, v.q5].filter(Boolean) as string[];
+
+const isWeb = (a: App) => !a.rating && a.src.includes('mini-marvin');
+const anyCompiled = apps.some((a) => cols.some((c) => a[c]?.compiled));
+---
+
+<div class={`table-wrap${cols.length >= 4 ? ' table-wrap-wide' : ''}`}>
+  <table class="cmp cmp-overview">
+    <thead>
+      <tr>
+        <th>App</th>
+        {cols.map((c) => <th>{LABELS[c]}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="is-ours">
+        <td data-label="App">Namore <span class="sf-note">(unsere App)</span></td>
+        {cols.map((c) => <td data-label={LABELS[c]}>{NAMORE[c]}</td>)}
+      </tr>
+      {apps.map((a) => (
+        <tr>
+          <td data-label="App">
+            <a href={a.src} rel="nofollow noopener" target="_blank">{a.name}</a>
+          </td>
+          {cols.map((c) => (
+            <td data-label={LABELS[c]}>
+              {a[c] ? (
+                <>
+                  {lines(a[c]!).map((l, i) => <>{i > 0 ? ' · ' : ''}<q>{l}</q></>)}
+                  {a[c]!.note ? <span class="sf-note"> ({a[c]!.note})</span> : null}
+                  {a[c]!.src !== a.src ? <> <a class="sf-src" href={a[c]!.src} rel="nofollow noopener" target="_blank">Quelle</a></> : null}
+                </>
+              ) : (
+                <span class="sf-none">{isWeb(a) ? 'Keine Angabe auf der Anbieterseite' : NO_STATEMENT}</span>
+              )}
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+{withNote ? (
+  <p class="post-caveat">
+    Die Namore-Zeile ist unsere eigene Beschreibung, nicht aus einem Store-Eintrag zitiert. Alle
+    anderen Angaben sind wörtlich aus dem jeweiligen Eintrag im deutschen App Store beziehungsweise
+    von der Anbieterseite übernommen, abgerufen am {VERIFIED}.{anyCompiled
+      ? ' Steht in einer Zelle mehr als eine Angabe, sind das einzelne Zeilen aus derselben Quelle, von uns nebeneinandergestellt.'
+      : ''} Der vollständige Wortlaut steht weiter unten auf dieser Seite.
+  </p>
+) : null}

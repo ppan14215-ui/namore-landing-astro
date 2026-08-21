@@ -11,6 +11,7 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Disclosure from '../../../components/Disclosure.astro';
 import StoreFacts from '../../../components/StoreFacts.astro';
+import VsTable from '../../../components/VsTable.astro';
 import WhyNamore from '../../../components/WhyNamore.astro';
 import ClusterFoot from '../../../components/ClusterFoot.astro';
 import { byslug, VERIFIED, APP_STORE, PLAY } from '../../../data/apps-de';
@@ -87,7 +88,13 @@ const jsonLd = {
       sind zwei Details, die klein aussehen und es im Alltag nicht sind.
     </p>
 
-    <StoreFacts app={rival} />
+    <VsTable rival={rival} />
+    <details class="sf-details">
+      <summary>Alle Angaben von {rival.name} im Wortlaut</summary>
+      <div class="sf-details-inner">
+        <StoreFacts app={rival} />
+      </div>
+    </details>
 
     <h2>Wann wir euch zu Unser Baby Name raten würden</h2>
     <p>

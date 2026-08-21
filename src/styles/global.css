@@ -814,3 +814,64 @@ footer.site-footer {
 .sf-list { list-style: none; margin: 0 0 0.35rem; padding: 0; }
 .sf-list li { padding: 0.1rem 0; }
 .sf-note { display: block; font-size: 0.78rem; line-height: 1.5; opacity: 0.55; }
+
+/* ── Collapsed store wordings + vs-table row headers ─────────────────────
+   Added 2026-08-21 after Julian's review: comparisons happen in tables now;
+   the full literal store wordings stay on every page, but folded into a
+   <details> so they stop forcing a scroll marathon. Do not remove the
+   blocks themselves — they are the §4 Nr. 2 UWG substantiation layer. */
+.sf-details {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--paper);
+  margin: 0 0 26px;
+}
+.sf-details > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 15px 18px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.sf-details > summary::-webkit-details-marker { display: none; }
+.sf-details > summary::before {
+  content: "▸";
+  display: inline-block;
+  margin-right: 8px;
+  transition: transform 0.15s ease;
+}
+.sf-details[open] > summary::before { transform: rotate(90deg); }
+.sf-details > summary:hover { color: var(--ink); }
+.sf-details .sf-details-inner { padding: 0 18px 6px; }
+.sf-details .storefacts { border: 0; border-top: 1px solid var(--line); border-radius: 0; margin: 0; }
+
+/* Row headers in the head-to-head table (criteria column). */
+.cmp tbody th[scope="row"] {
+  border-bottom: 1px solid rgba(227, 218, 200, 0.6);
+  vertical-align: top;
+  white-space: normal;
+  padding: 14px 16px;
+}
+.cmp tbody tr:last-child th[scope="row"] { border-bottom: none; }
+
+/* Weiterlesen: two columns on wide screens so the footer is half as tall. */
+@media (min-width: 720px) {
+  .post-foot .cluster-links {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 2rem;
+  }
+}
+
+/* Overview tables with 4+ criteria columns break out of the 720px article
+   column on wide screens instead of forcing a horizontal scrollbar. */
+.cmp-overview { font-size: 14px; }
+.cmp-overview td, .cmp-overview th { padding: 12px 14px; }
+@media (min-width: 1140px) {
+  .table-wrap-wide {
+    width: 1060px;
+    margin-left: calc((100% - 1060px) / 2);
+  }
+}

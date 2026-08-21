@@ -1,46 +1,68 @@
 ---
 /**
- * VsTable — head-to-head fact table for the German /de/blog comparison cluster.
+ * VsTable — head-to-head fact table: criteria as rows, Namore and one
+ * competitor side by side. Rewritten 2026-08-21; the first version of this
+ * file predated the evidence rule and read fields (platform, doubleBlind)
+ * that were removed when the cluster was rebuilt on literal transcriptions.
  *
- * Renders Namore in the left column and one competitor in the right, straight
- * from src/data/apps-de.ts. Pages must NOT pass literal strings for these
- * rows — the whole point is that one edit to apps-de.ts fixes every page.
- *
- * Rows are deliberately ordered so the two rows a couple actually decides on
- * (verdeckte Stimmen, Konto) sit above the vanity metrics (Bewertungen).
+ * Evidence rule: the competitor column is ONLY literal transcriptions from
+ * apps-de.ts (multi-line entries are separate lines from the same source,
+ * joined with ·), or "Keine Angabe". The Namore column is our own
+ * description, from namore-cells.ts, and the footnote says so. No row may
+ * editorialise ("besser", "einzige", a checkmark/cross scheme) — a tick
+ * grid is a characterisation, not a quotation.
  */
-import { NAMORE, type App } from '../data/apps-de';
+import { NO_STATEMENT, VERIFIED, type App, type Sourced } from '../data/apps-de';
+import { NAMORE_DE, LABELS_DE, type CellKey } from '../data/namore-cells';
 
 export interface Props {
   rival: App;
+  rows?: CellKey[];
 }
-const { rival } = Astro.props;
+const { rival, rows = ['partner', 'account', 'price', 'ads', 'names', 'ai'] } = Astro.props;
 
-const rows: [string, string, string][] = [
-  ['Plattform', NAMORE.platform, rival.platform],
-  ['Verdeckte Stimmen', NAMORE.doubleBlind, rival.doubleBlind],
-  ['Konto nötig', NAMORE.account, rival.account],
-  ['Preis', NAMORE.price, rival.price],
-  ['Namen', NAMORE.names, rival.names],
-  ['KI', NAMORE.ai, rival.ai],
-  ['App Store', NAMORE.ios, rival.ios],
-  ['Google Play', NAMORE.android, rival.android],
-];
+const lines = (v: NonNullable<Sourced>) =>
+  [v.q, v.q2, v.q3, v.q4, v.q5].filter(Boolean) as string[];
+
+const isWeb = !rival.rating && rival.src.includes('mini-marvin');
+const noneLabel = isWeb ? 'Keine Angabe auf der Anbieterseite' : NO_STATEMENT;
+const anyCompiled = rows.some((r) => rival[r]?.compiled);
 ---
 
 <div class="table-wrap">
-  <table class="cmp">
+  <table class="cmp cmp-vs">
     <thead>
-      <tr><th></th><th>Namore</th><th>{rival.name}</th></tr>
+      <tr>
+        <th></th>
+        <th>Namore</th>
+        <th><a href={rival.src} rel="nofollow noopener" target="_blank">{rival.name}</a></th>
+      </tr>
     </thead>
     <tbody>
-      {rows.map(([label, ours, theirs]) => (
+      {rows.map((r) => (
         <tr>
-          <td data-label=""><strong>{label}</strong></td>
-          <td data-label="Namore">{ours}</td>
-          <td data-label={rival.name}>{theirs}</td>
+          <th scope="row">{LABELS_DE[r]}</th>
+          <td data-label="Namore">{NAMORE_DE[r]}</td>
+          <td data-label={rival.name}>
+            {rival[r] ? (
+              <>
+                {lines(rival[r]!).map((l, i) => <>{i > 0 ? ' · ' : ''}<q>{l}</q></>)}
+                  {rival[r]!.note ? <span class="sf-note"> ({rival[r]!.note})</span> : null}
+                {rival[r]!.src !== rival.src ? <> <a class="sf-src" href={rival[r]!.src} rel="nofollow noopener" target="_blank">Quelle</a></> : null}
+              </>
+            ) : (
+              <span class="sf-none">{noneLabel}</span>
+            )}
+          </td>
         </tr>
       ))}
     </tbody>
   </table>
 </div>
+<p class="post-caveat">
+  Die Namore-Spalte ist unsere eigene Beschreibung. Die Spalte zu {rival.name} ist wörtlich
+  {isWeb ? ' von der Anbieterseite' : ' aus dem Eintrag im deutschen App Store'} übernommen, abgerufen am
+  {VERIFIED}.{anyCompiled
+    ? ' Steht in einer Zelle mehr als eine Angabe, sind das einzelne Zeilen aus derselben Quelle, von uns nebeneinandergestellt.'
+    : ''} Der vollständige Wortlaut steht unten auf dieser Seite.
+</p>

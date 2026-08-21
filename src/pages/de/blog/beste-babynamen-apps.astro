@@ -18,6 +18,7 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Disclosure from '../../../components/Disclosure.astro';
 import StoreFacts from '../../../components/StoreFacts.astro';
+import CompareTable from '../../../components/CompareTable.astro';
 import WhyNamore from '../../../components/WhyNamore.astro';
 import ClusterFoot from '../../../components/ClusterFoot.astro';
 import { APPS, VERIFIED, APP_STORE, PLAY } from '../../../data/apps-de';
@@ -118,11 +119,13 @@ const jsonLd = {
       jeder Anbieter in seinem eigenen Store-Eintrag schreibt, abgetippt, verlinkt, mit Datum. Wo
       einer zu etwas nichts sagt, steht das auch. Unsere Meinung kommt danach.
     </p>
-    {APPS.map((a) => <StoreFacts app={a} compact />)}
-    <p class="post-caveat">
-      Gekürzt auf die vier Punkte, an denen sich Paare entscheiden. Bewertungen, Konto und
-      KI-Angaben stehen vollständig auf der jeweiligen Vergleichsseite unten.
-    </p>
+    <CompareTable apps={APPS} cols={['price', 'names', 'partner', 'ads']} />
+    <details class="sf-details">
+      <summary>Die Store-Einträge im Wortlaut, alle sieben Punkte</summary>
+      <div class="sf-details-inner">
+        {APPS.map((a) => <StoreFacts app={a} />)}
+      </div>
+    </details>
 
     <h2>Und dann gibt es noch unsere</h2>
     <p>
