@@ -133,7 +133,7 @@ export const APPS: App[] = [
     vendor: 'Krijn Haasnoot',
     src: APPLE('1068421785', 'kinder-find-baby-names'),
     rating: { q: '4,3 von 5 · 381 Bewertungen', src: APPLE('1068421785', 'kinder-find-baby-names') },
-    price: { q: 'All Sets 5,99 €', q2: 'German 0,99 €', q3: 'French 0,99 €', q4: 'Spanish 0,99 € (und weitere Sprach-Sets zu je 0,99 €)', compiled: true, src: APPLE('1068421785', 'kinder-find-baby-names') },
+    price: { q: 'All Sets 5,99 €', q2: 'German 0,99 €', q3: 'French 0,99 €', q4: 'Spanish 0,99 €', note: 'Der Eintrag führt weitere Sprach-Sets zu ebenfalls je 0,99 €', compiled: true, src: APPLE('1068421785', 'kinder-find-baby-names') },
     names: { q: '20.000+ sorgfältig kuratierte Babynamen', src: APPLE('1068421785', 'kinder-find-baby-names') },
     partner: { q: 'Partner-Verbindung — Käufe werden geteilt, wenn ihr verbunden seid', src: APPLE('1068421785', 'kinder-find-baby-names') },
     account: { q: 'Mit E-Mail anmelden — Du kannst jetzt ein Konto erstellen oder dich mit deiner E-Mail-Adresse anmelden, zusätzlich zu Apple und Google.', note: 'aus den Versionshinweisen zu Version 2.0.8 vom 10. April', src: APPLE('1068421785', 'kinder-find-baby-names') },

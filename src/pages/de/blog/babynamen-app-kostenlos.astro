@@ -89,7 +89,7 @@ const jsonLd = {
     </header>
 
     <p class="post-standfirst">
-      Im Store steht bei allen dasselbe: kostenlos. Gemeint ist jedes Mal etwas anderes, mal
+      Im Store steht bei allen dasselbe: kostenlos. Gemeint ist jedes Mal etwas anderes: mal
       Werbung, mal ein Limit pro Tag, mal ein Set, das ihr einzeln kauft, mal ein Abo. Wir haben
       nachgesehen, was bei jeder App tatsächlich dahintersteckt, und die Angaben aus den
       Store-Einträgen abgetippt statt sie nachzuerzählen.
@@ -118,8 +118,8 @@ const jsonLd = {
           {APPS.map((a) => (
             <tr>
               <td data-label="App"><a href={a.src} rel="nofollow noopener" target="_blank">{a.name}</a></td>
-              <td data-label="Preisangabe">{a.price ? <q>{a.price.q}</q> : <span class="sf-none">{NO_STATEMENT}</span>}</td>
-              <td data-label="Werbung">{a.ads ? <q>{a.ads.q}</q> : <span class="sf-none">{NO_STATEMENT}</span>}</td>
+              <td data-label="Preisangabe">{a.price ? [a.price.q, a.price.q2, a.price.q3, a.price.q4, a.price.q5].filter(Boolean).map((l, i) => <>{i > 0 ? ' · ' : ''}<q>{l}</q></>) : <span class="sf-none">{NO_STATEMENT}</span>}</td>
+              <td data-label="Werbung">{a.ads ? [a.ads.q, a.ads.q2, a.ads.q3].filter(Boolean).map((l, i) => <>{i > 0 ? ' · ' : ''}<q>{l}</q></>) : <span class="sf-none">{NO_STATEMENT}</span>}</td>
             </tr>
           ))}
         </tbody>
@@ -130,7 +130,7 @@ const jsonLd = {
     <p>
       <strong>Erstens: Werbung oder Limit.</strong> Eine kostenlose App finanziert sich irgendwie.
       Manche Einträge weisen Werbung aus, andere begrenzen stattdessen die Nutzung. Beides ist
-      vertretbar, ihr solltet nur wissen, welchen Tausch ihr macht.
+      vertretbar; ihr solltet nur wissen, welchen Tausch ihr macht.
     </p>
     <p>
       <strong>Zweitens: Wo ihr den Preis nachlest.</strong> Bei mindestens einem Anbieter stehen auf
@@ -141,7 +141,7 @@ const jsonLd = {
       <strong>Drittens: Gilt der Kauf für einen oder für beide?</strong> Das ist bei einer Paar-App
       die wichtigste Angabe und fehlt am häufigsten. Bei Namore schaltet der Einmalkauf beide Handys
       frei. Kinder gibt im Eintrag an, dass Käufe geteilt werden, wenn ihr verbunden seid. Bei den
-      übrigen haben wir dazu keine Angabe gefunden, rechnet im Zweifel mit zwei Käufen.
+      übrigen haben wir dazu keine Angabe gefunden; rechnet im Zweifel mit zwei Käufen.
     </p>
 
     <WhyNamore

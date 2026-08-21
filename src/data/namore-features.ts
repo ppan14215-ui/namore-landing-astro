@@ -109,7 +109,7 @@ export const FEATURES: Feature[] = [
     distinct: true,
     de: {
       title: 'Es hört nicht beim Match auf',
-      body: 'Zwölf gemeinsame Treffer sind keine Entscheidung. In der Endrunde bewertet ihr die gemeinsamen Treffer noch einmal getrennt, und daraus entsteht eine Reihenfolge statt einer Liste. Genau da bleiben Paare sonst stecken. Eine vergleichbare Stufe zwischen den beiden Partnern haben wir bei den hier verglichenen Apps nicht gefunden, mehrere bieten an, die Trefferliste gemeinsam weiter einzugrenzen oder Freunde und Familie abstimmen zu lassen.',
+      body: 'Zwölf gemeinsame Treffer sind keine Entscheidung. In der Endrunde bewertet ihr die gemeinsamen Treffer noch einmal getrennt, und daraus entsteht eine Reihenfolge statt einer Liste. Genau da bleiben Paare sonst stecken. Eine vergleichbare Stufe zwischen den beiden Partnern haben wir bei den hier verglichenen Apps nicht gefunden; mehrere bieten an, die Trefferliste gemeinsam weiter einzugrenzen oder Freunde und Familie abstimmen zu lassen.',
     },
     en: {
       title: 'It does not stop at the match',
@@ -172,8 +172,8 @@ export const FEATURES: Feature[] = [
     key: 'learning',
     proof: 'buildDeckContext reads all loves+passes for the session from Postgres (paginated to 20k since fix #117); scoreCard applies asymmetric negative-preference penalties from lovedStyles/lovedVibes/lovedRegions. Measured 2026-08-19: 114/216 sessions multi-day, max 17,260 votes, max 95-day span.',
     de: {
-      title: 'Das Deck lernt, aus euch beiden, ohne euch zu verraten',
-      body: 'Jeder Swipe schärft die Auswahl: Stil, Klang, Herkunft, Silbenfluss. Das läuft über die gesamte Zeit, die ihr sucht, nicht nur über einen Abend, in echten Sitzungen sind das bis zu 17.000 Swipes, und die längste lief über drei Monate. Der Unterschied zu anderen Apps mit KI-Versprechen liegt nicht in der Technik, sondern darin, dass gelernt wird, ohne dass einer von euch die Stimmen des anderen sieht.',
+      title: 'Das Deck lernt aus euch beiden, ohne euch zu verraten',
+      body: 'Jeder Swipe schärft die Auswahl: Stil, Klang, Herkunft, Silbenfluss. Das läuft über die gesamte Zeit, die ihr sucht, nicht nur über einen Abend: In echten Sitzungen sind das bis zu 17.000 Swipes, und die längste lief über drei Monate. Der Unterschied zu anderen Apps mit KI-Versprechen liegt nicht in der Technik, sondern darin, dass gelernt wird, ohne dass einer von euch die Stimmen des anderen sieht.',
     },
     en: {
       title: 'The deck learns, from both of you, without exposing either',
@@ -220,7 +220,7 @@ export const FEATURES: Feature[] = [
     key: 'search-add',
     proof: '⚠️ SCOPED TO THE GERMAN LISTINGS on 2026-08-19 after a US-storefront pass showed how easily this breaks: a research agent had reported a double-blind quote as coming from Baby Name Together\u2019s APPLE listing; a direct read found it is on the GOOGLE PLAY listing instead. Same product, different store, different text. Never say "the other apps\u2019 listings" when only one storefront was read. Events name_searched and name_added are emitted by the app (code-derived inventory in CURRENT.md). None of the five German store listings transcribed on 2026-08-19 mentions searching or adding your own names — which is not proof they cannot, only that they do not say so.',
     de: {
-      title: 'Suchen, und eigene Namen einwerfen',
+      title: 'Suchen und eigene Namen einwerfen',
       body: 'Wenn euch ein Name einfällt, der nicht im Deck war, von der Oma, aus einem Buch, aus dem Nichts, könnt ihr ihn suchen oder selbst hinzufügen. Er landet dann im Deck eures Partners wie jeder andere Name, und ihr seht erst beim Match, was er davon hält. Kein Nachfragen, kein „und, wie findest du …?“ In den deutschen Store-Einträgen der anderen Apps haben wir dazu nichts gefunden.',
     },
     en: {
@@ -237,7 +237,7 @@ export const FEATURES: Feature[] = [
     proof: 'Counted in Supabase 2026-08-19: meaning_short, longevity_read and trend_context each populated 15,182/15,182 in EN, DE and ES. ⚠️ This is CONTENT, not UI count — Kinder\u2019s own listing advertises 23 interface languages, Baby Name Together 9, Baby Name Genius 10. NEVER claim more languages than they have; claim that the name material itself is written, not machine-translated UI over an English database.',
     de: {
       title: 'Drei Sprachen, und zwar der Inhalt',
-      body: 'Andere Apps bieten mehr Oberflächensprachen als wir. Kinder etwa 23. Bei uns sind dafür nicht nur die Knöpfe übersetzt: Bedeutung, Herkunft, Trend-Einordnung und die Einschätzung, ob ein Name Bestand hat, sind auf Deutsch, Englisch und Spanisch jeweils vollständig geschrieben. Alle 15.182 Namen, dreimal. Kein englischer Datensatz mit deutscher Beschriftung.',
+      body: 'Andere Apps bieten mehr Oberflächensprachen als wir, Kinder etwa 23. Bei uns sind dafür nicht nur die Knöpfe übersetzt: Bedeutung, Herkunft, Trend-Einordnung und die Einschätzung, ob ein Name Bestand hat, sind auf Deutsch, Englisch und Spanisch jeweils vollständig geschrieben. Alle 15.182 Namen, dreimal. Kein englischer Datensatz mit deutscher Beschriftung.',
     },
     en: {
       title: 'Three languages, of the content, not the buttons',
@@ -271,7 +271,7 @@ export const FEATURES: Feature[] = [
     key: 'privacy-price',
     proof: 'Supabase eu-west-1 (Ireland). One-time IAP unlocks both phones; no subscription tier exists. ⚠️ PRICE IS LOCALISED PER STOREFRONT (Julian, 2026-08-19) — never state one figure as if it were global; AT/CH/ES readers would be misled, and §3 PAngV wants the actual Endpreis. Additionally the GERMAN storefront currently lists TWO products, "Namore Unlimited 7,99 €" and "Namore Unlimited 4,99 €", so even the German figure is not unambiguous. Say "einmaliger Kauf" and name the German figure only as the current one, in the store.',
     de: {
-      title: 'Ein Preis, einmal, für beide, und Daten in der EU',
+      title: 'Ein Preis für beide, und Daten in der EU',
       body: 'Ein einmaliger Kauf schaltet unbegrenztes Wischen und alle Filter für beide Handys frei. Kein Abo, keine Folgekosten. Der Preis wird je Land festgelegt, im deutschen App Store liegt er derzeit bei 7,99 €; was für euch gilt, steht im Store vor dem Kauf. Gehostet in Irland, keine Weitergabe von Daten, kein Modelltraining mit euren Swipes.',
     },
     en: {
