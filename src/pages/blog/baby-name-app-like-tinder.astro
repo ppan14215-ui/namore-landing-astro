@@ -27,7 +27,7 @@ const faqs = [
   },
   {
     q: 'Why does my baby name app keep showing the same names?',
-    a: 'Because many apps stop reliably excluding already-rated names once there are a lot of them. It is the most common complaint about swipe apps. In Namore a name you swiped away does not come back, not after a thousand swipes and not after weeks. It was the bug that cost us the most work.',
+    a: 'That happens when an app loses track of already-rated names once there are a lot of them. In Namore a name you swiped away does not come back, not after a thousand swipes and not after weeks. It was the bug that cost us the most work to fix.',
   },
   {
     q: 'Can couples swipe baby names together?',
@@ -96,8 +96,8 @@ const jsonLd = {
     <p>
       So the most useful question to ask a swipe app is not how nicely it swipes, but what happens
       afterwards. And the second, underrated one: whether a name you swiped away actually stays
-      away. In many apps it resurfaces after a few hundred swipes, and that is the moment couples
-      stop trusting the app.
+      away. The moment a name you already rejected resurfaces is the moment you stop trusting an
+      app, and with hundreds of swipes per evening it is a real engineering problem.
     </p>
 
     <h2>Which apps swipe</h2>
@@ -115,7 +115,7 @@ const jsonLd = {
           {APPS_EN.map((a) => (
             <tr>
               <td data-label="App"><a href={a.src} rel="nofollow noopener" target="_blank">{a.name}</a></td>
-              <td data-label="What the vendor says">{a.partner ? <q>{a.partner.q}</q> : <span class="sf-none">{NO_STATEMENT_EN}</span>}</td>
+              <td data-label="What the vendor says">{a.partner ? <><q>{a.partner.q}</q>{a.partner.note ? <span class="sf-note"> ({a.partner.note})</span> : null}</> : <span class="sf-none">{NO_STATEMENT_EN}</span>}</td>
             </tr>
           ))}
         </tbody>

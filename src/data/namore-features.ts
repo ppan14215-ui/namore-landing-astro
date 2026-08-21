@@ -113,7 +113,7 @@ export const FEATURES: Feature[] = [
     },
     en: {
       title: 'It does not stop at the match',
-      body: 'Twelve mutual matches are not a decision. In the final round you each rate the mutual matches again, separately, and what comes out is an order rather than a list. That is where couples usually get stuck. We did not find a comparable stage between the two partners in the apps compared here, several do offer to narrow the match list together, or to let friends and family vote.',
+      body: 'Twelve mutual matches are not a decision. In the final round you each rate the mutual matches again, separately, and what comes out is an order rather than a list. That is where couples usually get stuck. We did not find a comparable stage between the two partners in the apps compared here; several do offer to narrow the match list together, or to let friends and family vote.',
     },
     es: {
       title: 'No termina en el match',
@@ -129,7 +129,7 @@ export const FEATURES: Feature[] = [
     },
     en: {
       title: 'No account, no e-mail',
-      body: 'One of you opens a session, the other joins with a six-letter code. It sounds minor and it is usually the point where one partner quietly drops out, someone who has to register first often does not bother on the sofa at night.',
+      body: 'One of you opens a session, the other joins with a six-letter code. It sounds minor, and it is usually the point where one partner quietly drops out: someone who has to register first often does not bother on the sofa at night.',
     },
     es: {
       title: 'Sin cuenta y sin correo',
@@ -221,11 +221,11 @@ export const FEATURES: Feature[] = [
     proof: '⚠️ SCOPED TO THE GERMAN LISTINGS on 2026-08-19 after a US-storefront pass showed how easily this breaks: a research agent had reported a double-blind quote as coming from Baby Name Together\u2019s APPLE listing; a direct read found it is on the GOOGLE PLAY listing instead. Same product, different store, different text. Never say "the other apps\u2019 listings" when only one storefront was read. Events name_searched and name_added are emitted by the app (code-derived inventory in CURRENT.md). None of the five German store listings transcribed on 2026-08-19 mentions searching or adding your own names — which is not proof they cannot, only that they do not say so.',
     de: {
       title: 'Suchen und eigene Namen einwerfen',
-      body: 'Wenn euch ein Name einfällt, der nicht im Deck war, von der Oma, aus einem Buch, aus dem Nichts, könnt ihr ihn suchen oder selbst hinzufügen. Er landet dann im Deck eures Partners wie jeder andere Name, und ihr seht erst beim Match, was er davon hält. Kein Nachfragen, kein „und, wie findest du …?“ In den deutschen Store-Einträgen der anderen Apps haben wir dazu nichts gefunden.',
+      body: 'Wenn euch ein Name einfällt, der nicht im Deck war, von der Oma, aus einem Buch, aus dem Nichts, könnt ihr ihn suchen oder selbst hinzufügen. Er landet dann im Deck eures Partners wie jeder andere Name, und ihr seht erst beim Match, was er davon hält. Kein Nachfragen, kein „und, wie findest du …?“',
     },
     en: {
       title: 'Search, and add your own names',
-      body: 'When a name occurs to you that was never in the deck, from a grandmother, a book, out of nowhere, you can search for it or add it yourself. It then appears in your partner\u2019s deck like any other name, and you only find out what they think when it matches. No asking, no "so… what do you reckon?" We found nothing about this in the other apps\u2019 store listings.',
+      body: 'When a name occurs to you that was never in the deck, from a grandmother, a book, out of nowhere, you can search for it or add it yourself. It then appears in your partner\u2019s deck like any other name, and you only find out what they think when it matches. No asking, no "so… what do you reckon?"',
     },
     es: {
       title: 'Buscar, y añadir vuestros propios nombres',
@@ -256,15 +256,15 @@ export const FEATURES: Feature[] = [
     proof: 'Design is a LEAD differentiator, not a footnote — it was part of the positioning locked in the 2026-08-16 audit (interface quality, double-blind, no account, one-time price). ⚠️ The line runs at COMPARISON, not at confidence: "Namore hat ein modernes Design" is a statement about our own product and is entirely permissible. What is not: "moderner als X", or any claim that a named competitor looks dated — that is the §4 Nr. 1 Herabsetzung surface an earlier review already caught on this cluster ("Die Oberfläche zeigt inzwischen ihr Alter", removed). Say ours plainly. Say nothing about theirs. A first draft of this card opened with "das ist Geschmack" and apologised before it claimed anything; that was over-correction, not caution.',
     de: {
       title: 'Modernes Design, und das ist kein Beiwerk',
-      body: 'Namen aussuchen ist etwas, das ihr abends auf dem Sofa macht, nicht am Schreibtisch. Also haben wir eine App gebaut, die sich danach anfühlt: eine Karte nach der anderen, ruhige Farben, große Typografie, nichts blinkt, nichts drängelt, keine Werbung dazwischen. Kein Formular, keine Trefferliste, kein Karussell aus Freischalt-Angeboten. Die Bildschirmfotos auf dieser Seite sind echt, schaut sie euch an und entscheidet in zwei Minuten selbst.',
+      body: 'Namen aussuchen ist etwas, das ihr abends auf dem Sofa macht, nicht am Schreibtisch. Also haben wir eine App gebaut, die sich danach anfühlt: eine Karte nach der anderen, ruhige Farben, große Typografie, nichts blinkt, nichts drängelt, keine Werbung dazwischen. Kein Formular, keine Trefferliste, kein Karussell aus Freischalt-Angeboten. Schaut euch die Bildschirmfotos im App Store an und entscheidet in zwei Minuten selbst.',
     },
     en: {
       title: 'A modern interface, and that is not decoration',
-      body: 'Choosing a name is something you do on the sofa in the evening, not at a desk. So we built an app that feels like that: one card at a time, quiet colours, large type, nothing flashing, nothing nagging, no ads in between. No forms, no results list, no carousel of unlock offers. The screenshots on this page are real, look at them and decide for yourself in two minutes.',
+      body: 'Choosing a name is something you do on the sofa in the evening, not at a desk. So we built an app that feels like that: one card at a time, quiet colours, large type, nothing flashing, nothing nagging, no ads in between. No forms, no results list, no carousel of unlock offers. Look at the screenshots in the App Store and decide for yourself in two minutes.',
     },
     es: {
       title: 'Diseño moderno, y no como adorno',
-      body: 'Elegir un nombre es algo que hacéis en el sofá por la noche, no en un escritorio. Así que hicimos una app que se siente así: una tarjeta cada vez, colores tranquilos, tipografía grande, nada que parpadee, sin publicidad de por medio. Las capturas de esta página son reales.',
+      body: 'Elegir un nombre es algo que hacéis en el sofá por la noche, no en un escritorio. Así que hicimos una app que se siente así: una tarjeta cada vez, colores tranquilos, tipografía grande, nada que parpadee, sin publicidad de por medio. Mirad las capturas en el App Store y decidid en dos minutos.',
     },
   },
   {
