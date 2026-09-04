@@ -7,6 +7,7 @@
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import NameList from '@/components/NameList.astro';
+import ConsensusCta from '@/components/ConsensusCta.astro';
 import type { NameRow } from '@/lib/types';
 import { getAllNames } from '@/lib/names';
 import { distinctOrigins, sortByPopularity } from '@/lib/hubs';
@@ -43,6 +44,8 @@ const jsonLd = {
     <p class="page-eyebrow"><a href="/names">Baby names</a></p>
     <h1 class="hub-title"><em>{origin}</em> baby names.</h1>
     <p class="hub-lede">{names.length.toLocaleString()} {origin} names, most popular first.</p>
+
+    <ConsensusCta placement="origin_hub_primary" />
 
     <section class="hub-section">
       <NameList names={names} />

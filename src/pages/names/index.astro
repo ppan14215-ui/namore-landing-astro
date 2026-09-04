@@ -8,6 +8,7 @@
  */
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import NameList from '@/components/NameList.astro';
+import ConsensusCta from '@/components/ConsensusCta.astro';
 import { getAllNames } from '@/lib/names';
 import { LETTERS, nameInitial, distinctOrigins } from '@/lib/hubs';
 import topNames from '@/data/top-names.json';
@@ -52,6 +53,8 @@ const jsonLd = {
       <a class="hub-chip" href="/names/boys">Boy names</a>
     </nav>
 
+    <ConsensusCta placement="names_hub_primary" />
+
     <section class="hub-section" aria-label="Browse by first letter">
       <h2>By first letter</h2>
       <nav class="hub-row" aria-label="A to Z">
@@ -78,18 +81,6 @@ const jsonLd = {
       <p class="hub-more"><a href="/names/popular">See all popular names →</a></p>
     </section>
 
-    <aside class="cta" aria-label="Install Namore">
-      <h2>Decide <em>together</em>.</h2>
-      <p>
-        Namore is the private app for couples to swipe through names
-        independently and discover the one you both choose.
-      </p>
-      <div class="cta-buttons">
-        <a class="btn btn-ink btn-lg" href="https://apps.apple.com/app/id6766572995?utm_source=names_hub&utm_medium=organic&utm_campaign=programmatic_seo">Get for iPhone</a>
-        <a class="btn btn-ink btn-lg" href="https://play.google.com/store/apps/details?id=com.julian.namore&utm_source=names_hub&utm_medium=organic&utm_campaign=programmatic_seo">Get for Android</a>
-        <a class="btn btn-ghost btn-lg" href="https://www.namore.app/">Learn more</a>
-      </div>
-    </aside>
   </main>
 
   <style>

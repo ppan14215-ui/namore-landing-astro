@@ -9,6 +9,7 @@
  */
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import NameList from '@/components/NameList.astro';
+import ConsensusCta from '@/components/ConsensusCta.astro';
 import { getAllNames } from '@/lib/names';
 import topNames from '@/data/top-names.json';
 
@@ -41,6 +42,8 @@ const jsonLd = {
       first. Browse the full set by <a href="/names">letter or origin</a>, or
       jump to <a href="/names/girls">girl</a> and <a href="/names/boys">boy</a> names.
     </p>
+
+    <ConsensusCta placement="popular_hub_primary" />
 
     <section class="hub-section">
       <NameList names={shown} />

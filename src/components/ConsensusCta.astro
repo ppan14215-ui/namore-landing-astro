@@ -1,0 +1,133 @@
+---
+/**
+ * Contextual conversion bridge for the /names cluster.
+ *
+ * The page-view denominator already exists as landing_view{page_type=names_directory}.
+ * Store clicks keep the canonical app_store_click / google_play_click events;
+ * data-cta-* is collected by namore-landing/analytics.js so each placement can
+ * be evaluated without adding a competing click schema.
+ */
+interface Props {
+  name?: string;
+  placement: string;
+}
+
+const { name, placement } = Astro.props as Props;
+const content = encodeURIComponent(name ? 'name_' + name : placement);
+const source = name ? 'names_page' : 'names_hub';
+const appStoreUrl = 'https://apps.apple.com/app/id6766572995?utm_source=' + source + '&utm_medium=organic&utm_campaign=private_overlap&utm_content=' + content;
+const googlePlayUrl = 'https://play.google.com/store/apps/details?id=com.julian.namore&utm_source=' + source + '&utm_medium=organic&utm_campaign=private_overlap&utm_content=' + content;
+---
+
+<aside class="consensus-cta" aria-label={name ? 'Find out whether your partner would pick ' + name + ' too' : 'Find the names you both chose'}>
+  <p class="consensus-eyebrow">The hard part is not finding one good name</p>
+  <h2>
+    {name ? <>Would your partner pick <em>{name}</em> too?</> : <>Find the names you <em>both</em> chose.</>}
+  </h2>
+  <p class="consensus-copy">
+    Choose separately on your own phones. Your lists stay private; Namore reveals
+    only the names you both picked — then you decide between them together.
+  </p>
+  <ol class="consensus-steps" aria-label="How Namore works">
+    <li><span>1</span> Connect with a code</li>
+    <li><span>2</span> Choose in private</li>
+    <li><span>3</span> Reveal the overlap</li>
+    <li><span>4</span> Decide together</li>
+  </ol>
+  <div class="consensus-actions">
+    <a
+      class="btn btn-ink btn-lg"
+      href={appStoreUrl}
+      data-cta-location={placement}
+      data-cta-message="private_overlap"
+    >Get for iPhone</a>
+    <a
+      class="btn btn-ink btn-lg"
+      href={googlePlayUrl}
+      data-cta-location={placement}
+      data-cta-message="private_overlap"
+    >Get for Android</a>
+  </div>
+  <p class="consensus-note">Free to start · 100 swipes a day each · no ads · no account required</p>
+</aside>
+
+<style>
+  .consensus-cta {
+    margin: 2rem 0 2.75rem;
+    padding: clamp(1.4rem, 4vw, 2.25rem);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--terra);
+    border-radius: 18px;
+    background: var(--paper);
+    box-shadow: 0 18px 48px rgba(90, 60, 40, 0.08);
+  }
+  .consensus-eyebrow {
+    margin: 0 0 0.65rem;
+    color: var(--terra-deep);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  h2 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    line-height: 1.08;
+  }
+  h2 em {
+    color: var(--terra-deep);
+    font-weight: 500;
+  }
+  .consensus-copy {
+    max-width: 58ch;
+    margin: 0.9rem 0 1.15rem;
+    color: var(--ink-2);
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+  .consensus-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem 1.25rem;
+    margin: 0 0 1.35rem;
+    padding: 0;
+    list-style: none;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 0.78rem;
+  }
+  .consensus-steps li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .consensus-steps span {
+    display: inline-grid;
+    width: 1.35rem;
+    height: 1.35rem;
+    place-items: center;
+    border-radius: 999px;
+    background: rgba(201, 120, 92, 0.14);
+    color: var(--terra-deep);
+  }
+  .consensus-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
+  .consensus-note {
+    margin: 0.9rem 0 0;
+    color: var(--ink-3);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    line-height: 1.45;
+  }
+  @media (max-width: 520px) {
+    .consensus-actions {
+      display: grid;
+    }
+  }
+</style>

@@ -9,6 +9,7 @@
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import NameList from '@/components/NameList.astro';
+import ConsensusCta from '@/components/ConsensusCta.astro';
 import type { NameRow } from '@/lib/types';
 import { getAllNames } from '@/lib/names';
 import { LETTERS, nameInitial } from '@/lib/hubs';
@@ -46,6 +47,8 @@ const canonical = `https://www.namore.app/names/starting-with/${letter.toLowerCa
         <a class="hub-chip" href={`/names/starting-with/${l.toLowerCase()}`} aria-current={l === letter ? 'page' : undefined}>{l}</a>
       ))}
     </nav>
+
+    <ConsensusCta placement="letter_hub_primary" />
 
     <section class="hub-section">
       <NameList names={names} />
