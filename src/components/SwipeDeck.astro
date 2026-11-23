@@ -1,0 +1,490 @@
+---
+/**
+ * SwipeDeck — the app's core mechanic, live on the name page.
+ *
+ * Why (2026-11-23, SEO audit): Google sends ~1.3K sessions/28d to /names/*
+ * but only 1.4% clicked a store button with the static ConsensusCta. People
+ * arrive wanting "what does X mean", not "install an app". Instead of asking
+ * them to read a pitch, this hands them the thing itself: a small stack of
+ * name cards (this name + its related names) they can drag left/right, with
+ * tilt, LIKE/NOPE stamps, depth and haptics. The first ♥ flips into the
+ * private-overlap pitch ("now see if your partner picks it too") with the
+ * store button for their OS and the names they just saved.
+ *
+ * No-JS / crawler view: the cards render as a plain list and the store
+ * buttons are always in the HTML, so nothing is hidden from Google.
+ *
+ * Events (PostHog, via window.posthog from analytics.js):
+ *   name_deck_swipe  {direction, card_name, position, page_name}
+ *   name_deck_reveal {liked_count, liked_names, page_name, trigger}
+ * Store clicks keep the canonical app_store_click / google_play_click /
+ * store_click events via data-cta-location="name_page_deck".
+ */
+import type { NameRow } from '@/lib/types';
+
+interface Props {
+  name: NameRow;
+  related: NameRow[];
+}
+const { name, related } = Astro.props as Props;
+
+const cards = [name, ...related].slice(0, 6);
+const gender = (g: NameRow['gender']) => (g === 'M' ? 'Boy' : g === 'F' ? 'Girl' : 'Unisex');
+const vibes = (s: string | null) =>
+  (s ?? '')
+    .split(/[,;|]/)
+    .map((t) => t.trim().toLowerCase())
+    .filter(Boolean)
+    .slice(0, 3);
+
+const content = encodeURIComponent('deck_' + name.name);
+const appStoreUrl =
+  'https://apps.apple.com/app/id6766572995?utm_source=names_page&utm_medium=organic&utm_campaign=swipe_deck&utm_content=' +
+  content;
+const googlePlayUrl =
+  'https://play.google.com/store/apps/details?id=com.julian.namore&utm_source=names_page&utm_medium=organic&utm_campaign=swipe_deck&utm_content=' +
+  content;
+---
+
+<section class="deck" data-deck data-page-name={name.name} aria-label={`Swipe ${name.name} and similar names`}>
+  <header class="deck-head">
+    <p class="deck-eyebrow">Try it like in the app</p>
+    <h2>Would you keep <em>{name.name}</em>?</h2>
+    <p class="deck-sub">Drag the card: right to keep, left to skip.</p>
+  </header>
+
+  <div class="deck-stage" data-stage>
+    <ol class="deck-stack" data-stack>
+      {cards.map((c, i) => (
+        <li
+          class="dcard"
+          data-card
+          data-name={c.name}
+          style={`--i:${i}`}
+          aria-label={`${c.name}, ${gender(c.gender)}${c.origin ? ', ' + c.origin : ''}`}
+        >
+          <span class="stamp stamp-like" aria-hidden="true">Keep</span>
+          <span class="stamp stamp-nope" aria-hidden="true">Skip</span>
+          <p class="dcard-meta">
+            {gender(c.gender)}{c.origin ? ` · ${c.origin}` : ''}
+          </p>
+          <p class="dcard-name">{c.name}</p>
+          {c.pronunciation_text && <p class="dcard-pron">{c.pronunciation_text}</p>}
+          {c.meaning_short && <p class="dcard-meaning">&ldquo;{c.meaning_short}&rdquo;</p>}
+          {vibes(c.vibe_tags).length > 0 && (
+            <p class="dcard-vibes">
+              {vibes(c.vibe_tags).map((v) => <span>{v}</span>)}
+            </p>
+          )}
+          {i > 0 && (
+            <a class="dcard-link" href={`/names/${c.name.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`}>
+              Meaning of {c.name} →
+            </a>
+          )}
+        </li>
+      ))}
+    </ol>
+
+    <div class="deck-reveal" data-reveal hidden>
+      <p class="deck-eyebrow">Saved on this phone only</p>
+      <h3>
+        Now: would your partner keep <em data-reveal-names>{name.name}</em> too?
+      </h3>
+      <p class="reveal-copy">
+        In Namore you both swipe on your own phones. Your lists stay private. You only
+        see the names you <strong>both</strong> kept.
+      </p>
+      <ul class="reveal-chips" data-chips aria-label="Names you kept"></ul>
+      <div class="reveal-actions">
+        <a class="btn btn-ink btn-lg store-ios" href={appStoreUrl} data-cta-location="name_page_deck" data-cta-message="swipe_deck">Swipe together on iPhone</a>
+        <a class="btn btn-ink btn-lg store-android" href={googlePlayUrl} data-cta-location="name_page_deck" data-cta-message="swipe_deck">Swipe together on Android</a>
+      </div>
+      <button type="button" class="reveal-more" data-more>Keep swiping here</button>
+      <p class="reveal-note">Free to start · no ads · no account needed</p>
+    </div>
+  </div>
+
+  <div class="deck-controls" data-controls>
+    <button type="button" class="dbtn dbtn-nope" data-act="nope" aria-label="Skip this name">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+    </button>
+    <span class="deck-count" data-count aria-live="polite"></span>
+    <button type="button" class="dbtn dbtn-like" data-act="like" aria-label="Keep this name">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" /></svg>
+    </button>
+  </div>
+
+  <noscript>
+    <div class="reveal-actions">
+      <a class="btn btn-ink btn-lg" href={appStoreUrl}>Get for iPhone</a>
+      <a class="btn btn-ink btn-lg" href={googlePlayUrl}>Get for Android</a>
+    </div>
+  </noscript>
+</section>
+
+<style>
+  .deck {
+    max-width: 640px;
+    margin: -24px auto 56px;
+    padding: 26px clamp(16px, 4vw, 28px) 24px;
+    border-radius: 26px;
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(201, 120, 92, 0.13), transparent 60%),
+      var(--bg-deep);
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .deck-head { text-align: center; margin-bottom: 18px; }
+  .deck-eyebrow {
+    margin: 0 0 6px;
+    color: var(--terra-deep);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .deck h2, .deck h3 {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 400;
+    letter-spacing: -0.035em;
+    line-height: 1.08;
+  }
+  .deck h2 { font-size: clamp(1.7rem, 5vw, 2.3rem); }
+  .deck h3 { font-size: clamp(1.45rem, 4.4vw, 1.9rem); }
+  .deck h2 em, .deck h3 em { color: var(--terra-deep); font-weight: 500; }
+  .deck-sub { margin: 6px 0 0; color: var(--ink-3); font-size: 0.9rem; }
+
+  /* Stage: fixed height so flying cards never reflow the page */
+  .deck-stage {
+    position: relative;
+    height: 300px;
+    perspective: 1200px;
+  }
+  .deck-stack { list-style: none; margin: 0; padding: 0; position: absolute; inset: 0; }
+  .dcard {
+    position: absolute;
+    inset: 8px 6px 18px;
+    padding: 22px 22px 18px;
+    border-radius: 22px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.8) inset,
+      0 18px 40px rgba(90, 60, 40, 0.14),
+      0 4px 10px rgba(90, 60, 40, 0.06);
+    transform-origin: 50% 120%;
+    transform: translate3d(0, calc(var(--depth, var(--i)) * 10px), 0)
+      scale(calc(1 - var(--depth, var(--i)) * 0.045));
+    z-index: calc(10 - var(--i));
+    transition: transform 0.38s cubic-bezier(0.2, 0.9, 0.25, 1.15), opacity 0.3s ease, box-shadow 0.3s ease;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: grab;
+    will-change: transform;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .dcard:nth-child(n + 4) { opacity: 0; }
+  .dcard.is-dragging { transition: none; cursor: grabbing; box-shadow: 0 30px 60px rgba(90, 60, 40, 0.22); }
+  .dcard.is-gone { pointer-events: none; }
+  .dcard-meta {
+    margin: 0 0 4px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .dcard-name {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(44px, 12vw, 60px);
+    line-height: 1;
+    letter-spacing: -1.6px;
+    color: var(--ink);
+  }
+  .dcard-pron { margin: 6px 0 0; font-family: var(--mono); font-size: 12.5px; color: var(--ink-3); }
+  .dcard-meaning {
+    margin: 14px 0 0;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 19px;
+    color: var(--ink);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .dcard-vibes { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0 0; }
+  .dcard-vibes span {
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .dcard-link {
+    margin-top: auto;
+    padding-top: 10px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--terra-deep);
+    align-self: flex-start;
+  }
+  .stamp {
+    position: absolute;
+    top: 22px;
+    padding: 4px 12px;
+    border: 3px solid currentColor;
+    border-radius: 10px;
+    font-family: var(--sans);
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .stamp-like { left: 20px; color: #4E8B5A; transform: rotate(-12deg); opacity: var(--like, 0); }
+  .stamp-nope { right: 20px; color: var(--terra-deep); transform: rotate(12deg); opacity: var(--nope, 0); }
+
+  /* Controls */
+  .deck-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    margin-top: 8px;
+  }
+  .dbtn {
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: 0 10px 22px rgba(90, 60, 40, 0.14), 0 1px 0 #fff inset;
+    transition: transform 0.18s cubic-bezier(0.3, 1.6, 0.5, 1), box-shadow 0.2s;
+  }
+  .dbtn:active { transform: scale(0.9); }
+  .dbtn svg { width: 26px; height: 26px; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .dbtn-nope svg { stroke: var(--ink-2); }
+  .dbtn-like { background: var(--terra); border-color: var(--terra-deep); }
+  .dbtn-like svg { stroke: var(--paper); fill: var(--paper); }
+  .dbtn.pulse { transform: scale(1.12); }
+  .deck-count { min-width: 64px; text-align: center; font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+
+  /* Reveal */
+  .deck-reveal {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 6px 4px;
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+    transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.2, 0.9, 0.25, 1.1);
+  }
+  .deck-reveal.is-on { opacity: 1; transform: none; }
+  .reveal-copy { margin: 10px auto 0; max-width: 46ch; color: var(--ink-2); font-size: 0.95rem; line-height: 1.5; }
+  .reveal-chips { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 12px 0 0; padding: 0; }
+  .reveal-chips :global(li) {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    font-family: var(--serif);
+    font-size: 15px;
+  }
+  .reveal-chips :global(li)::before { content: '♥ '; color: var(--terra); }
+  .reveal-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 16px; }
+  .reveal-more {
+    margin: 10px auto 0;
+    background: none;
+    border: 0;
+    color: var(--ink-3);
+    font-family: var(--mono);
+    font-size: 12px;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .reveal-note { margin: 6px 0 0; color: var(--ink-3); font-family: var(--mono); font-size: 0.68rem; }
+  .deck.is-revealed .deck-stack,
+  .deck.is-revealed .deck-controls { visibility: hidden; }
+  .deck.is-revealed .deck-stage { height: 340px; }
+
+  /* Only show the store button for the visitor's OS (desktop sees both) */
+  :global(html.os-ios) .deck .store-android,
+  :global(html.os-android) .deck .store-ios { display: none; }
+
+  /* No-JS / pre-hydration: plain readable list, no stage */
+  .deck:not(.is-live) .deck-stage { height: auto; }
+  .deck:not(.is-live) .deck-stack { position: static; display: grid; gap: 10px; }
+  .deck:not(.is-live) .dcard { position: relative; inset: auto; transform: none; opacity: 1; cursor: default; }
+  .deck:not(.is-live) .stamp,
+  .deck:not(.is-live) .deck-controls { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dcard, .deck-reveal, .dbtn { transition-duration: 0.01ms !important; }
+  }
+</style>
+
+<script>
+  type PH = { capture?: (e: string, p?: Record<string, unknown>) => void };
+  const THRESHOLD = 90;
+
+  function track(event: string, props: Record<string, unknown>) {
+    const ph = (window as unknown as { posthog?: PH }).posthog;
+    try { ph?.capture?.(event, props); } catch { /* analytics must never break the deck */ }
+  }
+  function buzz(ms: number) {
+    try { (navigator as Navigator & { vibrate?: (p: number) => boolean }).vibrate?.(ms); } catch { /* iOS Safari has no vibrate */ }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-deck]').forEach((deck) => {
+    const pageName = deck.dataset.pageName || '';
+    const cards = Array.from(deck.querySelectorAll<HTMLElement>('[data-card]'));
+    const reveal = deck.querySelector<HTMLElement>('[data-reveal]')!;
+    const chips = deck.querySelector<HTMLElement>('[data-chips]')!;
+    const revealNames = deck.querySelector<HTMLElement>('[data-reveal-names]')!;
+    const count = deck.querySelector<HTMLElement>('[data-count]')!;
+    const btnLike = deck.querySelector<HTMLElement>('[data-act="like"]')!;
+    const btnNope = deck.querySelector<HTMLElement>('[data-act="nope"]')!;
+    let idx = 0;
+    const liked: string[] = [];
+    let revealedOnce = false;
+
+    deck.classList.add('is-live');
+    // Keep links inside cards from starting drags.
+    deck.querySelectorAll('.dcard-link').forEach((a) => a.addEventListener('pointerdown', (e) => e.stopPropagation()));
+
+    function layout() {
+      cards.forEach((c, i) => {
+        const d = i - idx;
+        if (d < 0) return;
+        c.style.setProperty('--depth', String(d));
+        c.style.zIndex = String(20 - d);
+        c.style.opacity = d > 2 ? '0' : '1';
+        if (!c.classList.contains('is-dragging')) c.style.transform = '';
+      });
+      const left = cards.length - idx;
+      count.textContent = left > 0 ? `${idx + 1} / ${cards.length}` : '';
+    }
+
+    function showReveal(trigger: string) {
+      if (liked.length === 0) {
+        revealNames.textContent = pageName;
+      } else {
+        revealNames.textContent = liked.length === 1 ? liked[0] : `${liked.length} names`;
+      }
+      chips.innerHTML = '';
+      liked.forEach((n) => {
+        const li = document.createElement('li');
+        li.textContent = n;
+        chips.appendChild(li);
+      });
+      const more = deck.querySelector<HTMLElement>('[data-more]');
+      if (more) more.hidden = idx >= cards.length;
+      reveal.hidden = false;
+      deck.classList.add('is-revealed');
+      requestAnimationFrame(() => reveal.classList.add('is-on'));
+      track('name_deck_reveal', { liked_count: liked.length, liked_names: liked.slice(0, 6), page_name: pageName, trigger });
+    }
+    function hideReveal() {
+      reveal.classList.remove('is-on');
+      deck.classList.remove('is-revealed');
+      reveal.hidden = true;
+    }
+
+    function commit(dir: 'like' | 'nope', viaButton: boolean) {
+      const card = cards[idx];
+      if (!card) return;
+      const out = dir === 'like' ? 1 : -1;
+      card.classList.remove('is-dragging');
+      card.classList.add('is-gone');
+      card.style.setProperty('--like', dir === 'like' ? '1' : '0');
+      card.style.setProperty('--nope', dir === 'nope' ? '1' : '0');
+      card.style.transition = 'transform 0.45s cubic-bezier(0.3, 0.6, 0.3, 1), opacity 0.45s ease';
+      card.style.transform = `translate3d(${out * 140}%, -30px, 0) rotate(${out * 24}deg)`;
+      card.style.opacity = '0';
+      buzz(dir === 'like' ? 18 : 8);
+      const btn = dir === 'like' ? btnLike : btnNope;
+      btn.classList.add('pulse');
+      setTimeout(() => btn.classList.remove('pulse'), 180);
+      const name = card.dataset.name || '';
+      if (dir === 'like') liked.push(name);
+      track('name_deck_swipe', { direction: dir, card_name: name, position: idx, page_name: pageName, via: viaButton ? 'button' : 'drag' });
+      idx += 1;
+      layout();
+      const done = idx >= cards.length;
+      if ((dir === 'like' && !revealedOnce) || done) {
+        revealedOnce = true;
+        setTimeout(() => showReveal(done ? 'deck_end' : 'first_like'), 360);
+      }
+    }
+
+    // Drag physics on the top card.
+    let startX = 0, startY = 0, dx = 0, dy = 0, dragging = false, crossed = false, pid = -1;
+    deck.addEventListener('pointerdown', (e) => {
+      const card = cards[idx];
+      if (!card || !(e.target instanceof Node) || !card.contains(e.target)) return;
+      dragging = true; crossed = false; pid = e.pointerId;
+      startX = e.clientX; startY = e.clientY; dx = dy = 0;
+      card.classList.add('is-dragging');
+      card.setPointerCapture?.(e.pointerId);
+    });
+    deck.addEventListener('pointermove', (e) => {
+      if (!dragging || e.pointerId !== pid) return;
+      const card = cards[idx];
+      dx = e.clientX - startX;
+      dy = e.clientY - startY;
+      const rot = dx / 18;
+      card.style.transform = `translate3d(${dx}px, ${dy * 0.25}px, 0) rotate(${rot}deg)`;
+      const p = Math.min(1, Math.abs(dx) / THRESHOLD);
+      card.style.setProperty('--like', dx > 0 ? String(p) : '0');
+      card.style.setProperty('--nope', dx < 0 ? String(p) : '0');
+      const next = cards[idx + 1];
+      if (next) next.style.transform = `translate3d(0, ${10 - 10 * p}px, 0) scale(${0.955 + 0.045 * p})`;
+      if (!crossed && Math.abs(dx) > THRESHOLD) { crossed = true; buzz(6); }
+      if (crossed && Math.abs(dx) < THRESHOLD) crossed = false;
+    });
+    const end = (e: PointerEvent) => {
+      if (!dragging || e.pointerId !== pid) return;
+      dragging = false;
+      const card = cards[idx];
+      if (Math.abs(dx) > THRESHOLD) {
+        commit(dx > 0 ? 'like' : 'nope', false);
+      } else {
+        card.classList.remove('is-dragging');
+        card.style.setProperty('--like', '0');
+        card.style.setProperty('--nope', '0');
+        card.style.transform = '';
+        layout();
+      }
+    };
+    deck.addEventListener('pointerup', end);
+    deck.addEventListener('pointercancel', end);
+
+    btnLike.addEventListener('click', () => commit('like', true));
+    btnNope.addEventListener('click', () => commit('nope', true));
+    deck.addEventListener('keydown', (e) => {
+      if (deck.classList.contains('is-revealed')) return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); commit('like', true); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); commit('nope', true); }
+    });
+    deck.querySelector('[data-more]')?.addEventListener('click', () => {
+      if (idx >= cards.length) return; // nothing left; keep the pitch up
+      hideReveal();
+      track('name_deck_keep_swiping', { page_name: pageName, liked_count: liked.length });
+    });
+
+    layout();
+  });
+</script>
