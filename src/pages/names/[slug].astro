@@ -22,7 +22,7 @@
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import NameCardHero from '@/components/NameCardHero.astro';
-import ConsensusCta from '@/components/ConsensusCta.astro';
+import SwipeDeck from '@/components/SwipeDeck.astro';
 import type { NameRow } from '@/lib/types';
 import { nameToSlug } from '@/lib/types';
 import { getAllNames, findRelatedNames } from '@/lib/names';
@@ -161,7 +161,7 @@ const relatedIntro = describeRelation(row, related);
 
     <NameCardHero name={row} />
 
-    <ConsensusCta name={row.name} placement="name_page_primary" />
+    <SwipeDeck name={row} related={related} />
 
     {row.longevity_read && (
       <section class="narrative" aria-label={`Longevity reading for ${row.name}`}>

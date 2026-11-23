@@ -1,0 +1,69 @@
+---
+/**
+ * StoreFactsFr — one competitor, rendered only as sourced literal
+ * transcriptions (French cluster). Same two rules as StoreFacts.astro:
+ * never characterise a competitor in our own words, and a compilation of
+ * separate listing lines is shown as a list, never as one quotation.
+ */
+import { NO_STATEMENT, VERIFIED, type App, type Sourced } from '../data/apps-fr';
+
+export interface Props {
+  app: App;
+  /** Compact = only the rows a reader actually decides on. */
+  compact?: boolean;
+}
+const { app, compact } = Astro.props;
+
+const allRows: [string, Sourced][] = [
+  ['Note', app.rating],
+  ['Prix', app.price],
+  ['Prénoms', app.names],
+  ['À deux', app.partner],
+  ['Après le match', app.after],
+  ['Proposer ses prénoms', app.add],
+  ['Compte', app.account],
+  ['Publicité', app.ads],
+  ['IA', app.ai],
+];
+const compactKeys = ['Prix', 'Prénoms', 'À deux', 'Publicité'];
+const rows = compact ? allRows.filter(([k]) => compactKeys.includes(k)) : allRows;
+
+const lines = (v: NonNullable<Sourced>) =>
+  [v.q, v.q2, v.q3, v.q4, v.q5].filter(Boolean) as string[];
+---
+
+<div class="storefacts" lang="fr">
+  <h3>Ce que {app.name} dit d’elle-même</h3>
+  <p class="storefacts-meta">
+    {app.vendor ? <>Éditeur : {app.vendor} · </> : null}{app.updated} · consulté le {VERIFIED}
+  </p>
+  <dl>
+    {rows.map(([label, v]) => (
+      <div class="sf-row">
+        <dt>{label}</dt>
+        <dd>
+          {v ? (
+            v.compiled ? (
+              <>
+                <ul class="sf-list">{lines(v).map((l) => <li><q>{l}</q></li>)}</ul>
+                <span class="sf-note">
+                  Lignes distinctes de la même source, placées l’une sous l’autre par nos soins, et non
+                  une phrase continue de l’éditeur.{v.note ? ` ${v.note[0].toUpperCase()}${v.note.slice(1)}.` : ''}{' '}
+                  <a class="sf-src" href={v.src} rel="nofollow noopener" target="_blank">Source</a>
+                </span>
+              </>
+            ) : (
+              <>
+                <q>{v.q}</q>{' '}
+                {v.note ? <span class="sf-note">({v.note})</span> : null}{' '}
+                <a class="sf-src" href={v.src} rel="nofollow noopener" target="_blank">Source</a>
+              </>
+            )
+          ) : (
+            <span class="sf-none">{NO_STATEMENT}</span>
+          )}
+        </dd>
+      </div>
+    ))}
+  </dl>
+</div>

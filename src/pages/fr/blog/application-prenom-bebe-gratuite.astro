@@ -1,0 +1,282 @@
+---
+/**
+ * /fr/blog/application-prenom-bebe-gratuite (2026-09-27). Targets
+ * « application prénom bébé gratuite ».
+ *
+ * ⚠️ Prices are the most dangerous thing to get wrong about a competitor. Every
+ * amount here is a row of the « Achats intégrés » section of the French App
+ * Store listing, transcribed in apps-fr.ts (the section is collapsed on the
+ * page; the first draft missed it and claimed the App Store no longer lists
+ * prices, which the independent review caught on 2026-09-27). No figure from
+ * memory, a vendor site or the German file.
+ * The ads label comes from Google Play and every such cell says so.
+ * Namore's own price is never written: it is set per country and the store
+ * shows it before purchase.
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import DisclosureFr from '../../../components/DisclosureFr.astro';
+import CompareTableFr from '../../../components/CompareTableFr.astro';
+import StoreFactsFr from '../../../components/StoreFactsFr.astro';
+import WhyNamore from '../../../components/WhyNamore.astro';
+import ClusterFootFr from '../../../components/ClusterFootFr.astro';
+import Shot from '../../../components/Shot.astro';
+import { APPS, VERIFIED, APP_STORE, PLAY_STORE, byslug, type Sourced } from '../../../data/apps-fr';
+import { FR_LIVE } from '../../../data/fr-live';
+
+const slug = 'application-prenom-bebe-gratuite';
+const canonical = `https://www.namore.app/fr/blog/${slug}`;
+const campaign = 'appli_prenom_gratuite_fr';
+const title = 'Applis de prénoms gratuites : ce que « gratuit » veut dire';
+const description =
+  'Les applis de prénoms comparées ici se disent toutes gratuites. Publicité, sets, formule au mois ou achat unique : ce que disent leurs fiches, mot pour mot.';
+
+const p2 = byslug('prenom-de-bebe-a-2');
+const kinder = byslug('kinder');
+const charlie = byslug('charliesnames');
+const babyname = byslug('babyname');
+const genius = byslug('baby-name-genius');
+const namie = byslug('namie');
+
+/** One literal line from apps-fr.ts. Fails the build if the field is gone. */
+type Quote = { q: string; src: string };
+type Part = string | Quote;
+const Q = (s: Sourced | undefined, k: 'q' | 'q2' | 'q3' | 'q4' | 'q5' = 'q'): Quote => {
+  const line = s ? s[k] : undefined;
+  if (!s || !line) throw new Error(`apps-fr : missing sourced line (${k})`);
+  return { q: line, src: s.src };
+};
+const NB = ' ';
+const plain = (parts: Part[]) =>
+  parts.map((p) => (typeof p === 'string' ? p : `«${NB}${p.q}${NB}»`)).join('');
+
+const q = {
+  playAds: Q(p2.ads),
+  p2Full: Q(p2.price),
+  kinderAll: Q(kinder.price),
+  kinderFrench: Q(kinder.price, 'q2'),
+  kinderModel1: Q(kinder.model),
+  kinderModel2: Q(kinder.model, 'q2'),
+  kinderPartner: Q(kinder.partner),
+  geniusMonthly: Q(genius.price),
+  geniusLifetime: Q(genius.price, 'q2'),
+  babynameNoAds: Q(babyname.price, 'q5'),
+  charlieLife: Q(charlie.model),
+  namieFree: Q(namie.model),
+};
+
+const faqs: { q: string; a: Part[] }[] = [
+  {
+    q: 'Existe-t-il une application de prénoms de bébé vraiment gratuite ?',
+    a: [
+      'Toutes se téléchargent gratuitement, mais pas selon le même modèle. La fiche de Namie indique ',
+      q.namieFree,
+      '. Sur Google Play, quatre des six fiches comparées ici portent la mention ',
+      q.playAds,
+      ' (le tableau renvoie à chacune). Namore est gratuit et sans publicité, avec 100 swipes par personne toutes les 24 heures.',
+    ],
+  },
+  {
+    q: 'Quelle appli de prénoms n’a pas d’abonnement ?',
+    a: [
+      'La fiche de Namie indique ',
+      q.namieFree,
+      '. Chez Namore non plus, il n’y a pas d’abonnement : un achat unique débloque tout sur vos deux téléphones. La rubrique « Achats intégrés » de Baby Name Genius liste ',
+      q.geniusMonthly,
+      ' et ',
+      q.geniusLifetime,
+      '. Pour les autres applis, cette rubrique de la fiche App Store détaille ce qui est vendu.',
+    ],
+  },
+  {
+    q: 'Combien coûte Namore ?',
+    a: [
+      'Rien, tant que 100 swipes par personne toutes les 24 heures vous suffisent, sans publicité et sans compte obligatoire. Pour swiper sans limite, un achat unique débloque Namore sur vos deux téléphones, sans abonnement. Le prix est fixé par pays, et l’App Store ou Google Play l’affiche avant l’achat.',
+    ],
+  },
+  {
+    q: 'Où voir le prix exact des achats intégrés ?',
+    a: [
+      `Sur l’App Store, dans la rubrique « Achats intégrés » de chaque fiche, parfois repliée : il faut la déplier. Sur Google Play, le prix s’affiche au moment de l’achat, avant que vous le confirmiez. Les montants cités ici sont ceux des fiches françaises, consultées le ${VERIFIED}.`,
+    ],
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: title,
+      description,
+      inLanguage: 'fr-FR',
+      datePublished: '2026-09-27',
+      dateModified: '2026-09-27',
+      author: { '@type': 'Person', name: 'Julian Ziegler' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Namore',
+        logo: { '@type': 'ImageObject', url: 'https://www.namore.app/logo@2x.png' },
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: 'fr-FR',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: plain(f.a) },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  lang="fr"
+  noindex={!FR_LIVE}
+  title={`${title} | Namore`}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <article class="post" lang="fr">
+    <DisclosureFr />
+
+    <header class="post-head">
+      <p class="post-kicker">Guide · consulté le {VERIFIED}</p>
+      <h1>{title}</h1>
+    </header>
+
+    <p class="post-standfirst">
+      Les six applis que nous avons regardées se téléchargent gratuitement. Derrière, ce n’est
+      jamais tout à fait la même chose : ici de la publicité, là des prénoms vendus par lots,
+      ailleurs une version complète, une formule au mois ou rien du tout à payer. Aucun de ces
+      modèles n’est un problème en soi, à condition de savoir lequel vous choisissez.
+    </p>
+
+    <p class="post-method">
+      Notre méthode : les montants ci-dessous sont ceux de la rubrique « Achats intégrés » de
+      chaque fiche de l’App Store français, recopiés tels quels le {VERIFIED} ; quand la rubrique
+      compte plus de lignes que la cellule, la cellule le précise. La mention de publicité vient de
+      Google Play, et chaque cellule concernée le précise. Ces montants valent pour la France : le
+      prix d’une appli est fixé par pays, le nôtre compris.
+    </p>
+
+    <h2>Prix et publicité, tels que les fiches les écrivent</h2>
+    <CompareTableFr apps={APPS} cols={['price', 'ads']} />
+    <details class="sf-details">
+      <summary>Les fiches mot pour mot, point par point</summary>
+      <div class="sf-details-inner">
+        {APPS.map((a) => <StoreFactsFr app={a} />)}
+      </div>
+    </details>
+
+    <h2>Ce que « gratuit » recouvre</h2>
+    <p>
+      <strong>La publicité.</strong> Sur Google Play, quatre des six fiches comparées ici portent
+      la mention <q>{q.playAds.q}</q> : Prénom de bébé à 2, Kinder, BabyName et Baby Name Genius
+      (voir le tableau). Parmi les achats intégrés de
+      <a href={q.babynameNoAds.src} rel="nofollow noopener" target="_blank">BabyName</a> figure
+      d’ailleurs <q>{q.babynameNoAds.q}</q>. Pour certains, la publicité est un compromis
+      acceptable ; d’autres préfèrent payer pour ne pas avoir d’annonces entre deux prénoms.
+    </p>
+    <p>
+      <strong>Les prénoms par lots.</strong> La fiche de
+      <a href={q.kinderModel1.src} rel="nofollow noopener" target="_blank">Kinder</a> indique
+      <q>{q.kinderModel1.q}</q>, puis <q>{q.kinderModel2.q}</q> ; sa rubrique « Achats
+      intégrés » liste <q>{q.kinderAll.q}</q> et, par exemple, <q>{q.kinderFrench.q}</q>.
+    </p>
+    <p>
+      <strong>Une version complète.</strong> La rubrique « Achats intégrés » de
+      <a href={q.p2Full.src} rel="nofollow noopener" target="_blank">Prénom de bébé à 2</a> liste
+      <q>{q.p2Full.q}</q>.
+    </p>
+    <p>
+      <strong>Au mois ou à vie.</strong> Celle de
+      <a href={q.geniusMonthly.src} rel="nofollow noopener" target="_blank">Baby Name Genius</a>
+      liste <q>{q.geniusMonthly.q}</q> et <q>{q.geniusLifetime.q}</q>.
+    </p>
+    <p>
+      <strong>Une version Pro.</strong> La fiche de
+      <a href={q.charlieLife.src} rel="nofollow noopener" target="_blank">CharliesNames</a> termine
+      la liste de ce qu’apporte sa version Pro par <q>{q.charlieLife.q}</q> ; les montants sont
+      dans le tableau.
+    </p>
+    <p>
+      <strong>Entièrement gratuit.</strong> La fiche de
+      <a href={q.namieFree.src} rel="nofollow noopener" target="_blank">Namie</a> indique
+      <q>{q.namieFree.q}</q>. Si vous ne voulez rien payer du tout, c’est une piste à regarder.
+    </p>
+    <p>
+      <strong>Une limite par jour, puis un achat unique.</strong> C’est notre modèle. Namore est
+      gratuit et sans publicité, avec 100 swipes par personne toutes les 24 heures. Un achat unique,
+      sans abonnement, débloque les swipes illimités sur vos deux téléphones. Son prix est fixé par
+      pays et l’App Store ou Google Play l’affiche avant l’achat ; nous ne l’écrivons pas ici pour ne pas vous donner
+      un chiffre qui ne serait pas le vôtre.
+    </p>
+
+    <h2>La question qu’on oublie : un téléphone ou deux ?</h2>
+    <p>
+      Pour une appli de couple, c’est le détail qui change la facture. Chez Namore, un seul achat vaut
+      pour vos deux téléphones. La fiche de
+      <a href={q.kinderPartner.src} rel="nofollow noopener" target="_blank">Kinder</a> indique
+      <q>{q.kinderPartner.q}</q>. Pour les autres applis, la réponse se trouve dans leur fiche ou
+      auprès de l’éditeur : vérifiez-la avant d’acheter.
+    </p>
+
+    <Shot
+      shots={['/fr/blog/shots/hook.webp', '/fr/blog/shots/fy1.webp']}
+      width={600}
+      height={1300}
+      alts={[
+        'Carte du prénom Olivia dans Namore : prononciation, signification « Olivier, ou celle qui vit », surnoms et ambiance, avec les boutons pour passer ou aimer',
+        'Onglet « Pour toi » dans Namore : le prénom Henry, proposé « Parce que tu as adoré Leo », avec les boutons « Pas pour nous » et « Coup de cœur »',
+      ]}
+      caption="Sans payer : la pile, 100 swipes chacun toutes les 24 heures, et une première série « Pour toi »."
+    />
+
+    <WhyNamore
+      lang="fr"
+      heading="Ce qui est gratuit chez nous, et ce qui ne l’est pas"
+      only={['shared-deck', 'no-ads', 'card-themes', 'search-add', 'for-you', 'countries-top', 'privacy-price']}
+    />
+
+    <p>
+      Le test le plus honnête est simple : servez-vous de la version gratuite jusqu’à la limite.
+      Si vous ne l’atteignez jamais, vous n’avez pas besoin de payer. Si vous l’atteignez dès le premier
+      soir, vous savez au moins que l’appli vous sert.
+    </p>
+
+    <p class="post-caveat">
+      Là où Namore est plus faible : 100 swipes par personne et par jour, c’est une vraie limite, et
+      l’appli est récente, sur l’App Store depuis mai 2026 et sur Google Play depuis août 2026, avec
+      encore peu de notes.
+    </p>
+
+    <p class="cta-row">
+      <a class="btn btn-ink" href={APP_STORE(campaign)}>Télécharger Namore sur l’App Store</a>
+      <a class="btn btn-ghost" href={PLAY_STORE(campaign)}>Disponible sur Google Play</a>
+    </p>
+
+    <h2>Questions fréquentes</h2>
+    <dl class="faq">
+      {faqs.map((f) => (
+        <div class="faq-item">
+          <dt>{f.q}</dt>
+          <dd>
+            {f.a.map((p) =>
+              typeof p === 'string' ? (
+                p
+              ) : (
+                <><q>{p.q}</q> <a class="sf-src" href={p.src} rel="nofollow noopener" target="_blank">(source)</a></>
+              ),
+            )}
+          </dd>
+        </div>
+      ))}
+    </dl>
+
+    <ClusterFootFr current={slug} />
+  </article>
+</BaseLayout>

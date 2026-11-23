@@ -1,0 +1,62 @@
+---
+/**
+ * ClusterFootFr — « À lire aussi » block + sources note for the French cluster.
+ * Hub-and-spoke wiring, same reason as ClusterFoot.astro: orphaned pages on a
+ * domain with a crawl-budget problem do not get fetched.
+ * ⚠️ Links stay inside /fr/ while FR_LIVE is false (see data/fr-live.ts).
+ */
+import { VERIFIED } from '../data/apps-fr';
+
+export interface Props {
+  current: string;
+}
+const { current } = Astro.props;
+
+const links: { href: string; label: string; blurb: string }[] = [
+  {
+    href: '/fr/blog/meilleures-applications-prenom-bebe',
+    label: 'Applis de prénoms 2026, comparées',
+    blurb: 'Les six côte à côte.',
+  },
+  {
+    href: '/fr/blog/application-prenom-bebe-couple',
+    label: 'Choisir le prénom à deux',
+    blurb: 'Ce qui compte quand on est deux.',
+  },
+  {
+    href: '/fr/blog/application-prenom-bebe-tinder',
+    label: 'Le « Tinder des prénoms »',
+    blurb: 'Swiper, et ce qui vient après.',
+  },
+  {
+    href: '/fr/blog/application-prenom-bebe-gratuite',
+    label: 'Ce que « gratuit » veut dire',
+    blurb: 'Publicité, sets, abonnement ou achat unique.',
+  },
+  {
+    href: '/fr/blog/choisir-prenom-bebe-regles',
+    label: 'Choisir un prénom en France',
+    blurb: 'Ce que dit la loi, et où trouver les chiffres.',
+  },
+];
+
+const rest = links.filter((l) => !l.href.endsWith(current));
+---
+
+<footer class="post-foot" lang="fr">
+  <h2 class="foot-head">À lire aussi</h2>
+  <ul class="cluster-links">
+    {rest.map((l) => (
+      <li>
+        <a href={l.href}>{l.label}</a>
+        <span>{l.blurb}</span>
+      </li>
+    ))}
+  </ul>
+
+  <p class="sources-note">
+    <strong>Sources.</strong> Les indications sur les autres applis sont reprises mot pour mot de
+    leurs fiches sur l’App Store français et sur Google Play France, consultées le {VERIFIED}. Quand
+    une fiche ne dit rien sur un point, nous l’écrivons. Les prix et les fonctions changent.
+  </p>
+</footer>

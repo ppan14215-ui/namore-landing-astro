@@ -1,0 +1,282 @@
+---
+/**
+ * /fr/blog/application-prenom-bebe-tinder (2026-09-27). Targets « appli prénom
+ * bébé tinder » and « swipe ».
+ *
+ * Angle: swiping is common now (four French listings describe it, quoted
+ * below); the difference is what happens after the match. Namie's listing
+ * describes a post-match stage and BabyName's Google Play listing describes
+ * adding names without the partner knowing: both are quoted, not argued with.
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import DisclosureFr from '../../../components/DisclosureFr.astro';
+import CompareTableFr from '../../../components/CompareTableFr.astro';
+import StoreFactsFr from '../../../components/StoreFactsFr.astro';
+import WhyNamore from '../../../components/WhyNamore.astro';
+import ClusterFootFr from '../../../components/ClusterFootFr.astro';
+import Shot from '../../../components/Shot.astro';
+import { APPS, VERIFIED, APP_STORE, PLAY_STORE, byslug, type Sourced } from '../../../data/apps-fr';
+import { FR_LIVE } from '../../../data/fr-live';
+
+const slug = 'application-prenom-bebe-tinder';
+const canonical = `https://www.namore.app/fr/blog/${slug}`;
+const campaign = 'appli_prenom_tinder_fr';
+const title = 'Le « Tinder des prénoms » : swiper à deux, et après ?';
+const description =
+  'Swiper des prénoms de bébé à deux, comme sur Tinder : plusieurs applis le font. Ce que disent leurs fiches, et ce qui se passe une fois le match obtenu.';
+
+const p2 = byslug('prenom-de-bebe-a-2');
+const kinder = byslug('kinder');
+const charlie = byslug('charliesnames');
+const babyname = byslug('babyname');
+const namie = byslug('namie');
+
+/** One literal line from apps-fr.ts. Fails the build if the field is gone. */
+type Quote = { q: string; src: string };
+type Part = string | Quote;
+const Q = (s: Sourced, k: 'q' | 'q2' | 'q3' = 'q'): Quote => {
+  const line = s ? s[k] : undefined;
+  if (!s || !line) throw new Error(`apps-fr : missing sourced line (${k})`);
+  return { q: line, src: s.src };
+};
+const NB = ' ';
+const plain = (parts: Part[]) =>
+  parts.map((p) => (typeof p === 'string' ? p : `«${NB}${p.q}${NB}»`)).join('');
+
+const q = {
+  p2Partner: Q(p2.partner),
+  p2Account: Q(p2.account),
+  charliePartner: Q(charlie.partner),
+  babynamePartner: Q(babyname.partner),
+  namieMatch: Q(namie.partner, 'q2'),
+  namieAfter1: Q(namie.after),
+  namieAfter2: Q(namie.after, 'q2'),
+  namieAfter3: Q(namie.after, 'q3'),
+  kinderAfter: Q(kinder.after),
+};
+
+const faqs: { q: string; a: Part[] }[] = [
+  {
+    q: 'Existe-t-il une appli de prénoms de bébé comme Tinder ?',
+    a: [
+      'Oui, plusieurs. La fiche de CharliesNames indique ',
+      q.charliePartner,
+      ', et celle de BabyName ',
+      q.babynamePartner,
+      ' Namore fonctionne aussi par swipe : chacun sur son téléphone, et un prénom devient un match quand vous avez dit oui tous les deux.',
+    ],
+  },
+  {
+    q: 'Que se passe-t-il après un match ?',
+    a: [
+      'Cela dépend de l’appli. La fiche de Kinder mentionne ',
+      q.kinderAfter,
+      ' ; celle de Namie annonce ',
+      q.namieAfter3,
+      '. Chez Namore, c’est le dernier tour : chacun note vos matchs de 1 à 5 en privé, puis les deux classements s’affichent côte à côte.',
+    ],
+  },
+  {
+    q: 'Peut-on swiper les prénoms à deux, chacun sur son téléphone ?',
+    a: [
+      'Oui, c’est le principe. La façon de relier les téléphones varie : la fiche App Store de Prénom de bébé à 2 indique ',
+      q.p2Account,
+      '. Chez Namore, l’un de vous ouvre une session et l’autre la rejoint avec un code à six caractères, sans compte.',
+    ],
+  },
+  {
+    q: 'Un prénom écarté peut-il revenir dans la pile ?',
+    a: [
+      'Chez Namore, non : ce que vous avez écarté ne réapparaît jamais, ni après mille swipes ni des semaines plus tard. Ça paraît évident, mais c’est le bug qui nous a demandé le plus de travail.',
+    ],
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: title,
+      description,
+      inLanguage: 'fr-FR',
+      datePublished: '2026-09-27',
+      dateModified: '2026-09-27',
+      author: { '@type': 'Person', name: 'Julian Ziegler' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Namore',
+        logo: { '@type': 'ImageObject', url: 'https://www.namore.app/logo@2x.png' },
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: 'fr-FR',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: plain(f.a) },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  lang="fr"
+  noindex={!FR_LIVE}
+  title={`${title} | Namore`}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <article class="post" lang="fr">
+    <DisclosureFr />
+
+    <header class="post-head">
+      <p class="post-kicker">Guide · consulté le {VERIFIED}</p>
+      <h1>{title}</h1>
+    </header>
+
+    <p class="post-standfirst">
+      À droite si le prénom vous plaît, à gauche sinon, et quand vous avez tous les deux swipé à droite sur le même prénom, c’est un match. Le principe marche très bien, et il n’a plus rien de rare.
+      La vraie question arrive juste après : qu’est-ce qu’on fait de ces matchs ?
+    </p>
+
+    <h2>Swiper, plusieurs applis le font déjà</h2>
+    <p>
+      Si vous cherchez une « appli prénom bébé Tinder », vous en trouverez plusieurs, et elles le
+      disent elles-mêmes dans leurs fiches :
+    </p>
+    <ul>
+      <li>
+        Prénom de bébé à 2, sur Google Play : <q>{q.p2Partner.q}</q>
+        <a class="sf-src" href={q.p2Partner.src} rel="nofollow noopener" target="_blank">(source)</a>
+      </li>
+      <li>
+        CharliesNames, sur l’App Store : <q>{q.charliePartner.q}</q>
+        <a class="sf-src" href={q.charliePartner.src} rel="nofollow noopener" target="_blank">(source)</a>
+      </li>
+      <li>
+        BabyName, sur l’App Store : <q>{q.babynamePartner.q}</q>
+        <a class="sf-src" href={q.babynamePartner.src} rel="nofollow noopener" target="_blank">(source)</a>
+      </li>
+      <li>
+        Namie, sur l’App Store : <q>{q.namieMatch.q}</q>
+        <a class="sf-src" href={q.namieMatch.src} rel="nofollow noopener" target="_blank">(source)</a>
+      </li>
+    </ul>
+    <p>
+      Le swipe en lui-même ne départage donc pas grand monde. Ce qui change d’une appli à l’autre,
+      c’est ce qui vient avant (faut-il un compte, qui voit quoi) et surtout ce qui vient après.
+    </p>
+
+    <h2>Là où la comparaison avec Tinder s’arrête</h2>
+    <p>
+      Sur Tinder, le match est le but. Vous vous êtes trouvés, la suite se passe ailleurs. Avec les
+      prénoms, le match n’est qu’une présélection. Après quelques soirées, on se retrouve vite avec
+      une douzaine de prénoms en commun, et on en est au même point qu’avant, avec une liste plus
+      courte sur laquelle se disputer.
+    </p>
+    <p>
+      Deux choses comptent alors. D’abord, ce que l’appli fait de vos matchs : une liste, un
+      classement, une étape pour trancher. Ensuite, un détail qui n’en est pas un : qu’un prénom
+      écarté ne revienne pas. Quand un prénom refusé il y a trois semaines réapparaît dans la pile, on
+      se met à douter de tout le reste.
+    </p>
+
+    <h2>Après le match : ce que disent les fiches</h2>
+    <p>
+      Même règle que dans le reste de ce dossier : ce que les éditeurs écrivent, mot pour mot. Nous ne
+      sommes pas les seuls à prévoir une suite au match. La fiche de
+      <a href={q.namieAfter1.src} rel="nofollow noopener" target="_blank">Namie</a>, par exemple,
+      annonce <q>{q.namieAfter1.q}</q>, <q>{q.namieAfter2.q}</q> et <q>{q.namieAfter3.q}</q>.
+    </p>
+    <CompareTableFr apps={APPS} cols={['partner', 'after', 'add']} />
+    <details class="sf-details">
+      <summary>Les fiches mot pour mot, point par point</summary>
+      <div class="sf-details-inner">
+        {APPS.map((a) => <StoreFactsFr app={a} />)}
+      </div>
+    </details>
+
+    <h2>Chez Namore, ce qui se passe après le swipe</h2>
+    <p>
+      Chacun swipe sur son téléphone. Quand vous avez dit oui tous les deux, l’écran l’annonce :
+      « Un coup de cœur à deux ». Vos votes, eux, restent privés : l’autre ne voit jamais les prénoms
+      que vous avez écartés.
+    </p>
+    <p>
+      Puis vient le dernier tour. Chacun note vos matchs de 1 à 5, en privé, et les deux classements
+      s’affichent ensuite côte à côte. Vous voyez alors d’un coup d’œil si un prénom est en tête chez
+      vous deux, ou si vos deux favoris sont loin l’un de l’autre, ce qui est aussi une information.
+    </p>
+    <p>
+      Entre deux soirées, l’onglet « Pour toi » propose dix prénoms par jour, chacun relié à un prénom
+      que vous avez aimé, du genre « Parce que tu as adoré Leo ». La première série est gratuite ; une
+      fois Namore débloqué, une nouvelle arrive chaque matin.
+    </p>
+
+    <Shot
+      shots={['/fr/blog/shots/hook.webp', '/fr/blog/shots/match.webp']}
+      width={600}
+      height={1300}
+      alts={[
+        'Carte du prénom Olivia dans Namore : prononciation, signification « Olivier, ou celle qui vit », surnoms et ambiance, avec les boutons pour passer ou aimer',
+        'Écran de match dans Namore : « Un coup de cœur à deux » pour le prénom Leo, avec les boutons « Ouvrir Leo » et « Continuer à swiper »',
+      ]}
+      caption="La pile, une carte à la fois, et l’écran qui s’affiche quand vous avez dit oui tous les deux."
+    />
+
+    <WhyNamore
+      lang="fr"
+      heading="Ce qui se passe chez nous après le swipe"
+      only={['decision-round', 'shared-deck', 'no-repeats', 'search-add', 'for-you', 'countries-top', 'card-themes']}
+    />    <h2>Ce que Namore fait</h2>
+    <ul>
+      <li>chacun swipe sur son téléphone, et un prénom ne devient un match que si vous avez dit oui tous les deux ;</li>
+      <li>au dernier tour, chacun note vos matchs sans voir les notes de l’autre avant d’avoir fini ;</li>
+      <li>pas de compte obligatoire, pas de publicité, même en version gratuite ;</li>
+      <li>un prénom écarté ne revient jamais dans votre pile.</li>
+    </ul>
+
+    <h2>Ce que Namore ne fait pas</h2>
+    <ul>
+      <li>pas de forum ni de communauté, pas de vote de la famille ou des amis ;</li>
+      <li>pas de swipes illimités en gratuit : 100 par personne toutes les 24 heures ;</li>
+      <li>si vous cherchez seul, sans personne à convaincre, n’importe quelle appli de prénoms fera aussi bien l’affaire.</li>
+    </ul>
+
+    <p class="post-caveat">
+      Là où Namore est plus faible : l’appli est récente, sur l’App Store depuis mai 2026 et sur
+      Google Play depuis août 2026, avec encore peu de notes. Il n’y a ni forum ni communauté, et le
+      vote reste à deux : ni la famille ni les amis ne peuvent s’en mêler.
+    </p>
+
+    <p class="cta-row">
+      <a class="btn btn-ink" href={APP_STORE(campaign)}>Télécharger Namore sur l’App Store</a>
+      <a class="btn btn-ghost" href={PLAY_STORE(campaign)}>Disponible sur Google Play</a>
+    </p>
+
+    <h2>Questions fréquentes</h2>
+    <dl class="faq">
+      {faqs.map((f) => (
+        <div class="faq-item">
+          <dt>{f.q}</dt>
+          <dd>
+            {f.a.map((p) =>
+              typeof p === 'string' ? (
+                p
+              ) : (
+                <><q>{p.q}</q> <a class="sf-src" href={p.src} rel="nofollow noopener" target="_blank">(source)</a></>
+              ),
+            )}
+          </dd>
+        </div>
+      ))}
+    </dl>
+
+    <ClusterFootFr current={slug} />
+  </article>
+</BaseLayout>

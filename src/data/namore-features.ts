@@ -74,7 +74,7 @@
  * ══════════════════════════════════════════════════════════════════════════
  */
 
-export type Lang = 'de' | 'en' | 'es';
+export type Lang = 'de' | 'en' | 'es' | 'fr';
 
 /** Language-neutral counted facts. Numbers live here and nowhere else. */
 export const FACTS = {
@@ -84,9 +84,9 @@ export const FACTS = {
   namesNl: 11182,
   freeSwipes: 100,
   cycleHours: 24,
-  /** ⚠️ German storefront only, and currently ambiguous — see the privacy-price proof. */
-  priceEurDe: '7,99',
-  priceEurEn: '€7.99',
+  /** German storefront price. Every other storefront sets its own local price (Julian 2026-09-27: "9,99 with localisation"). */
+  priceEurDe: '9,99',
+  priceEurEn: '€9.99',
   maxSessionVotes: 17260,
   maxSessionDays: 95,
 } as const;
@@ -100,6 +100,13 @@ type Feature = {
   de: { title: string; body: string };
   en: { title: string; body: string };
   es: { title: string; body: string };
+  /**
+   * French (2026-09-27). ⚠️ 'name-depth' and 'content-languages' say the name
+   * material is written in French. That is only true once the French name data
+   * (meaning_fr, origin_fr, longevity_read_fr, trend_context_fr) is complete —
+   * the whole French cluster is noindex behind FR_LIVE until then (fr-live.ts).
+   */
+  fr: { title: string; body: string };
 };
 
 export const FEATURES: Feature[] = [
@@ -119,6 +126,50 @@ export const FEATURES: Feature[] = [
       title: 'No termina en el match',
       body: 'Doce coincidencias no son una decisión. En la ronda final volvéis a puntuar por separado los nombres coincidentes, y lo que sale es un orden en lugar de una lista. Ahí es donde las parejas se atascan. No hemos encontrado una fase comparable entre los dos miembros de la pareja en las apps comparadas aquí.',
     },
+    fr: {
+      title: 'Le match n’est pas la fin',
+      body: 'Douze matchs, ce n’est pas encore une décision. Au dernier tour, chacun note à nouveau vos prénoms en commun, séparément, de 1 à 5, et il en sort un classement, pas une simple liste. C’est souvent là que les couples restent bloqués. Plusieurs applis proposent aussi une étape après le match. Dans Namore, vos notes restent privées jusqu’à ce que vous ayez validé tous les deux, puis les deux classements s’affichent côte à côte.',
+    },
+  },
+  {
+    key: 'shared-deck',
+    proof: 'App 1.0.10 (2026-10-06, commit 01745e6 "one shared deck per couple"; a8a2a50 persisted couple order 2026-10-08; fd0dcb7 couple taste is category-level via a membership-checked RPC, individual choices never reach the client; 04f581d 2026-10-09 partner passes no longer shown anywhere). changelogItem111Deck: "You and your partner now see the same names, so a name you both like turns into a match sooner." Added 2026-10-12.',
+    de: {
+      title: 'Ein Stapel für euch beide',
+      body: 'Ihr wischt denselben Stapel in derselben Reihenfolge, gebaut aus den Ländern, deren Namen ihr wollt. Ein Name, den einer von euch mag, kommt also auch beim anderen vorbei, und Matches kommen schneller. Was der andere wegwischt, seht ihr trotzdem nie.',
+    },
+    en: {
+      title: 'One deck for both of you',
+      body: 'You swipe the same deck in the same order, built from the countries whose names you want. A name one of you likes reaches the other too, so matches come sooner. What your partner passes on still stays hidden.',
+    },
+    es: {
+      title: 'Un solo mazo para los dos',
+      body: 'Deslizáis el mismo mazo en el mismo orden, construido a partir de los países cuyos nombres queréis. Un nombre que le gusta a uno también le llega al otro, así que los matches llegan antes. Lo que descarta tu pareja sigue sin verse.',
+    },
+    fr: {
+      title: 'Une seule pile pour vous deux',
+      body: 'Vous swipez la même pile, dans le même ordre, construite à partir des pays dont vous voulez les prénoms. Un prénom que l’un aime passe aussi chez l’autre, et les matchs arrivent plus vite. Ce que l’autre écarte reste caché.',
+    },
+  },
+  {
+    key: 'countries-top',
+    proof: 'App 1.0.10/1.0.11 (2026-09-28 f054e5e country ranks from official data; 2026-10-06 443d620 Names from + Trend Top 100/500; 2026-10-08 03caa33 countries first in the filter sheet, Top 100/500 in the premium block, Trend Rising/Stable/Reviving/Fading/Rare stays free). en.json filter.popularityHintCountries: "In the official top 100 or top 500 of {{countries}}." Added 2026-10-12.',
+    de: {
+      title: 'Namen aus euren Ländern, mit echtem Rang',
+      body: 'Ihr wählt, aus welchen Ländern eure Namen kommen sollen, etwa Deutschland und Italien. Die Reihenfolge folgt der amtlichen Geburtenstatistik dieser Länder, und jeder Name zeigt seinen Rang dort. Nach Trend filtern (steigend bis selten) ist kostenlos; nur die Top 100 oder Top 500 zu sehen, gehört zum einmaligen Kauf.',
+    },
+    en: {
+      title: 'Names from your countries, with their real rank',
+      body: 'You pick which countries your names should come from, say the US and Italy. The order follows those countries’ official birth statistics, and every name shows its rank there. Filtering by trend, from rising to rare, is free; showing only the Top 100 or Top 500 comes with the one-time unlock.',
+    },
+    es: {
+      title: 'Nombres de vuestros países, con su puesto real',
+      body: 'Elegís de qué países deben venir los nombres, por ejemplo España y Francia. El orden sigue las estadísticas oficiales de nacimientos de esos países y cada nombre muestra su puesto allí. Filtrar por tendencia es gratis; ver solo el Top 100 o el Top 500 forma parte de la compra única.',
+    },
+    fr: {
+      title: 'Les prénoms de vos pays, avec leur vrai rang',
+      body: 'Vous choisissez de quels pays viennent vos prénoms, par exemple la France et l’Italie. L’ordre suit les statistiques officielles des naissances de ces pays, et chaque prénom affiche son rang. Filtrer par tendance est gratuit ; ne voir que le Top 100 ou le Top 500 fait partie de l’achat unique.',
+    },
   },
   {
     key: 'no-account',
@@ -134,6 +185,10 @@ export const FEATURES: Feature[] = [
     es: {
       title: 'Sin cuenta y sin correo',
       body: 'Uno abre una sesión y el otro entra con un código de seis letras. Parece un detalle y suele ser justo el punto en el que uno de los dos abandona: quien tiene que registrarse primero muchas veces ya no lo hace.',
+    },
+    fr: {
+      title: 'Pas de compte obligatoire',
+      body: 'L’un de vous ouvre une session, l’autre la rejoint avec un code à six caractères. La connexion avec Apple, Google ou par e-mail reste facultative. Ça paraît secondaire, et c’est souvent là que l’un des deux décroche : quand il faut d’abord créer un compte, on remet à plus tard.',
     },
   },
   {
@@ -151,6 +206,10 @@ export const FEATURES: Feature[] = [
       title: 'Sin publicidad, tampoco en la versión gratuita',
       body: 'La versión gratuita no muestra anuncios. A cambio tenéis 100 deslizamientos por persona cada 24 horas. La mayoría de las demás apps financian su versión gratuita con publicidad.',
     },
+    fr: {
+      title: 'Pas de publicité, même en gratuit',
+      body: 'La version gratuite n’affiche aucune annonce. À la place, vous avez chacun 100 swipes toutes les 24 heures. Sur Google Play, quatre des six applis comparées ici portent la mention « Contient des annonces ».',
+    },
   },
   {
     key: 'name-depth',
@@ -166,6 +225,10 @@ export const FEATURES: Feature[] = [
     es: {
       title: 'Cada nombre lleva más que un significado',
       body: 'Los 15.182 nombres incluyen significado, origen, pronunciación, número de sílabas, rasgos de estilo, posiciones reales en varios países, una lectura de tendencia y una valoración de si el nombre perdura, escrito como frase, no como etiqueta. Completo en español, alemán e inglés. Hay diminutivos en algo más de la mitad.',
+    },
+    fr: {
+      title: 'Chaque prénom porte plus qu’une signification',
+      body: 'Les 15 182 prénoms ont leur signification, leur origine, leur prononciation, leur nombre de syllabes, leur style, leur classement réel dans plusieurs pays, une lecture de tendance et une appréciation de leur longévité, rédigée en phrases et non en mots-clés. En français, en anglais, en allemand et en espagnol. Un peu plus de la moitié des prénoms ont aussi leurs diminutifs.',
     },
   },
   {
@@ -183,6 +246,30 @@ export const FEATURES: Feature[] = [
       title: 'El mazo aprende, de los dos, sin delatar a ninguno',
       body: 'Cada deslizamiento afina lo siguiente: estilo, sonido, origen, ritmo silábico. Funciona durante todo el tiempo que estéis buscando, no una sola noche. La diferencia con otras apps que prometen IA no está en la técnica, sino en que aprende sin que ninguno vea los votos del otro.',
     },
+    fr: {
+      title: 'La pile apprend de vous deux, sans rien trahir',
+      body: 'Chaque swipe affine la suite : style, sonorité, origine, rythme des syllabes. Et cela sur toute la durée de votre recherche, pas un seul soir : une vraie session a dépassé 17 000 swipes, et la plus longue a duré plus de trois mois. D’autres applis promettent aussi de l’IA ; chez Namore, l’apprentissage se fait sans que l’un de vous voie les votes de l’autre.',
+    },
+  },
+  {
+    key: 'for-you',
+    proof: 'App 1.0.9, production 2026-09-19: For You tab (en.json forYou.*, changelogItem109ForYou). Every pick is anchored to a name the user loved ("Because you loved {{name}}"); forYou.hub.footFree: "One set is free. Unlock Namore for a fresh set every morning." Events for_you_viewed / for_you_vote. Added to this file 2026-09-27.',
+    de: {
+      title: 'Für dich: zehn Namen am Tag, jeder mit Grund',
+      body: 'Namore stellt zehn Namen für dich zusammen, jeder zurückgeführt auf einen Namen, den du schon liebst, etwa „Weil du Leo liebst“. Ihr wischt sie im Vollbild durch und tippt doppelt, wenn einer passt. Zwei der zehn sind für euch beide zusammen ausgesucht, einer ist bewusst ein Wagnis. Das erste Set ist kostenlos, mit Unlimited kommt jeden Morgen ein neues.',
+    },
+    en: {
+      title: 'For You: ten names a day, each with a reason',
+      body: 'Namore puts together ten names for you, each traced back to one you already love, for example “Because you loved Leo”. Swipe through them full screen and double-tap the ones that fit. Two of the ten are picked for the two of you together, and one is a deliberate stretch. The first set is free; with Unlimited a fresh set arrives every morning.',
+    },
+    es: {
+      title: 'Para ti: diez nombres al día, cada uno con su motivo',
+      body: 'Namore reúne diez nombres para ti, cada uno con raíz en uno que ya te encanta, por ejemplo «Porque te encantó Leo». Los deslizáis a pantalla completa y tocáis dos veces los que encajan. Dos de los diez se eligen para los dos juntos y uno es una apuesta a propósito. El primer set es gratis; con Unlimited llega uno nuevo cada mañana.',
+    },
+    fr: {
+      title: '« Pour toi » : dix prénoms par jour, chacun avec sa raison',
+      body: 'Namore prépare pour chacun de vous dix prénoms, chacun relié à un prénom que vous aimez déjà, par exemple « Parce que tu as adoré Leo ». Vous les faites défiler en plein écran et touchez deux fois ceux qui vous plaisent. Deux des dix sont choisis pour vous deux ensemble, et un est volontairement un pari. La première série est gratuite ; une fois Namore débloqué, une nouvelle série arrive chaque matin.',
+    },
   },
   {
     key: 'no-repeats',
@@ -198,6 +285,10 @@ export const FEATURES: Feature[] = [
     es: {
       title: 'Ningún nombre se repite',
       body: 'Lo que habéis descartado no vuelve a aparecer, ni tras mil deslizamientos ni semanas después. Parece obvio y no lo es.',
+    },
+    fr: {
+      title: 'Aucun prénom ne revient',
+      body: 'Ce que vous avez écarté ne réapparaît jamais, ni après mille swipes ni des semaines plus tard. Ça semble évident, ça ne l’est pas : c’est le bug qui nous a demandé le plus de travail.',
     },
   },
   {
@@ -215,21 +306,29 @@ export const FEATURES: Feature[] = [
       title: 'Filtros, búsqueda, vuestros nombres y contexto con IA',
       body: 'Filtrad por estilo, origen, longitud y sonido, buscad directamente, añadid vuestros propios nombres para que aparezcan en el mazo de la pareja y, al hacer match, recibid una explicación de por qué encaja con los dos.',
     },
+    fr: {
+      title: 'Filtres, recherche, vos propres prénoms, éclairage par IA',
+      body: 'Filtrez par style, origine, longueur et sonorité, cherchez directement, ajoutez vos propres prénoms pour qu’ils apparaissent dans la pile de l’autre, marquez un favori d’un super like, et obtenez sur un match une explication de ce qui vous plaît à tous les deux.',
+    },
   },
   {
     key: 'search-add',
     proof: '⚠️ SCOPED TO THE GERMAN LISTINGS on 2026-08-19 after a US-storefront pass showed how easily this breaks: a research agent had reported a double-blind quote as coming from Baby Name Together\u2019s APPLE listing; a direct read found it is on the GOOGLE PLAY listing instead. Same product, different store, different text. Never say "the other apps\u2019 listings" when only one storefront was read. Events name_searched and name_added are emitted by the app (code-derived inventory in CURRENT.md). None of the five German store listings transcribed on 2026-08-19 mentions searching or adding your own names — which is not proof they cannot, only that they do not say so.',
     de: {
       title: 'Suchen und eigene Namen einwerfen',
-      body: 'Wenn euch ein Name einfällt, der nicht im Deck war, von der Oma, aus einem Buch, aus dem Nichts, könnt ihr ihn suchen oder selbst hinzufügen. Er landet dann im Deck eures Partners wie jeder andere Name, und ihr seht erst beim Match, was er davon hält. Kein Nachfragen, kein „und, wie findest du …?“',
+      body: 'Wenn euch ein Name einfällt, der nicht im Deck war, von der Oma, aus einem Buch, aus dem Nichts, könnt ihr ihn suchen oder selbst hinzufügen. Er landet dann früh im Deck eures Partners, ohne dass zu sehen ist, von wem er kommt, und ihr seht erst beim Match, was er davon hält. Kein Nachfragen, kein „und, wie findest du …?“ Drei eigene Namen am Tag sind kostenlos.',
     },
     en: {
       title: 'Search, and add your own names',
-      body: 'When a name occurs to you that was never in the deck, from a grandmother, a book, out of nowhere, you can search for it or add it yourself. It then appears in your partner\u2019s deck like any other name, and you only find out what they think when it matches. No asking, no "so… what do you reckon?"',
+      body: 'When a name occurs to you that was never in the deck, from a grandmother, a book, out of nowhere, you can search for it or add it yourself. It then appears early in your partner\u2019s deck, without showing who added it, and you only find out what they think when it matches. No asking, no "so… what do you reckon?" Three a day are free.',
     },
     es: {
       title: 'Buscar, y añadir vuestros propios nombres',
-      body: 'Si se os ocurre un nombre que no estaba en el mazo, podéis buscarlo o añadirlo. Aparecerá en el mazo de vuestra pareja como cualquier otro, y solo sabréis qué opina cuando haya coincidencia.',
+      body: 'Si se os ocurre un nombre que no estaba en el mazo, podéis buscarlo o añadirlo. Aparecerá pronto en el mazo de vuestra pareja, sin que se vea quién lo añadió, y solo sabréis qué opina cuando haya coincidencia. Tres al día son gratis.',
+    },
+    fr: {
+      title: 'Chercher, et ajouter vos propres prénoms',
+      body: 'Un prénom vous vient en tête et il n’était pas dans la pile, celui d’une grand-mère, d’un livre, venu de nulle part : vous pouvez le chercher ou l’ajouter vous-même. Il apparaît alors tôt dans la pile de l’autre, sans indiquer qui l’a ajouté, et vous ne saurez ce qu’il en pense qu’en cas de match. Pas de « alors, tu en penses quoi ? ». Trois par jour sont gratuits.',
     },
   },
   {
@@ -246,6 +345,10 @@ export const FEATURES: Feature[] = [
     es: {
       title: 'Tres idiomas, del contenido, no de los botones',
       body: 'Otras apps ofrecen más idiomas de interfaz que nosotros. Lo que tenemos es contenido escrito: significado, origen, tendencia y durabilidad, completos en español, alemán e inglés. Los 15.182 nombres, tres veces.',
+    },
+    fr: {
+      title: 'Quatre langues, pour le contenu et pas seulement les boutons',
+      body: 'D’autres applis proposent plus de langues d’interface que nous ; la fiche de Kinder en affiche 23. Chez nous, ce ne sont pas seulement les boutons qui sont traduits : signification, origine, tendance et longévité de chaque prénom sont rédigées en français, en anglais, en allemand et en espagnol. Les 15 182 prénoms, dans chacune de ces langues.',
     },
   },
   {
@@ -266,24 +369,58 @@ export const FEATURES: Feature[] = [
       title: 'Diseño moderno, y no como adorno',
       body: 'Elegir un nombre es algo que hacéis en el sofá por la noche, no en un escritorio. Así que hicimos una app que se siente así: una tarjeta cada vez, colores tranquilos, tipografía grande, nada que parpadee, sin publicidad de por medio. Mirad las capturas en el App Store y decidid en dos minutos.',
     },
+    fr: {
+      title: 'Un design moderne, et ce n’est pas accessoire',
+      body: 'Choisir un prénom, ça se fait souvent le soir, à deux, pas à un bureau. Nous avons donc fait une appli qui ressemble à ce moment-là : une carte à la fois, des couleurs calmes, de grands caractères, rien qui clignote, rien qui insiste, pas de publicité entre deux cartes. Pas de formulaire, pas de liste de résultats, pas de carrousel d’offres à débloquer. Regardez les captures sur l’App Store et jugez en deux minutes.',
+    },
+  },
+  {
+    key: 'card-themes',
+    proof: 'App 1.0.8/1.0.9 (2026-09-16/19): 105 illustrated card backdrops (commit 53eb8b2), Settings toggle settings.cardBackdrops with no premium gate in app/(tabs)/settings.tsx; changelogItem109Themes. Added to this file 2026-09-27.',
+    de: {
+      title: 'Karten-Themes, wenn ihr mögt',
+      body: '105 sanfte Illustrationen, eigens für Namore gezeichnet, können hinter jeder Namenskarte liegen. In den Einstellungen schaltet ihr sie ein oder aus, kostenlos. Wer es schlicht mag, lässt sie einfach weg.',
+    },
+    en: {
+      title: 'Card themes, if you like',
+      body: '105 soft illustrations, drawn for Namore, can sit behind every name card. Switch them on or off in Settings, free. If you prefer plain cards, leave them off.',
+    },
+    es: {
+      title: 'Temas de tarjeta, si os apetece',
+      body: '105 ilustraciones suaves, dibujadas para Namore, pueden ir detrás de cada tarjeta. Se activan o desactivan en Ajustes, gratis. Si preferís tarjetas sencillas, dejadlas apagadas.',
+    },
+    fr: {
+      title: 'Des thèmes de cartes, si vous voulez',
+      body: 'Cent cinq illustrations tout en douceur, dessinées pour Namore, peuvent s’afficher derrière chaque carte. Vous les activez ou les désactivez dans les Réglages, gratuitement. Si vous préférez des cartes unies, laissez-les désactivées.',
+    },
   },
   {
     key: 'privacy-price',
-    proof: 'Supabase eu-west-1 (Ireland). One-time IAP unlocks both phones; no subscription tier exists. ⚠️ PRICE IS LOCALISED PER STOREFRONT (Julian, 2026-08-19) — never state one figure as if it were global; AT/CH/ES readers would be misled, and §3 PAngV wants the actual Endpreis. Additionally the GERMAN storefront currently lists TWO products, "Namore Unlimited 7,99 €" and "Namore Unlimited 4,99 €", so even the German figure is not unambiguous. Say "einmaliger Kauf" and name the German figure only as the current one, in the store.',
+    proof: 'Supabase eu-west-1 (Ireland). One-time IAP unlocks both phones; no subscription tier exists. ⚠️ PRICE IS LOCALISED PER STOREFRONT (Julian, 2026-08-19) — never state one figure as if it were global; AT/CH/ES readers would be misled, and §3 PAngV wants the actual Endpreis. Price moved to 9,99 € with app 1.0.9 (2026-09-19); Julian confirmed 2026-09-27: "price is 9,99 with localisation". Say "einmaliger Kauf" and name the German figure only as the current one, in the store.',
     de: {
       title: 'Ein Preis für beide, und Daten in der EU',
-      body: 'Ein einmaliger Kauf schaltet unbegrenztes Wischen und alle Filter für beide Handys frei. Kein Abo, keine Folgekosten. Der Preis wird je Land festgelegt, im deutschen App Store liegt er derzeit bei 7,99 €; was für euch gilt, steht im Store vor dem Kauf. Gehostet in Irland, keine Weitergabe von Daten, kein Modelltraining mit euren Swipes.',
+      body: 'Ein einmaliger Kauf schaltet unbegrenztes Wischen, alle Filter und jeden Morgen ein neues Für-dich-Set für beide Handys frei. Kein Abo, keine Folgekosten. Der Preis wird je Land festgelegt, im deutschen App Store liegt er derzeit bei 9,99 €; was für euch gilt, steht im Store vor dem Kauf. Gehostet in Irland, keine Weitergabe von Daten, kein Modelltraining mit euren Swipes.',
     },
     en: {
       title: 'One price, once, for both, and EU hosting',
-      body: 'A single purchase unlocks unlimited swiping and every filter on both phones. No subscription, nothing recurring. The price is set per country, the store shows what applies to you before you buy. Hosted in Ireland, no data sold, no model trained on your swipes.',
+      body: 'A single purchase unlocks unlimited swiping, every filter and a fresh For You set each morning on both phones. No subscription, nothing recurring. The price is set per country, the store shows what applies to you before you buy. Hosted in Ireland, no data sold, no model trained on your swipes.',
     },
     es: {
       title: 'Un precio, una vez, para los dos, y datos en la UE',
-      body: 'Un único pago desbloquea deslizamientos ilimitados y todos los filtros en ambos móviles. Sin suscripción. El precio se fija por país, la tienda os muestra el vuestro antes de comprar. Alojado en Irlanda, sin venta de datos ni entrenamiento de modelos con vuestros votos.',
+      body: 'Un único pago desbloquea deslizamientos ilimitados, todos los filtros y un set nuevo de Para ti cada mañana en ambos móviles. Sin suscripción. El precio se fija por país, la tienda os muestra el vuestro antes de comprar. Alojado en Irlanda, sin venta de datos ni entrenamiento de modelos con vuestros votos.',
+    },
+    fr: {
+      title: 'Un seul prix, une seule fois, pour vous deux, et des données dans l’UE',
+      body: 'Un achat unique débloque les swipes illimités, tous les filtres et une nouvelle série « Pour toi » chaque matin, sur vos deux téléphones. Pas d’abonnement, rien de récurrent. Le prix est fixé par pays, et l’App Store ou Google Play l’affiche avant l’achat. Hébergement en Irlande, aucune revente de données, aucun modèle entraîné sur vos swipes.',
     },
   },
 ];
 
+/**
+ * `distinct` is never shown on French pages: in the French stores, hidden
+ * voting (Prénom de bébé à 2, Namie), a post-match stage (Namie, « Le Grand
+ * Choix ») and anonymous name suggestions (BabyName) are all claimed by
+ * competitors. See the header of apps-fr.ts.
+ */
 export const featuresFor = (lang: Lang) =>
-  FEATURES.map((f) => ({ key: f.key, distinct: !!f.distinct, ...f[lang] }));
+  FEATURES.map((f) => ({ key: f.key, distinct: lang === 'fr' ? false : !!f.distinct, ...f[lang] }));

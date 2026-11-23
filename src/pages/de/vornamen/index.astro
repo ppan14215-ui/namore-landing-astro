@@ -1,0 +1,40 @@
+---
+/** /de/vornamen — index of the German list pages. */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getAllNames } from '@/lib/names';
+import { DE_LISTS, buildList } from '@/lib/de-lists';
+
+const all = await getAllNames();
+const lists = DE_LISTS.map((l) => ({ l, n: buildList(l, all)?.length ?? 0 })).filter((x) => x.n > 0);
+const canonical = 'https://www.namore.app/de/vornamen';
+const title = 'Vornamen mit Bedeutung – Listen für Mädchen und Jungen';
+const description = 'Vornamen-Listen mit Bedeutung und Herkunft: selten, kurz, nordisch, griechisch, beliebt in Deutschland und mehr. Zu zweit swipen und den gemeinsamen Favoriten finden.';
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} lang="de">
+  <main class="wrap page">
+    <p class="page-eyebrow"><a href="/de/">Namore</a></p>
+    <h1 class="hub-title">Vornamen <em>mit Bedeutung</em>.</h1>
+    <p class="hub-lede">Listen zum Stöbern, jeder Name mit Bedeutung und Herkunft. Wenn ihr zu zweit sucht: In Namore swipt jeder für sich, und ihr seht nur die Namen, die ihr beide mögt.</p>
+    <ul class="lists">
+      {lists.map(({ l, n }) => (
+        <li>
+          <a href={`/de/vornamen/${l.slug}`}>
+            <span class="t">{l.h1.join('').trim()}</span>
+            <span class="n">{n} Namen</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </main>
+</BaseLayout>
+
+<style>
+  .hub-title { font-family: var(--serif); font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: -0.04em; margin: 0 0 12px; }
+  .hub-title em { color: var(--terra-deep); }
+  .hub-lede { max-width: 60ch; color: var(--ink-2); margin: 0 0 32px; line-height: 1.55; }
+  .lists { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+  .lists a { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 16px 18px; border-radius: 16px; background: var(--paper); border: 1px solid var(--line); color: inherit; text-decoration: none; }
+  .t { font-family: var(--serif); font-size: 1.2rem; }
+  .n { font-family: var(--mono); font-size: 0.7rem; color: var(--ink-3); white-space: nowrap; }
+</style>

@@ -1,0 +1,272 @@
+---
+/**
+ * /fr/blog/application-prenom-bebe-couple (2026-09-27). Targets « appli prénom
+ * bébé couple ».
+ *
+ * Angle: the problem for a couple is not the size of the list but how two
+ * people agree without anchoring each other. The table uses the three
+ * apps-fr.ts fields that answer that (partner / after / account).
+ *
+ * ⚠️ In France, Prénom de bébé à 2 (Google Play) and Namie both describe
+ * independent, private choosing, Namie has a post-match stage and BabyName
+ * (Google Play) lets you add names without the partner knowing. The page
+ * quotes those and says plainly that Namore is not alone on these points.
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import DisclosureFr from '../../../components/DisclosureFr.astro';
+import CompareTableFr from '../../../components/CompareTableFr.astro';
+import StoreFactsFr from '../../../components/StoreFactsFr.astro';
+import WhyNamore from '../../../components/WhyNamore.astro';
+import ClusterFootFr from '../../../components/ClusterFootFr.astro';
+import Shot from '../../../components/Shot.astro';
+import { APPS, VERIFIED, APP_STORE, PLAY_STORE, byslug, type Sourced } from '../../../data/apps-fr';
+import { FR_LIVE } from '../../../data/fr-live';
+
+const slug = 'application-prenom-bebe-couple';
+const canonical = `https://www.namore.app/fr/blog/${slug}`;
+const campaign = 'appli_prenom_couple_fr';
+const title = 'Choisir le prénom à deux : ce qui compte dans une appli pour couples';
+const description =
+  'Une appli de prénoms pour couple sert moins à trouver des idées qu’à se mettre d’accord sans s’influencer. Les questions à poser, et ce que disent les fiches.';
+
+const p2 = byslug('prenom-de-bebe-a-2');
+const babyname = byslug('babyname');
+const namie = byslug('namie');
+
+/** One literal line from apps-fr.ts. Fails the build if the field is gone. */
+type Quote = { q: string; src: string };
+type Part = string | Quote;
+const Q = (s: Sourced, k: 'q' | 'q2' | 'q3' = 'q'): Quote => {
+  const line = s ? s[k] : undefined;
+  if (!s || !line) throw new Error(`apps-fr : missing sourced line (${k})`);
+  return { q: line, src: s.src };
+};
+const NB = ' ';
+const plain = (parts: Part[]) =>
+  parts.map((p) => (typeof p === 'string' ? p : `«${NB}${p.q}${NB}»`)).join('');
+
+const q = {
+  p2Partner: Q(p2.partner),
+  p2Account: Q(p2.account),
+  namiePartner: Q(namie.partner),
+  namieFinal: Q(namie.after, 'q3'),
+  babynameAccount: Q(babyname.account),
+  babynameAdd: Q(babyname.add),
+};
+
+const faqs: { q: string; a: Part[] }[] = [
+  {
+    q: 'Quelle appli de prénoms choisir quand on est en couple ?',
+    a: [
+      'Plusieurs applis permettent de choisir chacun de son côté. Sur Google Play, la fiche de Prénom de bébé à 2 indique ',
+      q.p2Partner,
+      ' Sur l’App Store, celle de Namie indique ',
+      q.namiePartner,
+      ' Regardez surtout ce qui se passe après le match et s’il faut un compte. Chez Namore, pas de compte obligatoire, et au dernier tour chacun note vos matchs de 1 à 5 en privé avant de découvrir les deux classements côte à côte.',
+    ],
+  },
+  {
+    q: 'Pourquoi voter chacun de son côté ?',
+    a: [
+      'Parce qu’un avis entendu en premier déplace le sien. On dit oui pour faire plaisir, ou non pour rééquilibrer après avoir cédé la fois précédente. Quand chacun vote sans connaître le vote de l’autre, un match veut dire que le prénom vous plaît vraiment à tous les deux.',
+    ],
+  },
+  {
+    q: 'Faut-il un compte pour chacun des deux parents ?',
+    a: [
+      'Cela dépend de l’appli. La fiche App Store de Prénom de bébé à 2 indique ',
+      q.p2Account,
+      '. Celle de BabyName, dans un passage présenté comme le texte de l’équipe éditoriale d’Apple, indique ',
+      q.babynameAccount,
+      ' Chez Namore, l’un de vous ouvre une session et l’autre la rejoint avec un code à six caractères, sans compte obligatoire ni e-mail à donner.',
+    ],
+  },
+  {
+    q: 'Peut-on proposer un prénom sans que l’autre sache qu’il vient de nous ?',
+    a: [
+      'Sur Google Play, la fiche de BabyName indique ',
+      q.babynameAdd,
+      ' Chez Namore, un prénom que vous ajoutez apparaît tôt dans la pile de l’autre, sans montrer qui l’a ajouté, et vous ne connaîtrez son avis qu’en cas de match. Trois ajouts par jour sont gratuits.',
+    ],
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: title,
+      description,
+      inLanguage: 'fr-FR',
+      datePublished: '2026-09-27',
+      dateModified: '2026-09-27',
+      author: { '@type': 'Person', name: 'Julian Ziegler' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Namore',
+        logo: { '@type': 'ImageObject', url: 'https://www.namore.app/logo@2x.png' },
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: 'fr-FR',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: plain(f.a) },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  lang="fr"
+  noindex={!FR_LIVE}
+  title="Appli prénom bébé en couple : ce qui compte à deux | Namore"
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <article class="post" lang="fr">
+    <DisclosureFr />
+
+    <header class="post-head">
+      <p class="post-kicker">Guide · consulté le {VERIFIED}</p>
+      <h1>{title}</h1>
+    </header>
+
+    <p class="post-standfirst">
+      Dès que vous savez que l’autre adore un prénom, vous ne l’entendez plus de la même façon. Vous
+      le trouvez un peu plus joli, ou un peu moins, selon la soirée et selon qui a cédé la dernière
+      fois. Aucune base de données ne règle ça. Ce qui compte, dans une appli pour couples, c’est la
+      manière dont elle vous fait choisir.
+    </p>
+
+    <h2>Le vrai problème n’est pas la liste de prénoms</h2>
+    <p>
+      C’est un effet d’ancrage tout à fait ordinaire : le premier avis entendu sert de repère aux
+      suivants. Entre deux personnes qui s’aiment, il se double d’autre chose, l’envie de ne pas
+      décevoir. Alors on dit « pourquoi pas » à un prénom qui ne nous plaît qu’à moitié, ou on refuse
+      le suivant pour rééquilibrer. Au bout de quelques semaines, la conversation ne porte plus sur les
+      prénoms, mais sur qui fait des concessions.
+    </p>
+    <p>
+      Une bonne appli pour couples ne se contente donc pas de vous donner des idées. Elle organise le
+      moment où vous découvrez l’avis de l’autre, et ce que vous en faites ensuite.
+    </p>
+
+    <h2>Les questions à poser à une appli</h2>
+    <ul>
+      <li>
+        <strong>Chacun choisit-il en privé ?</strong> Et un prénom n’apparaît-il que lorsque vous l’avez
+        aimé tous les deux, ou voyez-vous en cours de route où en est l’autre ?
+      </li>
+      <li>
+        <strong>Que se passe-t-il après un match ?</strong> Dix prénoms en commun ne disent pas lequel
+        vous préférez. Regardez si l’appli vous aide à passer de la liste au choix.
+      </li>
+      <li>
+        <strong>Faut-il un compte chacun ?</strong> Adresse e-mail, mot de passe, lien à partager : à
+        deux, chaque étape compte double, et il suffit que l’un décroche.
+      </li>
+      <li>
+        <strong>Peut-on proposer un prénom sans mettre l’autre au pied du mur ?</strong> Le prénom d’une
+        grand-mère se propose plus facilement quand l’autre peut dire non sans avoir à le dire en face.
+      </li>
+    </ul>
+    <p>
+      Reste la question du prix, et surtout de savoir si un achat vaut pour un téléphone ou pour les
+      deux. Elle a sa propre page : <a href="/fr/blog/application-prenom-bebe-gratuite">ce que
+      « gratuit » veut dire</a>.
+    </p>
+
+    <h2>Ce que disent les fiches</h2>
+    <p>
+      Voici ce que chaque éditeur écrit sur ces trois points, recopié tel quel. En France, plusieurs
+      fiches décrivent déjà un choix indépendant. Sur Google Play, celle de
+      <a href={q.p2Partner.src} rel="nofollow noopener" target="_blank">Prénom de bébé à 2</a>
+      indique <q>{q.p2Partner.q}</q> Sur l’App Store, celle de
+      <a href={q.namiePartner.src} rel="nofollow noopener" target="_blank">Namie</a> indique
+      <q>{q.namiePartner.q}</q> et, pour la suite, <q>{q.namieFinal.q}</q>. Nous ne sommes donc pas
+      les seuls à y avoir pensé. La différence tient aux détails, et c’est à vous de juger lesquels
+      comptent.
+    </p>
+    <CompareTableFr apps={APPS} cols={['partner', 'after', 'account']} />
+    <details class="sf-details">
+      <summary>Les fiches mot pour mot, point par point</summary>
+      <div class="sf-details-inner">
+        {APPS.map((a) => <StoreFactsFr app={a} />)}
+      </div>
+    </details>
+
+    <h2>Comment Namore s’y prend</h2>
+    <p>
+      L’un de vous ouvre une session, l’autre la rejoint avec un code à six caractères. Pas de compte obligatoire, pas d’e-mail à donner. Ensuite chacun swipe sur son propre téléphone, à son rythme, sans voir ce que fait
+      l’autre. Un prénom n’apparaît comme match que lorsque vous avez dit oui tous les deux, et vos
+      votes restent privés : l’autre ne sait jamais ce que vous avez écarté.
+    </p>
+    <p>
+      Quand la liste de matchs s’allonge, le dernier tour prend le relais. Chacun note vos prénoms en
+      commun de 1 à 5, en privé, et vous ne découvrez les deux classements, côte à côte, qu’une fois
+      que chacun a fini. C’est là qu’on voit si un prénom est en haut des deux listes, sans que
+      personne ait eu à le défendre.
+    </p>
+    <p>
+      Et si l’un de vous tient à un prénom qui n’est pas dans la pile, il peut l’ajouter : le prénom apparaîtra tôt dans la pile de l’autre, sans indiquer qui l’a ajouté. Trois ajouts par jour sont
+      gratuits. Là non plus, nous ne sommes pas seuls : sur Google Play, la fiche de
+      <a href={q.babynameAdd.src} rel="nofollow noopener" target="_blank">BabyName</a> indique
+      <q>{q.babynameAdd.q}</q>
+    </p>
+
+    <Shot
+      shots={['/fr/blog/shots/match.webp', '/fr/blog/shots/short.webp']}
+      width={600}
+      height={1300}
+      alts={[
+        'Écran de match dans Namore : « Un coup de cœur à deux » pour le prénom Leo, avec les boutons « Ouvrir Leo » et « Continuer à swiper »',
+        'Le « Tour de la shortlist » dans Namore : chaque prénom en commun reçoit d’une à cinq étoiles, et les notes de l’autre restent masquées jusqu’à ce que vous ayez fini',
+      ]}
+      caption="Un match n’apparaît que lorsque vous avez dit oui tous les deux. Au dernier tour, chacun note vos matchs de son côté."
+    />
+
+    <WhyNamore
+      lang="fr"
+      heading="Ce qui aide quand on décide à deux"
+      only={['decision-round', 'shared-deck', 'no-account', 'search-add', 'for-you', 'countries-top', 'design']}
+    />
+
+    <p class="post-caveat">
+      Là où Namore est plus faible : l’appli est récente, sur l’App Store depuis mai 2026 et sur
+      Google Play depuis août 2026, et elle a encore peu de notes. La famille et les amis ne peuvent
+      pas voter : Namore se joue à deux, et seulement à deux.
+    </p>
+
+    <p class="cta-row">
+      <a class="btn btn-ink" href={APP_STORE(campaign)}>Télécharger Namore sur l’App Store</a>
+      <a class="btn btn-ghost" href={PLAY_STORE(campaign)}>Disponible sur Google Play</a>
+    </p>
+
+    <h2>Questions fréquentes</h2>
+    <dl class="faq">
+      {faqs.map((f) => (
+        <div class="faq-item">
+          <dt>{f.q}</dt>
+          <dd>
+            {f.a.map((p) =>
+              typeof p === 'string' ? (
+                p
+              ) : (
+                <><q>{p.q}</q> <a class="sf-src" href={p.src} rel="nofollow noopener" target="_blank">(source)</a></>
+              ),
+            )}
+          </dd>
+        </div>
+      ))}
+    </dl>
+
+    <ClusterFootFr current={slug} />
+  </article>
+</BaseLayout>

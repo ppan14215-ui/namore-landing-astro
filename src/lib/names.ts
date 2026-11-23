@@ -107,6 +107,11 @@ const NAME_COLUMNS = [
   'peak_decade',
   'peak_count',
   'births_last_year',
+  // German list pages under /de/vornamen (2026-11-23). Two short columns,
+  // ~1MB extra per build; the long DE texts stay out.
+  'meaning_short_de',
+  'origin_de',
+  'name_length',
 ].join(',');
 
 function shouldUseMock(): boolean {

@@ -138,7 +138,13 @@ a.subtle:hover {
 
 /* ── Page hero ─────────────────────────────────────────────────── */
 .page {
-  padding: 56px 0 80px;
+  /* Top/bottom only: the shorthand used to zero .wrap's side gutter, so
+     text touched the screen edge on phones (fixed 2026-11-23). */
+  padding-top: 56px;
+  padding-bottom: 80px;
+}
+@media (max-width: 520px) {
+  .wrap { padding: 0 16px; }
 }
 .page-eyebrow {
   font-family: var(--mono);
@@ -809,6 +815,8 @@ footer.site-footer {
 }
 .storefacts dd { margin: 0; font-size: 0.93rem; line-height: 1.55; }
 .storefacts q { quotes: "„" "“"; }
+/* French cluster (2026-09-27): guillemets with no-break spaces, also inside .storefacts (set to German quotes above). */
+q:lang(fr), .storefacts q:lang(fr) { quotes: "«\00A0" "\00A0»" "“" "”"; }
 .sf-src { font-size: 0.78rem; opacity: 0.6; white-space: nowrap; }
 .sf-none { opacity: 0.55; font-style: italic; }
 .sf-list { list-style: none; margin: 0 0 0.35rem; padding: 0; }
@@ -916,3 +924,8 @@ footer.site-footer {
 @media (max-width: 560px) {
   .appshot-phone { width: 210px; }
 }
+
+/* 2026-09-27: store button that matches the phone (same logic as the namore.app home page) */
+.os-ios .nav-cta .store-android,
+.os-android .nav-cta .store-ios { display: none; }
+.os-ios .nav-cta .store-ios { background: var(--ink); color: var(--paper); border-color: var(--ink); }
