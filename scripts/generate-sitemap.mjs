@@ -132,13 +132,16 @@ ${urls}
 // Focused top-names sitemap — only the curated popular names that actually
 // built to disk. Submit this separately in Search Console; a short, curated
 // sitemap gets crawled far more aggressively than the full-catalog firehose.
-const topOnDisk = slugs.filter((slug) => topSlugs.has(slug));
+// Hubs ride in the curated sitemap too (2026-11-23): origin/letter/gender
+// hubs were the most-entered Google pages under /names but were missing here,
+// because this filter only matched top-name slugs.
+const topOnDisk = slugs.filter((slug) => topSlugs.has(slug) || isHub(slug));
 let extraIndexEntry = '';
 if (topOnDisk.length > 0) {
   const topUrls = topOnDisk
     .map(
       (slug) => `  <url>
-    <loc>${SITE}/names/${slug}</loc>
+    <loc>${SITE}/names${slug ? '/' + slug : ''}</loc>
     <lastmod>${TODAY}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
