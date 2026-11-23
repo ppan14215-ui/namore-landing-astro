@@ -21,6 +21,7 @@
  * store_click events via data-cta-location="name_page_deck".
  */
 import type { NameRow } from '@/lib/types';
+import photos from '@/data/fyp-photos.json';
 
 interface Props {
   name: NameRow;
@@ -40,7 +41,7 @@ const L = de
       revealCopy: 'In Namore swipt ihr beide auf euren eigenen Handys. Eure Listen bleiben privat. Ihr seht nur die Namen, die ihr <strong>beide</strong> behalten habt.',
       ios: 'Zusammen swipen auf dem iPhone', android: 'Zusammen swipen auf Android', more: 'Hier weiterswipen',
       note: 'Kostenlos starten · keine Werbung · kein Konto nötig', namesN: (n: number) => `${n} Namen`,
-      skipAria: 'Namen überspringen', keepAria: 'Namen behalten', iosNs: 'Für iPhone laden', androidNs: 'Für Android laden',
+      pass: 'Weiter', love: 'Behalten', skipAria: 'Namen überspringen', keepAria: 'Namen behalten', iosNs: 'Für iPhone laden', androidNs: 'Für Android laden',
     }
   : {
       eyebrow: 'Try it like in the app', keep: 'Would you keep', keepQ: '?', sub: 'Drag the card: right to keep, left to skip.',
@@ -49,7 +50,7 @@ const L = de
       revealCopy: 'In Namore you both swipe on your own phones. Your lists stay private. You only see the names you <strong>both</strong> kept.',
       ios: 'Swipe together on iPhone', android: 'Swipe together on Android', more: 'Keep swiping here',
       note: 'Free to start · no ads · no account needed', namesN: (n: number) => `${n} names`,
-      skipAria: 'Skip this name', keepAria: 'Keep this name', iosNs: 'Get for iPhone', androidNs: 'Get for Android',
+      pass: 'Pass', love: 'Love it', skipAria: 'Skip this name', keepAria: 'Keep this name', iosNs: 'Get for iPhone', androidNs: 'Get for Android',
     };
 
 const cards = [name, ...related].slice(0, 6);
@@ -63,6 +64,37 @@ const vibes = (s: string | null) =>
     .map((t) => t.trim().toLowerCase())
     .filter(Boolean)
     .slice(0, 3);
+
+// Photos (2026-11-23, Julian: "the look of the For You page, with the emotional
+// images"): the same R2 pool the app's For You feed uses, limited to the
+// emotional / parents / maternity families. Stable per name (FNV-1a, like the
+// app's backdropIndexFor), gender-matched (n = no visible child, fits all),
+// and never twice in one deck.
+type Photo = { id: string; g: 'm' | 'f' | 'n'; f: string };
+const POOL = photos.images as Photo[];
+const FAMILY_CYCLE = ['emotional', 'parents', 'maternity', 'parents', 'emotional', 'maternity'];
+const fnv = (str: string) => {
+  let h = 0x811c9dc5;
+  const k = str.trim().toLocaleLowerCase();
+  for (let i = 0; i < k.length; i++) { h ^= k.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+  return h;
+};
+const usedPhotos = new Set<string>();
+const photoFor = (c: NameRow, slot: number) => {
+  const g = c.gender === 'M' ? 'm' : c.gender === 'F' ? 'f' : null;
+  const fam = FAMILY_CYCLE[(fnv(name.name) + slot) % FAMILY_CYCLE.length];
+  for (const f of [fam, ...FAMILY_CYCLE.filter((x) => x !== fam)]) {
+    const list = POOL.filter((p) => p.f === f && (p.g === 'n' || p.g === g));
+    if (!list.length) continue;
+    let i = fnv(c.name) % list.length;
+    for (let t = 0; t < list.length && usedPhotos.has(list[i].id); t++) i = (i + 1) % list.length;
+    if (usedPhotos.has(list[i].id)) continue;
+    usedPhotos.add(list[i].id);
+    return `${photos.base}/${list[i].id}`;
+  }
+  return null;
+};
+const cardPhotos = cards.map((c, i) => photoFor(c, i));
 
 const content = encodeURIComponent((de ? 'de_' : 'deck_') + (heading ? placement : name.name));
 const appStoreUrl =
@@ -83,6 +115,7 @@ const googlePlayUrl =
   </header>
 
   <div class="deck-stage" data-stage>
+    <span class="deck-count" data-count aria-live="polite"></span>
     <ol class="deck-stack" data-stack>
       {cards.map((c, i) => (
         <li
@@ -94,22 +127,28 @@ const googlePlayUrl =
         >
           <span class="stamp stamp-like" aria-hidden="true">{L.stampKeep}</span>
           <span class="stamp stamp-nope" aria-hidden="true">{L.stampSkip}</span>
-          <p class="dcard-meta">
-            {gender(c.gender)}{originOf(c) ? ` · ${originOf(c)}` : ''}
-          </p>
-          <p class="dcard-name">{c.name}</p>
-          {c.pronunciation_text && <p class="dcard-pron">{c.pronunciation_text}</p>}
-          {meaningOf(c) && <p class="dcard-meaning">{de ? '„' : '\u201C'}{meaningOf(c)}{de ? '“' : '\u201D'}</p>}
-          {vibes(c.vibe_tags).length > 0 && (
-            <p class="dcard-vibes">
-              {vibes(c.vibe_tags).map((v) => <span>{v}</span>)}
-            </p>
+          {cardPhotos[i] && (
+            <img class="dcard-photo" src={cardPhotos[i]} alt="" width="720" height="1280" loading={i < 2 ? 'eager' : 'lazy'} decoding="async" draggable="false" onerror="this.remove()" />
           )}
+          <span class="dcard-shade" aria-hidden="true"></span>
+          <div class="dcard-copy">
+            <p class="dcard-chip">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" /></svg>
+              {gender(c.gender)}{originOf(c) ? ` · ${originOf(c)}` : ''}
+            </p>
+            <p class="dcard-name">{c.name}</p>
+            {meaningOf(c) && <p class="dcard-meaning">{de ? '„' : '\u201C'}{meaningOf(c)}{de ? '“' : '\u201D'}</p>}
+            {(c.pronunciation_text || vibes(c.vibe_tags).length > 0) && (
+              <p class="dcard-meta">
+                {[c.pronunciation_text, ...vibes(c.vibe_tags)].filter(Boolean).map((m, k) => <>{k > 0 && <i class="dot" />}<span>{m}</span></>)}
+              </p>
+            )}
           {(i > 0 || heading) && (
             <a class="dcard-link" href={`/names/${c.name.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`}>
               {L.meaningOf} {c.name} →
             </a>
           )}
+          </div>
         </li>
       ))}
     </ol>
@@ -131,12 +170,10 @@ const googlePlayUrl =
   </div>
 
   <div class="deck-controls" data-controls>
-    <button type="button" class="dbtn dbtn-nope" data-act="nope" aria-label={L.skipAria}>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
-    </button>
-    <span class="deck-count" data-count aria-live="polite"></span>
-    <button type="button" class="dbtn dbtn-like" data-act="like" aria-label={L.keepAria}>
+    <button type="button" class="pill pill-pass" data-act="nope" aria-label={L.skipAria}>{L.pass}</button>
+    <button type="button" class="pill pill-love" data-act="like" aria-label={L.keepAria}>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" /></svg>
+      {L.love}
     </button>
   </div>
 
@@ -184,24 +221,24 @@ const googlePlayUrl =
   /* Stage: fixed height so flying cards never reflow the page */
   .deck-stage {
     position: relative;
-    height: 300px;
+    height: min(500px, 128vw);
     perspective: 1200px;
   }
   .deck-stack { list-style: none; margin: 0; padding: 0; position: absolute; inset: 0; }
+  /* Card = the app's For You page (FeedCard B2): full-bleed photo, ink
+     gradient from the bottom, glass reason chip, Fraunces name in paper,
+     italic meaning, mono meta with rose dots. */
   .dcard {
     position: absolute;
-    inset: 8px 6px 18px;
-    padding: 22px 22px 18px;
-    border-radius: 22px;
-    background: var(--paper);
-    border: 1px solid var(--line);
-    box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.8) inset,
-      0 18px 40px rgba(90, 60, 40, 0.14),
-      0 4px 10px rgba(90, 60, 40, 0.06);
+    inset: 4px 4px 22px;
+    border-radius: 24px;
+    overflow: hidden;
+    background: var(--ink);
+    color: var(--paper);
+    box-shadow: 0 24px 48px rgba(40, 24, 16, 0.28), 0 6px 14px rgba(40, 24, 16, 0.14);
     transform-origin: 50% 120%;
-    transform: translate3d(0, calc(min(var(--depth, var(--i)), 2) * 10px), 0)
-      scale(calc(1 - min(var(--depth, var(--i)), 2) * 0.045));
+    transform: translate3d(0, calc(min(var(--depth, var(--i)), 2) * 12px), 0)
+      scale(calc(1 - min(var(--depth, var(--i)), 2) * 0.05));
     z-index: calc(10 - var(--i));
     transition: transform 0.38s cubic-bezier(0.2, 0.9, 0.25, 1.15), opacity 0.3s ease, box-shadow 0.3s ease;
     touch-action: pan-y;
@@ -209,103 +246,161 @@ const googlePlayUrl =
     -webkit-user-select: none;
     cursor: grab;
     will-change: transform;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
   }
   .dcard:nth-child(n + 4) { opacity: 0; }
   .deck.is-live .dcard:nth-child(n + 2) { pointer-events: none; }
   .deck.is-live .dcard.is-top { pointer-events: auto; }
-  .dcard.is-dragging { transition: none; cursor: grabbing; box-shadow: 0 30px 60px rgba(90, 60, 40, 0.22); }
+  .dcard.is-dragging { transition: none; cursor: grabbing; box-shadow: 0 34px 70px rgba(40, 24, 16, 0.36); }
   .dcard.is-gone { pointer-events: none; }
-  .dcard-meta {
-    margin: 0 0 4px;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 1.1px;
-    text-transform: uppercase;
-    color: var(--ink-2);
+  .dcard-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    transform: scale(1.04);
+    transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.25, 1);
   }
+  .dcard.is-top .dcard-photo { transform: scale(1); }
+  .dcard-shade {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(42, 38, 34, 0.25) 0%, rgba(42, 38, 34, 0) 26%, rgba(42, 38, 34, 0) 44%, rgba(42, 38, 34, 0.86) 100%);
+  }
+  .dcard-copy {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  .dcard-chip {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 14px;
+    padding: 5px 10px;
+    border-radius: 14px;
+    background: rgba(255, 250, 243, 0.16);
+    border: 1px solid rgba(255, 250, 243, 0.3);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 10.5px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+  .dcard-chip svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2.2; }
   .dcard-name {
     margin: 0;
     font-family: var(--serif);
-    font-size: clamp(44px, 12vw, 60px);
-    line-height: 1;
-    letter-spacing: -1.6px;
-    color: var(--ink);
+    font-size: clamp(46px, 13vw, 68px);
+    line-height: 0.98;
+    letter-spacing: -2.4px;
+    color: var(--paper);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  .dcard-pron { margin: 6px 0 0; font-family: var(--mono); font-size: 12.5px; color: var(--ink-3); }
   .dcard-meaning {
-    margin: 14px 0 0;
+    margin: 10px 0 0;
+    max-width: 300px;
     font-family: var(--serif);
     font-style: italic;
     font-size: 19px;
-    color: var(--ink);
+    line-height: 1.3;
+    color: rgba(255, 250, 243, 0.92);
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  .dcard-vibes { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0 0; }
-  .dcard-vibes span {
-    padding: 3px 10px;
-    border-radius: 999px;
-    border: 1px solid var(--line);
-    font-size: 12px;
-    color: var(--ink-2);
+  .dcard-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 12px 0 0;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(255, 250, 243, 0.82);
   }
+  .dcard-meta .dot { width: 4px; height: 4px; border-radius: 2px; background: var(--rose, #E4A79A); }
   .dcard-link {
-    margin-top: auto;
-    padding-top: 10px;
+    margin-top: 12px;
     font-family: var(--mono);
     font-size: 11.5px;
-    color: var(--terra-deep);
+    color: rgba(255, 250, 243, 0.9);
     align-self: flex-start;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
   .stamp {
     position: absolute;
-    top: 22px;
+    top: 26px;
+    z-index: 2;
     padding: 4px 12px;
     border: 3px solid currentColor;
     border-radius: 10px;
     font-family: var(--sans);
     font-weight: 800;
-    font-size: 20px;
+    font-size: 22px;
     letter-spacing: 2px;
     text-transform: uppercase;
+    background: rgba(42, 38, 34, 0.25);
     opacity: 0;
     pointer-events: none;
   }
-  .stamp-like { left: 20px; color: #4E8B5A; transform: rotate(-12deg); opacity: var(--like, 0); }
-  .stamp-nope { right: 20px; color: var(--terra-deep); transform: rotate(12deg); opacity: var(--nope, 0); }
+  .stamp-like { left: 20px; color: #9FE0A9; transform: rotate(-12deg); opacity: var(--like, 0); }
+  .stamp-nope { right: 20px; color: #FFD8CC; transform: rotate(12deg); opacity: var(--nope, 0); }
+  .deck-count {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    z-index: 30;
+    height: 28px;
+    padding: 0 11px;
+    border-radius: 14px;
+    background: rgba(42, 38, 34, 0.62);
+    color: rgba(255, 250, 243, 0.85);
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 28px;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+  }
+  .deck-count:empty { display: none; }
 
-  /* Controls */
+  /* Rail: the app's Pass / Love pills */
   .deck-controls {
     display: flex;
+    gap: 10px;
+    margin-top: 6px;
+    padding: 0 4px;
+  }
+  .pill {
+    height: 52px;
+    border-radius: 26px;
+    border: 0;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 28px;
-    margin-top: 8px;
-  }
-  .dbtn {
-    width: 62px;
-    height: 62px;
-    border-radius: 50%;
-    border: 1px solid var(--line);
-    background: var(--paper);
-    display: grid;
-    place-items: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 15px;
     cursor: pointer;
-    box-shadow: 0 10px 22px rgba(90, 60, 40, 0.14), 0 1px 0 #fff inset;
-    transition: transform 0.18s cubic-bezier(0.3, 1.6, 0.5, 1), box-shadow 0.2s;
+    transition: transform 0.18s cubic-bezier(0.3, 1.6, 0.5, 1), background 0.2s;
   }
-  .dbtn:active { transform: scale(0.9); }
-  .dbtn svg { width: 26px; height: 26px; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-  .dbtn-nope svg { stroke: var(--ink-2); }
-  .dbtn-like { background: var(--terra); border-color: var(--terra-deep); }
-  .dbtn-like svg { stroke: var(--paper); fill: var(--paper); }
-  .dbtn.pulse { transform: scale(1.12); }
-  .deck-count { min-width: 64px; text-align: center; font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+  .pill:active, .pill.pulse { transform: scale(0.95); }
+  .pill-pass { flex: 1; background: var(--paper); color: var(--ink); border: 1px solid var(--line); }
+  .pill-love { flex: 1.4; background: var(--terra); color: var(--paper); box-shadow: 0 10px 22px rgba(201, 120, 92, 0.3); }
+  .pill-love svg { width: 17px; height: 17px; fill: var(--paper); }
 
   /* Reveal */
   .deck-reveal {
@@ -346,7 +441,8 @@ const googlePlayUrl =
   .reveal-note { margin: 6px 0 0; color: var(--ink-3); font-family: var(--mono); font-size: 0.68rem; }
   .deck.is-revealed .deck-stack,
   .deck.is-revealed .deck-controls { visibility: hidden; }
-  .deck.is-revealed .deck-stage { height: 340px; }
+  .deck.is-revealed .deck-stage { height: 360px; }
+  .deck.is-revealed .deck-count { display: none; }
 
   /* Only show the store button for the visitor's OS (desktop sees both) */
   :global(html.os-ios) .deck .store-android,
@@ -355,12 +451,13 @@ const googlePlayUrl =
   /* No-JS / pre-hydration: plain readable list, no stage */
   .deck:not(.is-live) .deck-stage { height: auto; }
   .deck:not(.is-live) .deck-stack { position: static; display: grid; gap: 10px; }
-  .deck:not(.is-live) .dcard { position: relative; inset: auto; transform: none; opacity: 1; cursor: default; }
+  .deck:not(.is-live) .dcard { position: relative; inset: auto; transform: none; opacity: 1; cursor: default; height: 360px; }
+  .deck:not(.is-live) .deck-count { display: none; }
   .deck:not(.is-live) .stamp,
   .deck:not(.is-live) .deck-controls { display: none; }
 
   @media (prefers-reduced-motion: reduce) {
-    .dcard, .deck-reveal, .dbtn { transition-duration: 0.01ms !important; }
+    .dcard, .dcard-photo, .deck-reveal, .pill { transition-duration: 0.01ms !important; }
   }
 </style>
 
