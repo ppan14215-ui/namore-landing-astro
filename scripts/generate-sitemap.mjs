@@ -163,7 +163,8 @@ ${topUrls}
 // Walked separately from dist/names because findPagePaths() is rooted at
 // NAMES_DIR. Blog articles build to dist/blog/<slug>/ and dist/de/blog/<slug>/
 // and would otherwise appear in no sitemap at all.
-const BLOG_DIRS = [join(DIST, 'blog'), join(DIST, 'de', 'blog')];
+// fr/blog added 2026-09-27 when FR_LIVE went on (src/data/fr-live.ts).
+const BLOG_DIRS = [join(DIST, 'blog'), join(DIST, 'de', 'blog'), join(DIST, 'fr', 'blog')];
 const blogUrls = [];
 for (const dir of BLOG_DIRS) {
   if (!existsSync(dir)) continue;

@@ -228,7 +228,7 @@ export const APP_STORE = (c: string) => {
   const params = [PROVIDER_TOKEN ? `pt=${PROVIDER_TOKEN}` : '', `ct=${c}`, 'mt=8']
     .filter(Boolean)
     .join('&');
-  return `https://apps.apple.com/app/id6766572995?${params}`;
+  return `https://apps.apple.com/de/app/id6766572995?${params}`;
 };
 
 export const PLAY = (c: string) => {
@@ -236,5 +236,5 @@ export const PLAY = (c: string) => {
   const referrer = encodeURIComponent(
     `utm_source=namore_blog&utm_medium=organic&utm_campaign=${c}`,
   );
-  return `https://play.google.com/store/apps/details?id=com.julian.namore&referrer=${referrer}`;
+  return `https://play.google.com/store/apps/details?id=com.julian.namore&hl=de&gl=DE&referrer=${referrer}`;
 };

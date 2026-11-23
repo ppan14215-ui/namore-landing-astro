@@ -30,6 +30,7 @@ import '@fontsource-variable/fraunces';
 import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
+import { FR_LIVE } from '../data/fr-live';
 
 export interface Props {
   title: string;
@@ -45,6 +46,14 @@ export interface Props {
    * 2026-08-17 every German page here shipped as lang="en".
    */
   lang?: string;
+  /**
+   * true = <meta name="robots" content="noindex, nofollow">. Used by the French
+   * cluster while FR_LIVE is false (data/fr-live.ts): French is hidden in the
+   * app until its name data is done, so the pages must not be indexed yet.
+   */
+  noindex?: boolean;
+  /** <link rel="alternate" hreflang> set, e.g. COMPARISON_HUBS (data/hub-alternates.ts). */
+  alternates?: { hreflang: string; href: string }[];
 }
 
 const {
@@ -55,10 +64,23 @@ const {
   ogImageAlt = 'Namore: find a name you both love. The private baby name app for couples.',
   jsonLd,
   lang = 'en',
+  noindex = false,
+  alternates = [],
 } = Astro.props;
 
-const appStoreUrl = 'https://apps.apple.com/app/id6766572995?utm_source=names_nav&utm_medium=organic&utm_campaign=programmatic_seo';
-const googlePlayUrl = 'https://play.google.com/store/apps/details?id=com.julian.namore&utm_source=names_nav&utm_medium=organic&utm_campaign=programmatic_seo';
+const OG_LOCALE: Record<string, string> = { en: 'en_US', de: 'de_DE', es: 'es_ES', fr: 'fr_FR' };
+const isFr = lang === 'fr';
+const ogAlt = isFr && !Astro.props.ogImageAlt
+  ? 'Namore\u00a0: trouvez un prénom que vous aimez tous les deux. L’appli de prénoms privée pour les couples.'
+  : ogImageAlt;
+/** French chrome. The home link points at /fr/ only once the French home page is live. */
+const homeHref = isFr && FR_LIVE ? 'https://www.namore.app/fr/' : 'https://www.namore.app/';
+
+/** Store country follows the page language (DE/ES/FR listings carry their own
+ *  ratings, in the reader's language); English keeps the country-less link. */
+const STORE_CC = ({ de: 'de', es: 'es', fr: 'fr' } as Record<string, string>)[lang] ?? '';
+const appStoreUrl = `https://apps.apple.com/${STORE_CC ? STORE_CC + '/' : ''}app/id6766572995?utm_source=names_nav&utm_medium=organic&utm_campaign=programmatic_seo`;
+const googlePlayUrl = `https://play.google.com/store/apps/details?id=com.julian.namore${STORE_CC ? `&hl=${STORE_CC}&gl=${STORE_CC.toUpperCase()}` : ''}&utm_source=names_nav&utm_medium=organic&utm_campaign=programmatic_seo`;
 ---
 
 <!doctype html>
@@ -74,7 +96,8 @@ const googlePlayUrl = 'https://play.google.com/store/apps/details?id=com.julian.
     <meta name="theme-color" content="#F5EFE6" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+    {alternates.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)}
 
     {/* Open Graph */}
     <meta property="og:type" content="article" />
@@ -85,16 +108,16 @@ const googlePlayUrl = 'https://play.google.com/store/apps/details?id=com.julian.
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta property="og:image:alt" content={ogAlt} />
     <meta property="og:site_name" content="Namore" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={OG_LOCALE[lang] ?? 'en_US'} />
 
     {/* Twitter */}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    <meta name="twitter:image:alt" content={ogImageAlt} />
+    <meta name="twitter:image:alt" content={ogAlt} />
 
     {/* App Store smart banner — keeps the install funnel one tap away */}
     <meta name="apple-itunes-app" content="app-id=6766572995" />
@@ -122,18 +145,20 @@ const googlePlayUrl = 'https://play.google.com/store/apps/details?id=com.julian.
         ships small, but per-name pages are SEO surfaces where TTFB and
         LCP matter. */}
     <script src="/analytics.js" defer></script>
+    {/* 2026-09-27: phones see the store button for their own platform (same as the namore.app home page). */}
+    <script is:inline>(function(){var d=document.documentElement,u=navigator.userAgent||"",o="desktop";if(/iPhone|iPad|iPod/.test(u)||(/Macintosh/.test(u)&&navigator.maxTouchPoints>1))o="ios";else if(/Android/i.test(u))o="android";d.className+=(d.className?" ":"")+"os-"+o;})();</script>
   </head>
   <body>
     <nav class="nav">
       <div class="nav-inner">
-        <a class="brand" href="https://www.namore.app/">
+        <a class="brand" href={homeHref}>
           <img src="https://www.namore.app/logo.png" alt="Namore" width="28" height="28" />
           namore
         </a>
         <div class="nav-cta">
-          <a class="btn btn-ghost" href="https://www.namore.app/">Home</a>
-          <a class="btn btn-ghost store-nav" href={appStoreUrl}>iPhone</a>
-          <a class="btn btn-ink store-nav" href={googlePlayUrl}>Android</a>
+          <a class="btn btn-ghost" href={homeHref}>{isFr ? 'Accueil' : 'Home'}</a>
+          <a class="btn btn-ghost store-nav store-ios" href={appStoreUrl}>iPhone</a>
+          <a class="btn btn-ink store-nav store-android" href={googlePlayUrl}>Android</a>
         </div>
       </div>
     </nav>
@@ -151,8 +176,9 @@ const googlePlayUrl = 'https://play.google.com/store/apps/details?id=com.julian.
         largest internal signal available on this domain.
       */}
       <span>
-        <a href="/blog/best-baby-name-apps">Best baby name apps</a> ·
-        <a href="/de/blog/beste-babynamen-apps">Beste Babynamen-Apps</a>
+        <a href="/blog/best-baby-name-apps" lang="en">Best baby name apps</a> ·
+        <a href="/de/blog/beste-babynamen-apps" lang="de">Beste Babynamen-Apps</a>
+        {FR_LIVE && <> · <a href="/fr/blog/meilleures-applications-prenom-bebe" lang="fr">Meilleures applis de prénoms</a></>}
       </span>
       <span><a href={appStoreUrl}>App Store</a> · <a href={googlePlayUrl}>Google Play</a></span>
       {/*
@@ -165,11 +191,19 @@ const googlePlayUrl = 'https://play.google.com/store/apps/details?id=com.julian.
         footer had both. A missing Impressum is the single most frequently
         abgemahnte defect on German websites. Do not remove these two links.
       */}
-      <span>
-        <a href="/impressum.html">Impressum</a> ·
-        <a href="/privacy.html">Datenschutz</a> ·
-        <a href="/terms.html">AGB</a> · © 2026 Namore
-      </span>
+      {isFr ? (
+        <span>
+          <a href="/impressum.html">Mentions légales</a> ·
+          <a href="/privacy.html">Confidentialité</a> ·
+          <a href="/terms.html">CGU</a> · © 2026 Namore
+        </span>
+      ) : (
+        <span>
+          <a href="/impressum.html">Impressum</a> ·
+          <a href="/privacy.html">Datenschutz</a> ·
+          <a href="/terms.html">AGB</a> · © 2026 Namore
+        </span>
+      )}
     </footer>
   </body>
 </html>

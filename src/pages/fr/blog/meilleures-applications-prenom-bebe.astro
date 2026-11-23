@@ -1,0 +1,344 @@
+---
+/**
+ * /fr/blog/meilleures-applications-prenom-bebe — French hub (2026-09-27).
+ *
+ * Same evidence rule as the German hub, see the headers of apps-fr.ts and
+ * apps-de.ts. Every statement about another app is a literal line from
+ * apps-fr.ts, rendered inside <q> with a source link (prose, FAQ) or through
+ * CompareTableFr / StoreFactsFr. Nothing about a competitor in our own words.
+ *
+ * Deliberately NOT used although the brief suggested them: "Prénom de bébé à 2
+ * for community and polls with family" and "Baby Name Genius for popularity
+ * curves since 1900 and offline use". Neither has a transcribed quote in
+ * apps-fr.ts (the Genius line lives only in the unsourced `note` field), so
+ * the recommendations below lean on the lines that are transcribed.
+ *
+ * In France hidden voting, a post-match stage and anonymous suggestions are
+ * all claimed by competitors (Prénom de bébé à 2, Namie, BabyName). The page
+ * says so and never presents them as unusual.
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import DisclosureFr from '../../../components/DisclosureFr.astro';
+import CompareTableFr from '../../../components/CompareTableFr.astro';
+import StoreFactsFr from '../../../components/StoreFactsFr.astro';
+import WhyNamore from '../../../components/WhyNamore.astro';
+import ClusterFootFr from '../../../components/ClusterFootFr.astro';
+import Shot from '../../../components/Shot.astro';
+import { APPS, VERIFIED, APP_STORE, PLAY_STORE, byslug, type Sourced } from '../../../data/apps-fr';
+import { FR_LIVE } from '../../../data/fr-live';
+
+const slug = 'meilleures-applications-prenom-bebe';
+const canonical = `https://www.namore.app/fr/blog/${slug}`;
+const campaign = 'meilleures_applis_prenom_fr';
+const title = 'Les meilleures applis de prénoms de bébé en 2026, comparées';
+const description =
+  'Six applications de prénoms de bébé et la nôtre, côte à côte : ce que dit chaque fiche, mot pour mot, avec lien et date. Puis notre avis, signalé comme tel.';
+
+const p2 = byslug('prenom-de-bebe-a-2');
+const kinder = byslug('kinder');
+const charlie = byslug('charliesnames');
+const babyname = byslug('babyname');
+const genius = byslug('baby-name-genius');
+const namie = byslug('namie');
+
+/** One literal line from apps-fr.ts. Fails the build if the field is gone. */
+type Quote = { q: string; src: string };
+type Part = string | Quote;
+const Q = (s: Sourced, k: 'q' | 'q2' | 'q3' = 'q'): Quote => {
+  const line = s ? s[k] : undefined;
+  if (!s || !line) throw new Error(`apps-fr : missing sourced line (${k})`);
+  return { q: line, src: s.src };
+};
+const NB = ' ';
+const plain = (parts: Part[]) =>
+  parts.map((p) => (typeof p === 'string' ? p : `«${NB}${p.q}${NB}»`)).join('');
+
+const q = {
+  p2Rating: Q(p2.rating),
+  p2Names: Q(p2.names),
+  p2Partner: Q(p2.partner),
+  p2Account: Q(p2.account),
+  p2Ads: Q(p2.ads),
+  kinderRating: Q(kinder.rating),  kinderSet1: Q(kinder.model ?? null),
+  kinderSet2: Q(kinder.model ?? null, 'q2'),
+  kinderPartner: Q(kinder.partner),
+  charlieAi: Q(charlie.ai),
+  charlieNames: Q(charlie.names),
+  babynameAccount: Q(babyname.account),
+  babynameAdd: Q(babyname.add),
+  geniusPartner: Q(genius.partner),  namieFree: Q(namie.model ?? null),
+  namiePartner: Q(namie.partner),
+  namieAfter1: Q(namie.after),
+  namieAfter2: Q(namie.after, 'q2'),
+  namieAfter3: Q(namie.after, 'q3'),};
+
+const faqs: { q: string; a: Part[] }[] = [
+  {
+    q: 'Quelle est la meilleure application de prénoms de bébé pour un couple ?',
+    a: [
+      'Cela dépend de l’endroit où vous bloquez. Plusieurs fiches décrivent un choix fait chacun de son côté. Regardez aussi ce qui se passe après le match : la fiche de Namie annonce ',
+      q.namieAfter3,
+      '. Chez Namore, au dernier tour, chacun note vos matchs de 1 à 5 en privé, puis les deux classements s’affichent côte à côte.',
+    ],
+  },
+  {
+    q: 'Faut-il créer un compte pour utiliser une appli de prénoms à deux ?',
+    a: [
+      'Cela varie. La fiche App Store de Prénom de bébé à 2 indique ',
+      q.p2Account,
+      '. Celle de BabyName, dans un passage présenté comme le texte de l’équipe éditoriale d’Apple, indique ',
+      q.babynameAccount,
+      '. Namore ne demande pas de compte : l’un de vous ouvre une session, l’autre la rejoint avec un code à six caractères.',
+    ],
+  },
+  {
+    q: 'Les applications de prénoms de bébé sont-elles gratuites ?',
+    a: [      'Toutes se téléchargent gratuitement, mais le modèle diffère. Sur Google Play, quatre des six fiches comparées ici portent la mention ',
+      q.p2Ads,
+      ' (le tableau renvoie à chacune), et celle de Namie indique ',
+      q.namieFree,
+      '. Namore est gratuit et sans publicité, avec 100 swipes par personne toutes les 24 heures ; un achat unique, sans abonnement, débloque tout sur vos deux téléphones, à un prix fixé par pays et affiché par l’App Store ou Google Play.',
+    ],
+  },
+  {
+    q: 'Où sont stockées nos données avec Namore ?',
+    a: [
+      'Namore est hébergé dans l’Union européenne, en Irlande. Nous ne revendons aucune donnée et nous n’entraînons aucun modèle sur vos swipes. Pour une autre appli, la réponse se trouve dans sa fiche et dans sa politique de confidentialité.',
+    ],
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: title,
+      description,
+      inLanguage: 'fr-FR',
+      datePublished: '2026-09-27',
+      dateModified: '2026-09-27',
+      author: { '@type': 'Person', name: 'Julian Ziegler' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Namore',
+        logo: { '@type': 'ImageObject', url: 'https://www.namore.app/logo@2x.png' },
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: 'fr-FR',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: plain(f.a) },
+      })),
+    },
+  ],
+};
+import { COMPARISON_HUBS } from '../../../data/hub-alternates';
+---
+
+<BaseLayout
+  lang="fr"
+  noindex={!FR_LIVE}
+  title={`${title} | Namore`}
+  description={description}
+  canonical={canonical}
+  alternates={COMPARISON_HUBS}
+  jsonLd={jsonLd}
+>
+  <article class="post" lang="fr">
+    <DisclosureFr />
+
+    <header class="post-head">
+      <p class="post-kicker">Comparatif · consulté le {VERIFIED}</p>
+      <h1>Les meilleures applis de prénoms de bébé en 2026</h1>
+    </header>
+
+    <p class="post-standfirst">
+      Il y a les prénoms qu’on lance à voix haute, un peu trop vite, en guettant la tête de l’autre.
+      Et il y a ceux qu’on garde pour soi, parce qu’on voit déjà venir la petite moue. Choisir un
+      prénom à deux, ce n’est presque jamais manquer d’idées : c’est avoir des idées qu’on n’ose plus
+      proposer.
+    </p>
+    <p>
+      Pour feuilleter des prénoms le soir sur le canapé, à peu près n’importe quelle application de
+      prénoms de bébé fait l’affaire. Les différences apparaissent ailleurs : ce qui se passe quand
+      vous aimez tous les deux le même prénom, ce qui se passe quand vous n’êtes pas d’accord, et ce
+      que l’appli vous coûtera une fois passé l’enthousiasme des premiers soirs. Voici six applis
+      telles qu’elles se décrivent elles-mêmes, puis la nôtre, puis ce que nous en pensons.
+    </p>
+
+    <p class="post-method">
+      Notre méthode : nous avons lu les fiches de l’App Store français et de Google Play France le
+      {VERIFIED}. Ce qui concerne une autre appli est repris mot pour mot, avec un lien vers la
+      fiche ; quand une fiche ne dit rien sur un point, le tableau l’indique. Nous ne citons pas les
+      avis d’utilisateurs : en choisir quelques-uns reviendrait à garder ceux qui nous arrangent. Les prix sont ceux de la rubrique « Achats intégrés » de chaque fiche App Store, recopiés tels quels.
+    </p>
+
+    <h2>Les autres applis, dans leurs propres mots</h2>
+    <p>
+      Nous vendons l’une de ces applis, et vous n’avez aucune raison de nous croire sur parole quand
+      nous parlons des autres. Voici donc ce que chaque éditeur écrit dans sa propre fiche, recopié.
+      Notre avis vient après, signalé comme tel.
+    </p>
+    <CompareTableFr apps={APPS} cols={['price', 'names', 'partner', 'ads']} />
+    <details class="sf-details">
+      <summary>Les fiches mot pour mot, point par point</summary>
+      <div class="sf-details-inner">
+        {APPS.map((a) => <StoreFactsFr app={a} />)}
+      </div>
+    </details>
+
+    <h2>Et puis il y a la nôtre</h2>
+    <p>
+      Namore est né d’une impasse assez banale. Nous avions des dizaines de prénoms, et au bout de
+      quelques semaines nous ne parlions plus de prénoms, mais de qui avait cédé la dernière fois.
+    </p>
+    <p>
+      L’appli est donc faite pour un cas plus étroit que « trouver des idées » : permettre à deux
+      personnes de se décider sans se marcher dessus. Chacun swipe sur son propre téléphone, un
+      prénom ne devient un match que si vous avez dit oui tous les deux, et vos votes restent privés.
+      Ensuite vient le dernier tour : chacun note vos matchs de 1 à 5 de son côté, puis vous découvrez
+      les deux classements côte à côte. Si vous cherchez surtout de l’inspiration, ce n’est pas
+      forcément l’appli qu’il vous faut. Le détail de ce qui compte à deux est dans
+      <a href="/fr/blog/application-prenom-bebe-couple">notre guide pour les couples</a>.
+    </p>
+
+    <Shot
+      shots={['/fr/blog/shots/hook.webp', '/fr/blog/shots/short.webp']}
+      width={600}
+      height={1300}
+      alts={[
+        'Carte du prénom Olivia dans Namore : prononciation, signification « Olivier, ou celle qui vit », surnoms et ambiance, avec les boutons pour passer ou aimer',
+        'Le « Tour de la shortlist » dans Namore : chaque prénom en commun reçoit d’une à cinq étoiles, et les notes de l’autre restent masquées jusqu’à ce que vous ayez fini',
+      ]}
+      caption="À gauche, une carte de la pile. À droite, le dernier tour : chacun note vos prénoms en commun, sans voir les notes de l’autre avant d’avoir fini."
+    />
+
+    <WhyNamore
+      lang="fr"
+      heading="Ce que fait l’appli, concrètement"
+      only={['design', 'decision-round', 'shared-deck', 'no-account', 'search-add', 'for-you', 'countries-top', 'card-themes', 'no-repeats', 'privacy-price']}
+    />
+
+    <p class="post-caveat">
+      Là où Namore est plus faible : l’appli est récente. Sur l’App Store depuis mai 2026, sur Google
+      Play depuis août 2026, avec encore peu de notes. Si vous préférez une appli que beaucoup de gens
+      ont déjà notée, la fiche App Store de <a href={q.p2Rating.src} rel="nofollow noopener" target="_blank">Prénom de bébé à 2</a> affiche <q>{q.p2Rating.q}</q>, et celle
+      de <a href={q.kinderRating.src} rel="nofollow noopener" target="_blank">Kinder</a> <q>{q.kinderRating.q}</q>. Si la taille du catalogue compte pour vous, la
+      fiche de Prénom de bébé à 2 annonce <q>{q.p2Names.q}</q>&nbsp;; nous en avons 15 182. Enfin, il n’y
+      a chez nous ni forum ni communauté, pas de suivi de grossesse, et la famille ou les amis ne
+      peuvent pas voter : Namore se joue à deux. Si c’est ce que vous cherchez, notre appli ne vous le
+      donnera pas.
+    </p>
+
+    <p class="cta-row">
+      <a class="btn btn-ink" href={APP_STORE(campaign)}>Télécharger Namore sur l’App Store</a>
+      <a class="btn btn-ghost" href={PLAY_STORE(campaign)}>Disponible sur Google Play</a>
+    </p>
+
+    <h2>Ce que nous conseillerions</h2>
+    <p>
+      À partir d’ici, c’est un avis, et l’avis d’un éditeur qui vend l’une de ces applis. Prenez-le
+      comme tel. Chaque conseil s’appuie sur ce que dit la fiche de l’appli concernée, citée entre
+      guillemets.
+    </p>
+    <ul>
+      <li>
+        <strong>Vous voulez une appli entièrement gratuite, avec une étape après le match :</strong>
+        Namie. Sa fiche indique <q>{q.namieFree.q}</q> et annonce, après le match,
+        <q>{q.namieAfter1.q}</q>, <q>{q.namieAfter2.q}</q> et <q>{q.namieAfter3.q}</q>
+        <a class="sf-src" href={q.namieFree.src} rel="nofollow noopener" target="_blank">(source)</a>.
+      </li>
+      <li>
+        <strong>Vous tenez à une appli qui a déjà beaucoup de notes :</strong> Prénom de bébé à 2,
+        dont la fiche App Store affiche <q>{q.p2Rating.q}</q>
+        <a class="sf-src" href={q.p2Rating.src} rel="nofollow noopener" target="_blank">(source)</a>
+        et dont la fiche Google Play indique <q>{q.p2Partner.q}</q>
+        <a class="sf-src" href={q.p2Partner.src} rel="nofollow noopener" target="_blank">(source)</a>.
+      </li>
+      <li>
+        <strong>Vous voulez voir aussi les prénoms « à discuter » :</strong>
+        Baby Name Genius. Sa fiche indique <q>{q.geniusPartner.q}</q>
+        <a class="sf-src" href={q.geniusPartner.src} rel="nofollow noopener" target="_blank">(source)</a>.
+      </li>
+      <li>
+        <strong>Vous préférez acheter des prénoms par lots, au fur et à mesure :</strong> Kinder. Sa
+        fiche indique <q>{q.kinderSet1.q}</q> et <q>{q.kinderSet2.q}</q>, et précise
+        <q>{q.kinderPartner.q}</q>
+        <a class="sf-src" href={q.kinderPartner.src} rel="nofollow noopener" target="_blank">(source)</a>.
+      </li>
+      <li>
+        <strong>Vous voulez des suggestions par IA :</strong> CharliesNames. Sa fiche indique
+        <q>{q.charlieAi.q}</q> et annonce <q>{q.charlieNames.q}</q>
+        <a class="sf-src" href={q.charlieAi.src} rel="nofollow noopener" target="_blank">(source)</a>.
+      </li>
+      <li>
+        <strong>Vous voulez relier vos téléphones par un simple lien :</strong> BabyName. Sa fiche
+        App Store, dans un passage présenté comme le texte de l’équipe éditoriale d’Apple, indique
+        <q>{q.babynameAccount.q}</q>
+        <a class="sf-src" href={q.babynameAccount.src} rel="nofollow noopener" target="_blank">(source)</a>.
+        Sa fiche Google Play ajoute <q>{q.babynameAdd.q}</q>
+        <a class="sf-src" href={q.babynameAdd.src} rel="nofollow noopener" target="_blank">(source)</a>.
+      </li>
+      <li>
+        <strong>Vous avez déjà une vingtaine de prénoms, vous tournez en rond depuis des semaines, et
+        vous voulez un classement que chacun a fait sans voir celui de l’autre :</strong> c’est pour
+        ce moment-là que nous avons fait Namore.
+      </li>
+    </ul>
+    <p>
+      Et le conseil le plus honnête que nous ayons : toutes ces applis se téléchargent gratuitement.
+      Installez-en deux et regardez laquelle l’autre ouvre encore au bout de trois jours. Ça tranche
+      plus souvent qu’un tableau comparatif, y compris contre nous.
+    </p>
+
+    <h2>Ce qu’il faut regarder avant d’installer</h2>
+    <ul>
+      <li>
+        <strong>Ce qui se passe après le match.</strong> Une liste de prénoms en commun n’est pas
+        encore une décision : regardez si l’appli prévoit une suite. Nous comparons ce point dans
+        <a href="/fr/blog/application-prenom-bebe-tinder">Le « Tinder des prénoms », et après ?</a>
+      </li>
+      <li>
+        <strong>La façon de vous connecter.</strong> E-mail, lien, code : quand il faut créer deux
+        comptes avant le premier prénom, l’un des deux décroche souvent, d’après notre expérience.
+      </li>
+      <li>
+        <strong>La publicité.</strong> Les fiches l’indiquent : « Contient : Publicité » sur l’App Store, « Contient des annonces » sur Google Play.
+      </li>
+      <li>
+        <strong>Le prix, et pour combien de téléphones.</strong> Il s’affiche au moment de l’achat ;
+        vérifiez s’il vaut pour un téléphone ou pour les deux. Le détail est dans
+        <a href="/fr/blog/application-prenom-bebe-gratuite">ce que « gratuit » veut dire</a>.
+      </li>
+      <li>
+        <strong>Vos propres prénoms.</strong> Si l’un de vous a un prénom de famille en tête, voyez si
+        l’appli permet de l’ajouter, et si l’autre saura d’où il vient.
+      </li>
+    </ul>
+
+    <h2>Questions fréquentes</h2>
+    <dl class="faq">
+      {faqs.map((f) => (
+        <div class="faq-item">
+          <dt>{f.q}</dt>
+          <dd>
+            {f.a.map((p) =>
+              typeof p === 'string' ? (
+                p
+              ) : (
+                <><q>{p.q}</q> <a class="sf-src" href={p.src} rel="nofollow noopener" target="_blank">(source)</a></>
+              ),
+            )}
+          </dd>
+        </div>
+      ))}
+    </dl>
+
+    <ClusterFootFr current={slug} />
+  </article>
+</BaseLayout>

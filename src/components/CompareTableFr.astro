@@ -1,0 +1,69 @@
+---
+/**
+ * CompareTableFr — the scannable overview for the French cluster. Same
+ * evidence rule as CompareTable.astro: every competitor cell is a literal
+ * transcription from the listing (App Store France unless the cell says
+ * Google Play), or "Rien à ce sujet dans la fiche". The Namore row is our own
+ * description and says so.
+ */
+import { NO_STATEMENT, VERIFIED, type App, type Sourced } from '../data/apps-fr';
+import { NAMORE_FR as NAMORE, LABELS_FR as LABELS, type CellKeyFr } from '../data/namore-cells';
+
+export interface Props {
+  apps: App[];
+  cols?: CellKeyFr[];
+  withNote?: boolean;
+}
+const { apps, cols = ['price', 'names', 'partner', 'ads'], withNote = true } = Astro.props;
+
+const lines = (v: NonNullable<Sourced>) =>
+  [v.q, v.q2, v.q3, v.q4, v.q5].filter(Boolean) as string[];
+const anyCompiled = apps.some((a) => cols.some((c) => a[c]?.compiled));
+const anyPlay = apps.some((a) => cols.some((c) => a[c]?.src.includes('play.google.com')));
+---
+
+<div class={`table-wrap${cols.length >= 4 ? ' table-wrap-wide' : ''}`}>
+  <table class="cmp cmp-overview" lang="fr">
+    <thead>
+      <tr>
+        <th>Appli</th>
+        {cols.map((c) => <th>{LABELS[c]}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="is-ours">
+        <td data-label="Appli">Namore <span class="sf-note">(notre appli)</span></td>
+        {cols.map((c) => <td data-label={LABELS[c]}>{NAMORE[c]}</td>)}
+      </tr>
+      {apps.map((a) => (
+        <tr>
+          <td data-label="Appli">
+            <a href={a.src} rel="nofollow noopener" target="_blank">{a.name}</a>
+          </td>
+          {cols.map((c) => (
+            <td data-label={LABELS[c]}>
+              {a[c] ? (
+                <>
+                  {lines(a[c]!).map((l, i) => <>{i > 0 ? ' · ' : ''}<q>{l}</q></>)}
+                  {a[c]!.note ? <span class="sf-note"> ({a[c]!.note})</span> : null}
+                  {a[c]!.src !== a.src ? <> <a class="sf-src" href={a[c]!.src} rel="nofollow noopener" target="_blank">Source</a></> : null}
+                </>
+              ) : (
+                <span class="sf-none">{NO_STATEMENT}</span>
+              )}
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+{withNote ? (
+  <p class="post-caveat">    La ligne Namore est notre propre description, elle ne cite aucune fiche. Toutes les autres
+    indications sont reprises mot pour mot de la fiche de chaque appli sur l’App Store français{anyPlay
+      ? ' (ou sur Google Play France, quand la cellule le précise)'
+      : ''}, fiches consultées le {VERIFIED}.{anyCompiled
+      ? ' Quand une cellule contient plusieurs indications, ce sont des lignes distinctes de la même source, placées côte à côte par nos soins.'
+      : ''} Le texte complet figure plus bas sur cette page.
+  </p>
+) : null}

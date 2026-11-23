@@ -14,8 +14,13 @@ export interface Props {
   shots: string[];
   alts: string[];
   caption: string;
+  /** Pixel size of the source images (default: the 2026-05 PNG set). */
+  width?: number;
+  height?: number;
 }
-const { shots, alts, caption } = Astro.props;
+const { shots, alts, caption, width = 864, height = 1939 } = Astro.props;
+/** A full URL or absolute path is used as is (French cluster: /screenshots/2026-09/fr/*.webp). */
+const url = (s: string) => (s.startsWith('http') || s.startsWith('/') ? s : `https://www.namore.app/screenshots/${s}.png`);
 ---
 
 <figure class="appshots">
@@ -23,10 +28,10 @@ const { shots, alts, caption } = Astro.props;
     {shots.map((s, i) => (
       <div class="appshot-phone">
         <img
-          src={`https://www.namore.app/screenshots/${s}.png`}
+          src={url(s)}
           alt={alts[i]}
-          width="864"
-          height="1939"
+          width={width}
+          height={height}
           loading="lazy"
           decoding="async"
         />

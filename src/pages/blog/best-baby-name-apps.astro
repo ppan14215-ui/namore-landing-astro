@@ -73,12 +73,14 @@ const jsonLd = {
     },
   ],
 };
+import { COMPARISON_HUBS } from '../../data/hub-alternates';
 ---
 
 <BaseLayout
   title="Best baby name apps in 2026, compared | Namore"
   description="Six baby name apps side by side, each quoted from its own store listing with source links and dates, plus what Namore does differently."
   canonical={canonical}
+  alternates={COMPARISON_HUBS}
   jsonLd={jsonLd}
 >
   <article class="post">
@@ -137,7 +139,7 @@ const jsonLd = {
     <WhyNamore
       lang="en"
       heading="What the app actually does"
-      only={['design', 'decision-round', 'search-add', 'no-repeats', 'no-account', 'privacy-price']}
+      only={['design', 'card-themes', 'decision-round', 'shared-deck', 'for-you', 'countries-top', 'search-add', 'no-repeats', 'no-account', 'privacy-price']}
     />
 
     <p class="post-caveat">

@@ -1,0 +1,272 @@
+---
+/**
+ * /fr/blog/choisir-prenom-bebe-regles (2026-09-27). Informational page, no
+ * app comparison, so no DisclosureFr; the Namore section says plainly that
+ * Namore is our app.
+ *
+ * ⚠️ LEGAL CONTENT: every statement in « Ce que dit la loi » and « Où trouver
+ * les chiffres » restates one of three official pages, read on 2026-09-27:
+ *   • service-public.gouv.fr F882 « Choix du prénom de l’enfant »
+ *     (page dated « Vérifié le 20 mars 2026 »)
+ *   • Légifrance, Code civil art. 57, version en vigueur depuis le 4 août 2021
+ *     (modifié par la loi n° 2021-1017 du 2 août 2021). Quoted literally.
+ *   • insee.fr/fr/statistiques/8595130 « Fichier des prénoms », paru le 16/07/2026
+ * Nothing from memory or from secondary sites. If a source changes, re-read it
+ * before editing this page.
+ *
+ * The naming tips are ordinary craft, not an app feature. Namore does not score
+ * how a first name fits a surname; keep the product mention small and factual.
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ClusterFootFr from '../../../components/ClusterFootFr.astro';
+import Shot from '../../../components/Shot.astro';
+import { APP_STORE, PLAY_STORE } from '../../../data/apps-fr';
+import { FR_LIVE } from '../../../data/fr-live';
+
+const slug = 'choisir-prenom-bebe-regles';
+const canonical = `https://www.namore.app/fr/blog/${slug}`;
+const campaign = 'choisir_prenom_regles_fr';
+const title = 'Choisir un prénom en France : ce que dit la loi, et comment le tester à voix haute';
+const description =
+  'Ce que disent le Code civil et Service Public sur le choix du prénom, où trouver les chiffres de l’Insee, et six tests à faire à voix haute avec votre nom.';
+
+const CHECKED = '27 septembre 2026';
+const SRC = {
+  sp: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F882',
+  cc57: 'https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000043896203',
+  insee: 'https://www.insee.fr/fr/statistiques/8595130',
+};
+
+const faqs = [
+  {
+    q: 'Peut-on donner n’importe quel prénom à son enfant en France ?',
+    a: 'Presque. Il n’existe pas de liste de prénoms autorisés, mais le prénom, seul ou associé au nom, ne doit pas être contraire à l’intérêt de l’enfant ni au droit d’une autre personne à voir protéger son nom de famille. L’officier de l’état civil ne peut pas le refuser ; s’il le juge contraire à l’intérêt de l’enfant ou au droit des tiers, il en avise sans délai le procureur de la République, qui peut saisir le juge aux affaires familiales (Service Public et article 57 du Code civil, consultés le 27 septembre 2026).',
+  },
+  {
+    q: 'Combien de prénoms peut-on donner à un enfant ?',
+    a: 'Selon Service Public, il n’y a pas de règle sur le nombre de prénoms, mais l’officier de l’état civil peut estimer que leur multiplicité est contraire à l’intérêt de l’enfant. N’importe lequel peut devenir le prénom usuel ; les cartes d’identité et les passeports reprennent l’ordre de l’état civil.',
+  },
+  {
+    q: 'Que se passe-t-il si les parents ne sont pas d’accord sur le prénom ?',
+    a: 'Selon Service Public, c’est le juge aux affaires familiales qui est compétent pour trancher. Il faut saisir le tribunal judiciaire, et la représentation par avocat n’est pas obligatoire.',
+  },
+  {
+    q: 'Où trouver combien de bébés ont reçu un prénom ?',
+    a: 'Dans le Fichier des prénoms de l’Insee, paru le 16 juillet 2026 : enfants nés en France de 1900 à 2025, par année, au niveau national, régional et départemental, avec des effectifs arrondis au multiple de 5 le plus proche.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: title,
+      description,
+      inLanguage: 'fr-FR',
+      datePublished: '2026-09-27',
+      dateModified: '2026-09-27',
+      author: { '@type': 'Person', name: 'Julian Ziegler' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Namore',
+        logo: { '@type': 'ImageObject', url: 'https://www.namore.app/logo@2x.png' },
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+      citation: [SRC.sp, SRC.cc57, SRC.insee],
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: 'fr-FR',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  lang="fr"
+  noindex={!FR_LIVE}
+  title="Choisir un prénom en France : la loi et le test à voix haute | Namore"
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <article class="post" lang="fr">
+    <header class="post-head">
+      <p class="post-kicker">Guide · sources consultées le {CHECKED}</p>
+      <h1>{title}</h1>
+    </header>
+
+    <p class="post-standfirst">
+      En France, vous pouvez inventer un prénom, et l’officier de l’état civil ne pourra pas le
+      refuser. La loi est plus souple qu’on ne le croit, avec quelques limites nettes. Le reste se joue
+      ailleurs : dans la bouche de tous ceux qui prononceront ce prénom pendant des années, à
+      commencer par vous deux.
+    </p>
+
+    <h2>Ce que dit la loi</h2>
+    <p class="post-method">
+      Nous ne sommes pas juristes. Cette partie reprend la fiche
+      <a href={SRC.sp} rel="noopener" target="_blank">« Choix du prénom de l’enfant »</a> de
+      Service Public (page « Vérifié le 20 mars 2026 ») et
+      <a href={SRC.cc57} rel="noopener" target="_blank">l’article 57 du Code civil</a>, en vigueur
+      depuis le 4 août 2021, tous deux consultés le {CHECKED}. Pour un cas particulier, voyez avec la
+      mairie ou un professionnel du droit.
+    </p>
+
+    <h3>Les parents choisissent, sans liste imposée</h3>
+    <p>
+      Le Code civil le dit en une phrase : <q>Les prénoms de l'enfant sont choisis par ses père et
+      mère.</q> Le choix se fait lors de la déclaration de naissance, et Service Public rappelle :
+      <q>Il n'y a pas de liste de prénoms autorisés.</q> Vous pouvez reprendre un prénom déjà porté ou
+      en créer un.
+    </p>
+
+    <h3>Les limites</h3>
+    <p>
+      Service Public en donne trois. Le prénom, seul ou associé au nom de famille, ne doit pas être
+      contraire à l’intérêt de l’enfant (la fiche cite un prénom ridicule ou grossier). Il doit
+      respecter le droit d’une autre personne à voir protéger son nom de famille, par exemple le nom
+      d’une personne célèbre pris comme prénom. Enfin, un enfant qui ne porte le nom que d’un de ses
+      parents ne peut pas avoir pour prénom le nom de l’autre : l’enfant de M. Dupont et de
+      Mme Martin qui s’appelle seulement Dupont ne peut pas avoir Martin comme prénom.
+    </p>
+
+    <h3>Qui contrôle, et ce qui peut se passer</h3>
+    <p>
+      L’officier de l’état civil contrôle chaque prénom au moment de la déclaration : seul, avec les
+      autres prénoms et avec le nom. Mais, écrit Service Public, <q>L'officier de l'état civil ne peut
+      pas refuser les prénoms choisis par les parents.</q> S’il estime qu’un choix pose problème,
+      l’article 57 prévoit la suite :
+    </p>
+    <blockquote>
+      <p>
+        <q>Lorsque ces prénoms ou l'un d'eux, seul ou associé aux autres prénoms ou au nom, lui
+        paraissent contraires à l'intérêt de l'enfant ou au droit des tiers à voir protéger leur nom
+        de famille, l'officier de l'état civil en avise sans délai le procureur de la République.
+        Celui-ci peut saisir le juge aux affaires familiales.</q>
+      </p>
+    </blockquote>
+    <p>
+      Le juge peut ordonner la suppression du prénom sur les registres de l’état civil, et en
+      attribue un autre si les parents n’en choisissent pas un nouveau.
+    </p>
+
+    <h3>Plusieurs prénoms, orthographe</h3>
+    <p>
+      Il n’y a pas de règle sur le nombre de prénoms, mais l’officier de l’état civil peut estimer que
+      leur multiplicité est contraire à l’intérêt de l’enfant. N’importe lequel peut devenir le prénom
+      usuel ; les papiers d’identité, eux, gardent l’ordre de l’état civil. À la déclaration, vous
+      précisez l’orthographe de chaque prénom, et pour un prénom composé, le tiret ou le simple espace :
+      Marie-Anne et Marie Anne sont des prénoms composés, Marie, Anne sont deux prénoms. L’alphabet
+      doit être celui qui sert à l’écriture du français.
+    </p>
+
+    <h3>Si vous n’êtes pas d’accord entre vous</h3>
+    <p>
+      C’est prévu : en cas de désaccord entre les parents, le juge aux affaires familiales est
+      compétent pour trancher. Il faut saisir le tribunal judiciaire, et la représentation par avocat n’est pas obligatoire. Autant régler ça à la maison, à
+      voix haute.
+    </p>
+
+    <h2>Où trouver les chiffres</h2>
+    <p>
+      Pour savoir si un prénom est rare ou très donné, consultez le
+      <a href={SRC.insee} rel="noopener" target="_blank">Fichier des prénoms</a> de l’Insee, paru le
+      16 juillet 2026. Il couvre les enfants nés en France de 1900 à 2025, année par année, au niveau
+      national, régional et départemental. À savoir pour le lire : les effectifs sont arrondis au
+      multiple de 5 le plus proche, les données d’avant 2012 ne concernent que la France hors Mayotte,
+      et le fichier porte sur le premier prénom.
+    </p>
+
+    <h2>Le tester à voix haute, avec votre nom</h2>
+    <p>
+      Reste la vie quotidienne du prénom, qui ne se voit pas sur une liste. Six tests, dans l’ordre où
+      ils servent.
+    </p>
+
+    <h3>1. Dites-le en entier, trois fois</h3>
+    <p>
+      Prénom et nom, à voix normale, trois fois de suite : à la troisième, vous entendez ce qui
+      accroche. Puis dites-le comme il sera vraiment dit, crié depuis le bout du jardin ou appelé dans
+      la salle d’attente du pédiatre.
+    </p>
+
+    <h3>2. Écoutez le rythme et la jonction</h3>
+    <p>
+      Prénom et nom se disent d’un seul souffle, et l’accent tombe à la fin, donc sur le nom. Un
+      prénom long devant un nom long fait un groupe qui n’en finit pas ; une syllabe devant une
+      syllabe peut sonner sec. Écoutez aussi la jonction : une consonne finale prononcée glisse sur un
+      nom qui commence par une voyelle, et « Estelle Aubry » s’entend presque « Estè-laubry ».
+      Vérifiez que ce glissement ne fabrique pas un autre mot.
+    </p>
+
+    <h3>3. Écrivez les initiales</h3>
+    <p>
+      Prénom, éventuel deuxième prénom, nom : lisez les initiales comme un mot, puis comme un sigle.
+      Faites pareil avec l’adresse e-mail la plus probable. Mieux vaut que ce soit vous qui remarquiez
+      quelque chose plutôt qu’un camarade de CM1.
+    </p>
+
+    <h3>4. Passez par la cour de récré</h3>
+    <p>
+      Cherchez le diminutif que les autres enfants utiliseront, que vous l’aimiez ou non, et les rimes
+      faciles. Si le diminutif le plus probable vous déplaît vraiment, mieux vaut le savoir maintenant.
+    </p>
+
+    <h3>5. Épelez-le au téléphone</h3>
+    <p>
+      Imaginez-vous dicter le prénom à la crèche ou au service client. Accent, tréma, h muet, y ou i,
+      lettre doublée : chaque hésitation, votre enfant la répétera toute sa vie. Une orthographe
+      originale n’est pas un défaut, tant qu’elle est choisie en connaissance de cause.
+    </p>
+
+    <h3>6. Testez le prénom qu’on utilisera vraiment</h3>
+    <p>
+      Avec plusieurs prénoms, testez celui du quotidien, puis son diminutif. Avec un double nom de
+      famille, prenez la version complète : le groupe s’allonge vite.
+    </p>
+
+    <h2>Et l’appli dans tout ça</h2>
+    <p>
+      Namore est notre appli, autant le dire. Namore ne décide pas à votre place si un prénom va avec votre nom : ça se teste à voix haute, chez vous. Ce qu’elle peut faire,
+      c’est préparer le terrain. Dans Namore, chacun des 15 182 prénoms affiche sa prononciation, sa
+      signification et son origine. Et le dernier tour, où chacun note vos matchs de 1 à 5 en privé,
+      est le bon moment pour ce test : avant de mettre vos étoiles, dites chaque prénom avec votre nom,
+      trois fois.
+    </p>
+
+    <Shot
+      shots={['/fr/blog/shots/detail.webp', '/fr/blog/shots/short.webp']}
+      width={600}
+      height={1300}
+      alts={[
+        'Fiche du prénom Charlotte dans Namore : prononciation, signification « Forme féminine française de Charles, qui signifie femme libre », surnoms Charlie, Char et Lottie',
+        'Le « Tour de la shortlist » dans Namore : chaque prénom en commun reçoit d’une à cinq étoiles, et les notes de l’autre restent masquées jusqu’à ce que vous ayez fini',
+      ]}
+      caption="La fiche d’un prénom, avec sa prononciation, et le dernier tour, où chacun note vos matchs en privé. Le test à voix haute, c’est vous qui le faites."
+    />
+
+    <p class="cta-row">
+      <a class="btn btn-ink" href={APP_STORE(campaign)}>Télécharger Namore sur l’App Store</a>
+      <a class="btn btn-ghost" href={PLAY_STORE(campaign)}>Disponible sur Google Play</a>
+    </p>
+
+    <h2>Questions fréquentes</h2>
+    <dl class="faq">
+      {faqs.map((f) => (
+        <div class="faq-item">
+          <dt>{f.q}</dt>
+          <dd>{f.a}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <ClusterFootFr current={slug} />
+  </article>
+</BaseLayout>
