@@ -36,7 +36,12 @@ const boy = (r: NameRow) => r.gender === 'M';
 const uni = (r: NameRow) => r.gender === 'U';
 const originIs = (re: RegExp) => (r: NameRow) => re.test(r.origin_de ?? '') || re.test(r.origin ?? '');
 const short = (r: NameRow) => r.name.replace(/[^\p{L}]/gu, '').length <= 4 || r.name_length === 'short';
-const rare = (r: NameRow) => (r.births_last_year ?? 0) < 250 && r.trend_label !== 'popular';
+// births_last_year / popularity_history are EMPTY in the catalogue (verified
+// 2026-08-19, see data/namore-features.ts), so popularity comes from
+// trend_label and how many countries use the name (country_flags).
+const flagCount = (r: NameRow) => (r.country_flags ?? '').trim().split(/\s+/).filter(Boolean).length;
+const rare = (r: NameRow) =>
+  flagCount(r) <= 2 && (r.trend_label === 'stable' || r.trend_label === 'rising' || r.trend_label === 'reviving');
 const tags = (r: NameRow) => `${r.style_tags ?? ''},${r.vibe_tags ?? ''}`.toLowerCase();
 const vintage = (r: NameRow) => /vintage|old-fashioned|classic|traditional|nostalg/.test(tags(r));
 const rising = (r: NameRow) => r.trend_label === 'rising' || r.trend_label === 'reviving';
@@ -69,6 +74,7 @@ export const DE_LISTS: DeList[] = [
     description: 'Seltene, schöne Mädchennamen, die kaum jemand trägt, mit Bedeutung und Herkunft. Findet zu zweit den Namen, den ihr beide liebt.',
     intro: 'Namen, die schön klingen, aber selten vergeben werden. Eure Tochter ist damit vermutlich die einzige in der Kita-Gruppe.',
     filter: (r) => girl(r) && rare(r),
+    sort: (a, b) => sortRare(a, b),
   },
   {
     slug: 'seltene-jungennamen',
@@ -77,6 +83,7 @@ export const DE_LISTS: DeList[] = [
     description: 'Seltene Jungennamen, die nicht jeder hat, mit Bedeutung und Herkunft. Zu zweit swipen und den gemeinsamen Favoriten finden.',
     intro: 'Ungewöhnliche Jungennamen, die trotzdem leicht auszusprechen sind. Für Eltern, die keinen Top-10-Namen wollen.',
     filter: (r) => boy(r) && rare(r),
+    sort: (a, b) => sortRare(a, b),
   },
   {
     slug: 'kurze-maedchennamen',
@@ -192,8 +199,19 @@ export const DE_LISTS: DeList[] = [
   },
 ];
 
+const TREND_ORDER: Record<string, number> = { popular: 0, rising: 1, classic_steady: 2, reviving: 3, stable: 4, fading: 5 };
+/** Familiar first: DACH chart names, then trend, then how widely the name is used. */
 export function sortDefault(a: NameRow, b: NameRow): number {
-  return (b.births_last_year ?? 0) - (a.births_last_year ?? 0) || a.name.localeCompare(b.name, 'de');
+  return (
+    (dachOrder.get(a.name.toLowerCase()) ?? 999) - (dachOrder.get(b.name.toLowerCase()) ?? 999) ||
+    (TREND_ORDER[a.trend_label ?? ''] ?? 9) - (TREND_ORDER[b.trend_label ?? ''] ?? 9) ||
+    flagCount(b) - flagCount(a) ||
+    a.name.localeCompare(b.name, 'de')
+  );
+}
+/** For "rare" lists: rising first, then the more widely recognisable rare names. */
+function sortRare(a: NameRow, b: NameRow): number {
+  return (TREND_ORDER[a.trend_label ?? ''] ?? 9) - (TREND_ORDER[b.trend_label ?? ''] ?? 9) || flagCount(b) - flagCount(a) || a.name.localeCompare(b.name, 'de');
 }
 
 /** Rows for one list, or null if the list is too thin to publish. */
