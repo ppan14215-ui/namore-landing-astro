@@ -167,8 +167,10 @@ ${topUrls}
 // NAMES_DIR. Blog articles build to dist/blog/<slug>/ and dist/de/blog/<slug>/
 // and would otherwise appear in no sitemap at all.
 // fr/blog added 2026-09-27 when FR_LIVE went on (src/data/fr-live.ts).
-const BLOG_DIRS = [join(DIST, 'blog'), join(DIST, 'de', 'blog'), join(DIST, 'fr', 'blog')];
+// de/vornamen added 2026-11-23: German list pages (src/lib/de-lists.ts).
+const BLOG_DIRS = [join(DIST, 'blog'), join(DIST, 'de', 'blog'), join(DIST, 'fr', 'blog'), join(DIST, 'de', 'vornamen')];
 const blogUrls = [];
+if (existsSync(join(DIST, 'de', 'vornamen', 'index.html'))) blogUrls.push(`${SITE}/de/vornamen`);
 for (const dir of BLOG_DIRS) {
   if (!existsSync(dir)) continue;
   for (const entry of readdirSync(dir)) {

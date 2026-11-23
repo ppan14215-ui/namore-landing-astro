@@ -1,0 +1,130 @@
+---
+/**
+ * /de/vornamen/<list> — German list pages (see src/lib/de-lists.ts for why).
+ * One page per list in DE_LISTS that has enough names with a German meaning.
+ */
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SwipeDeck from '@/components/SwipeDeck.astro';
+import type { NameRow } from '@/lib/types';
+import { nameToSlug } from '@/lib/types';
+import { getAllNames } from '@/lib/names';
+import { DE_LISTS, buildList, type DeList } from '@/lib/de-lists';
+
+export const getStaticPaths = (async () => {
+  const all = await getAllNames();
+  const built = DE_LISTS.map((list) => ({ list, rows: buildList(list, all) })).filter(
+    (x): x is { list: DeList; rows: NameRow[] } => x.rows !== null,
+  );
+  const siblings = built.map((b) => ({ slug: b.list.slug, label: b.list.h1.join('').trim() }));
+  console.log(`[build] generating ${built.length}/${DE_LISTS.length} German list pages`);
+  return built.map(({ list, rows }) => ({
+    params: { list: list.slug },
+    props: { list, rows, siblings: siblings.filter((s) => s.slug !== list.slug) },
+  }));
+}) satisfies GetStaticPaths;
+
+interface PageProps {
+  list: DeList;
+  rows: NameRow[];
+  siblings: { slug: string; label: string }[];
+}
+const { list, rows, siblings } = Astro.props as PageProps;
+const canonical = `https://www.namore.app/de/vornamen/${list.slug}`;
+const gender = (g: NameRow['gender']) => (g === 'M' ? 'Junge' : g === 'F' ? 'Mädchen' : 'Unisex');
+const [h1a, h1em, h1b] = list.h1;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Namore', item: 'https://www.namore.app/de/' },
+        { '@type': 'ListItem', position: 2, name: 'Vornamen', item: 'https://www.namore.app/de/vornamen' },
+        { '@type': 'ListItem', position: 3, name: list.h1.join('').trim(), item: canonical },
+      ],
+    },
+    {
+      '@type': 'ItemList',
+      name: list.h1.join('').trim(),
+      numberOfItems: rows.length,
+      itemListElement: rows.slice(0, 30).map((r, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: r.name,
+        url: `https://www.namore.app/names/${nameToSlug(r.name)}`,
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout title={list.title} description={list.description} canonical={canonical} jsonLd={jsonLd} lang="de">
+  <main class="wrap page">
+    <p class="page-eyebrow"><a href="/de/vornamen">Vornamen</a></p>
+    <h1 class="hub-title">{h1a}<em>{h1em}</em>{h1b}</h1>
+    <p class="hub-lede">{list.intro} {rows.length} Namen, jeweils mit Bedeutung und Herkunft.</p>
+
+    <SwipeDeck
+      name={rows[0]}
+      related={rows.slice(1, 6)}
+      lang="de"
+      heading={rows[0].name}
+      placement={`de_list_${list.slug}`}
+    />
+
+    <section class="de-grid" aria-label={list.h1.join('').trim()}>
+      <ol>
+        {rows.map((r) => (
+          <li>
+            <a href={`/names/${nameToSlug(r.name)}`}>
+              <span class="de-name">{r.name}</span>
+              <span class="de-meta">{gender(r.gender)}{r.origin_de ? ` · ${r.origin_de}` : ''}</span>
+              <span class="de-meaning">{r.meaning_short_de}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <aside class="de-pitch">
+      <h2>Ein Name, den <em>ihr beide</em> liebt.</h2>
+      <p>
+        Jeder swipt auf seinem eigenen Handy. Eure Listen bleiben privat, und Namore zeigt
+        euch nur die Namen, die ihr beide behalten habt. Danach entscheidet ihr zusammen.
+      </p>
+      <div class="de-pitch-actions">
+        <a class="btn btn-ink btn-lg" href={`https://apps.apple.com/de/app/id6766572995?utm_source=de_list&utm_medium=organic&utm_campaign=de_vornamen&utm_content=${list.slug}`} data-cta-location="de_list_bottom">Für iPhone laden</a>
+        <a class="btn btn-ink btn-lg" href={`https://play.google.com/store/apps/details?id=com.julian.namore&hl=de&utm_source=de_list&utm_medium=organic&utm_campaign=de_vornamen&utm_content=${list.slug}`} data-cta-location="de_list_bottom">Für Android laden</a>
+      </div>
+    </aside>
+
+    <nav class="de-more" aria-label="Weitere Vornamen-Listen">
+      <h2>Weitere Listen</h2>
+      <ul>
+        {siblings.map((s) => <li><a href={`/de/vornamen/${s.slug}`}>{s.label}</a></li>)}
+      </ul>
+    </nav>
+  </main>
+</BaseLayout>
+
+<style>
+  .hub-title { font-family: var(--serif); font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: -0.04em; line-height: 1.04; margin: 0 0 12px; }
+  .hub-title em { color: var(--terra-deep); }
+  .hub-lede { max-width: 60ch; color: var(--ink-2); margin: 0 0 40px; font-size: 1.05rem; line-height: 1.55; }
+  .de-grid ol { list-style: none; padding: 0; margin: 0 0 48px; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+  .de-grid a { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; border-radius: 16px; background: var(--paper); border: 1px solid var(--line); color: inherit; text-decoration: none; height: 100%; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+  .de-grid a:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(90, 60, 40, 0.1); }
+  .de-name { font-family: var(--serif); font-size: 1.45rem; letter-spacing: -0.02em; }
+  .de-meta { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+  .de-meaning { font-size: 0.92rem; color: var(--ink-2); margin-top: 4px; }
+  .de-pitch { max-width: 640px; margin: 0 auto 48px; padding: clamp(1.4rem, 4vw, 2.2rem); border-radius: 22px; background: var(--paper); border: 1px solid var(--line); border-left: 4px solid var(--terra); }
+  .de-pitch h2 { margin: 0 0 10px; font-family: var(--serif); font-weight: 400; font-size: clamp(1.6rem, 4.5vw, 2.2rem); letter-spacing: -0.035em; }
+  .de-pitch h2 em { color: var(--terra-deep); }
+  .de-pitch p { color: var(--ink-2); line-height: 1.55; margin: 0 0 16px; }
+  .de-pitch-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .de-more h2 { font-family: var(--serif); font-weight: 400; font-size: 1.5rem; margin: 0 0 12px; }
+  .de-more ul { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .de-more a { display: inline-block; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); text-decoration: none; font-size: 0.9rem; }
+</style>

@@ -25,11 +25,38 @@ import type { NameRow } from '@/lib/types';
 interface Props {
   name: NameRow;
   related: NameRow[];
+  lang?: 'en' | 'de';
+  /** Overrides the headline name (list pages use the list title). */
+  heading?: string;
+  placement?: string;
 }
-const { name, related } = Astro.props as Props;
+const { name, related, lang = 'en', heading, placement = 'name_page_deck' } = Astro.props as Props;
+const de = lang === 'de';
+const L = de
+  ? {
+      eyebrow: 'Probiert es aus wie in der App', keep: 'Würdest du', keepQ: 'behalten?', sub: 'Karte ziehen: rechts behalten, links weg.',
+      stampKeep: 'Behalten', stampSkip: 'Weg', meaningOf: 'Bedeutung von', savedEyebrow: 'Nur auf diesem Handy gemerkt',
+      revealA: 'Und jetzt: würde dein Partner', revealB: 'auch behalten?',
+      revealCopy: 'In Namore swipt ihr beide auf euren eigenen Handys. Eure Listen bleiben privat. Ihr seht nur die Namen, die ihr <strong>beide</strong> behalten habt.',
+      ios: 'Zusammen swipen auf dem iPhone', android: 'Zusammen swipen auf Android', more: 'Hier weiterswipen',
+      note: 'Kostenlos starten · keine Werbung · kein Konto nötig', namesN: (n: number) => `${n} Namen`,
+      skipAria: 'Namen überspringen', keepAria: 'Namen behalten', iosNs: 'Für iPhone laden', androidNs: 'Für Android laden',
+    }
+  : {
+      eyebrow: 'Try it like in the app', keep: 'Would you keep', keepQ: '?', sub: 'Drag the card: right to keep, left to skip.',
+      stampKeep: 'Keep', stampSkip: 'Skip', meaningOf: 'Meaning of', savedEyebrow: 'Saved on this phone only',
+      revealA: 'Now: would your partner keep', revealB: 'too?',
+      revealCopy: 'In Namore you both swipe on your own phones. Your lists stay private. You only see the names you <strong>both</strong> kept.',
+      ios: 'Swipe together on iPhone', android: 'Swipe together on Android', more: 'Keep swiping here',
+      note: 'Free to start · no ads · no account needed', namesN: (n: number) => `${n} names`,
+      skipAria: 'Skip this name', keepAria: 'Keep this name', iosNs: 'Get for iPhone', androidNs: 'Get for Android',
+    };
 
 const cards = [name, ...related].slice(0, 6);
-const gender = (g: NameRow['gender']) => (g === 'M' ? 'Boy' : g === 'F' ? 'Girl' : 'Unisex');
+const gender = (g: NameRow['gender']) =>
+  de ? (g === 'M' ? 'Junge' : g === 'F' ? 'Mädchen' : 'Unisex') : g === 'M' ? 'Boy' : g === 'F' ? 'Girl' : 'Unisex';
+const originOf = (c: NameRow) => (de ? c.origin_de || c.origin : c.origin);
+const meaningOf = (c: NameRow) => (de ? c.meaning_short_de || c.meaning_short : c.meaning_short);
 const vibes = (s: string | null) =>
   (s ?? '')
     .split(/[,;|]/)
@@ -37,7 +64,7 @@ const vibes = (s: string | null) =>
     .filter(Boolean)
     .slice(0, 3);
 
-const content = encodeURIComponent('deck_' + name.name);
+const content = encodeURIComponent((de ? 'de_' : 'deck_') + (heading ? placement : name.name));
 const appStoreUrl =
   'https://apps.apple.com/app/id6766572995?utm_source=names_page&utm_medium=organic&utm_campaign=swipe_deck&utm_content=' +
   content;
@@ -46,11 +73,13 @@ const googlePlayUrl =
   content;
 ---
 
-<section class="deck" data-deck data-page-name={name.name} aria-label={`Swipe ${name.name} and similar names`}>
+<section class="deck" data-deck data-page-name={heading ?? name.name} data-names-label={L.namesN(0).replace('0 ', '')} aria-label={`Swipe ${name.name}`}>
   <header class="deck-head">
-    <p class="deck-eyebrow">Try it like in the app</p>
-    <h2>Would you keep <em>{name.name}</em>?</h2>
-    <p class="deck-sub">Drag the card: right to keep, left to skip.</p>
+    <p class="deck-eyebrow">{L.eyebrow}</p>
+    {heading
+      ? <h2>{L.keep} <em>{heading}</em> {L.keepQ}</h2>
+      : <h2>{L.keep} <em>{name.name}</em>{de ? ' ' : ''}{L.keepQ}</h2>}
+    <p class="deck-sub">{L.sub}</p>
   </header>
 
   <div class="deck-stage" data-stage>
@@ -61,24 +90,24 @@ const googlePlayUrl =
           data-card
           data-name={c.name}
           style={`--i:${i}`}
-          aria-label={`${c.name}, ${gender(c.gender)}${c.origin ? ', ' + c.origin : ''}`}
+          aria-label={`${c.name}, ${gender(c.gender)}${originOf(c) ? ', ' + originOf(c) : ''}`}
         >
-          <span class="stamp stamp-like" aria-hidden="true">Keep</span>
-          <span class="stamp stamp-nope" aria-hidden="true">Skip</span>
+          <span class="stamp stamp-like" aria-hidden="true">{L.stampKeep}</span>
+          <span class="stamp stamp-nope" aria-hidden="true">{L.stampSkip}</span>
           <p class="dcard-meta">
-            {gender(c.gender)}{c.origin ? ` · ${c.origin}` : ''}
+            {gender(c.gender)}{originOf(c) ? ` · ${originOf(c)}` : ''}
           </p>
           <p class="dcard-name">{c.name}</p>
           {c.pronunciation_text && <p class="dcard-pron">{c.pronunciation_text}</p>}
-          {c.meaning_short && <p class="dcard-meaning">&ldquo;{c.meaning_short}&rdquo;</p>}
+          {meaningOf(c) && <p class="dcard-meaning">{de ? '„' : '\u201C'}{meaningOf(c)}{de ? '“' : '\u201D'}</p>}
           {vibes(c.vibe_tags).length > 0 && (
             <p class="dcard-vibes">
               {vibes(c.vibe_tags).map((v) => <span>{v}</span>)}
             </p>
           )}
-          {i > 0 && (
+          {(i > 0 || heading) && (
             <a class="dcard-link" href={`/names/${c.name.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`}>
-              Meaning of {c.name} →
+              {L.meaningOf} {c.name} →
             </a>
           )}
         </li>
@@ -86,38 +115,35 @@ const googlePlayUrl =
     </ol>
 
     <div class="deck-reveal" data-reveal hidden>
-      <p class="deck-eyebrow">Saved on this phone only</p>
+      <p class="deck-eyebrow">{L.savedEyebrow}</p>
       <h3>
-        Now: would your partner keep <em data-reveal-names>{name.name}</em> too?
+        {L.revealA} <em data-reveal-names>{name.name}</em> {L.revealB}
       </h3>
-      <p class="reveal-copy">
-        In Namore you both swipe on your own phones. Your lists stay private. You only
-        see the names you <strong>both</strong> kept.
-      </p>
+      <p class="reveal-copy" set:html={L.revealCopy} />
       <ul class="reveal-chips" data-chips aria-label="Names you kept"></ul>
       <div class="reveal-actions">
-        <a class="btn btn-ink btn-lg store-ios" href={appStoreUrl} data-cta-location="name_page_deck" data-cta-message="swipe_deck">Swipe together on iPhone</a>
-        <a class="btn btn-ink btn-lg store-android" href={googlePlayUrl} data-cta-location="name_page_deck" data-cta-message="swipe_deck">Swipe together on Android</a>
+        <a class="btn btn-ink btn-lg store-ios" href={appStoreUrl} data-cta-location={placement} data-cta-message="swipe_deck">{L.ios}</a>
+        <a class="btn btn-ink btn-lg store-android" href={googlePlayUrl} data-cta-location={placement} data-cta-message="swipe_deck">{L.android}</a>
       </div>
-      <button type="button" class="reveal-more" data-more>Keep swiping here</button>
-      <p class="reveal-note">Free to start · no ads · no account needed</p>
+      <button type="button" class="reveal-more" data-more>{L.more}</button>
+      <p class="reveal-note">{L.note}</p>
     </div>
   </div>
 
   <div class="deck-controls" data-controls>
-    <button type="button" class="dbtn dbtn-nope" data-act="nope" aria-label="Skip this name">
+    <button type="button" class="dbtn dbtn-nope" data-act="nope" aria-label={L.skipAria}>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
     </button>
     <span class="deck-count" data-count aria-live="polite"></span>
-    <button type="button" class="dbtn dbtn-like" data-act="like" aria-label="Keep this name">
+    <button type="button" class="dbtn dbtn-like" data-act="like" aria-label={L.keepAria}>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" /></svg>
     </button>
   </div>
 
   <noscript>
     <div class="reveal-actions">
-      <a class="btn btn-ink btn-lg" href={appStoreUrl}>Get for iPhone</a>
-      <a class="btn btn-ink btn-lg" href={googlePlayUrl}>Get for Android</a>
+      <a class="btn btn-ink btn-lg" href={appStoreUrl}>{L.iosNs}</a>
+      <a class="btn btn-ink btn-lg" href={googlePlayUrl}>{L.androidNs}</a>
     </div>
   </noscript>
 </section>
@@ -174,8 +200,8 @@ const googlePlayUrl =
       0 18px 40px rgba(90, 60, 40, 0.14),
       0 4px 10px rgba(90, 60, 40, 0.06);
     transform-origin: 50% 120%;
-    transform: translate3d(0, calc(var(--depth, var(--i)) * 10px), 0)
-      scale(calc(1 - var(--depth, var(--i)) * 0.045));
+    transform: translate3d(0, calc(min(var(--depth, var(--i)), 2) * 10px), 0)
+      scale(calc(1 - min(var(--depth, var(--i)), 2) * 0.045));
     z-index: calc(10 - var(--i));
     transition: transform 0.38s cubic-bezier(0.2, 0.9, 0.25, 1.15), opacity 0.3s ease, box-shadow 0.3s ease;
     touch-action: pan-y;
@@ -188,6 +214,8 @@ const googlePlayUrl =
     justify-content: center;
   }
   .dcard:nth-child(n + 4) { opacity: 0; }
+  .deck.is-live .dcard:nth-child(n + 2) { pointer-events: none; }
+  .deck.is-live .dcard.is-top { pointer-events: auto; }
   .dcard.is-dragging { transition: none; cursor: grabbing; box-shadow: 0 30px 60px rgba(90, 60, 40, 0.22); }
   .dcard.is-gone { pointer-events: none; }
   .dcard-meta {
@@ -368,8 +396,9 @@ const googlePlayUrl =
     function layout() {
       cards.forEach((c, i) => {
         const d = i - idx;
+        c.classList.toggle('is-top', d === 0);
         if (d < 0) return;
-        c.style.setProperty('--depth', String(d));
+        c.style.setProperty('--depth', String(Math.min(d, 2)));
         c.style.zIndex = String(20 - d);
         c.style.opacity = d > 2 ? '0' : '1';
         if (!c.classList.contains('is-dragging')) c.style.transform = '';
@@ -382,7 +411,7 @@ const googlePlayUrl =
       if (liked.length === 0) {
         revealNames.textContent = pageName;
       } else {
-        revealNames.textContent = liked.length === 1 ? liked[0] : `${liked.length} names`;
+        revealNames.textContent = liked.length === 1 ? liked[0] : `${liked.length} ${deck.dataset.namesLabel || 'names'}`;
       }
       chips.innerHTML = '';
       liked.forEach((n) => {
