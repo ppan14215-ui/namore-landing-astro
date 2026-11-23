@@ -114,6 +114,20 @@ const googlePlayUrl =
     <p class="deck-sub">{L.sub}</p>
   </header>
 
+  <div class="phone">
+  <div class="phone-screen">
+  <div class="phone-status" aria-hidden="true">
+    <span class="ps-time">9:41</span>
+    <span class="ps-island"></span>
+    <span class="ps-icons">
+      <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+      <svg viewBox="0 0 26 12"><rect x="0.5" y="0.5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2.5" y="2.5" width="16" height="7" rx="2"/><rect x="24" y="4" width="1.6" height="4" rx=".8" opacity=".45"/></svg>
+    </span>
+  </div>
+  <div class="phone-appbar" aria-hidden="true">
+    <span class="pa-tab is-on">{de ? 'Für dich' : 'For You'}</span>
+    <span class="pa-tab">{de ? 'Matches' : 'Matches'}</span>
+  </div>
   <div class="deck-stage" data-stage>
     <span class="deck-count" data-count aria-live="polite"></span>
     <ol class="deck-stack" data-stack>
@@ -176,6 +190,9 @@ const googlePlayUrl =
       {L.love}
     </button>
   </div>
+  <span class="phone-home" aria-hidden="true"></span>
+  </div>
+  </div>
 
   <noscript>
     <div class="reveal-actions">
@@ -219,9 +236,92 @@ const googlePlayUrl =
   .deck-sub { margin: 6px 0 0; color: var(--ink-3); font-size: 0.9rem; }
 
   /* Stage: fixed height so flying cards never reflow the page */
+  /* Phone mockup: the deck lives inside an iPhone so it reads as the app */
+  .phone {
+    position: relative;
+    width: min(330px, 84vw);
+    margin: 4px auto 0;
+    padding: 11px;
+    border-radius: 54px;
+    background: linear-gradient(145deg, #3a332d, #15120f 55%, #2b2520);
+    box-shadow:
+      0 0 0 1.5px #5a5048 inset,
+      0 0 0 3px #0d0b09 inset,
+      0 40px 80px rgba(40, 24, 16, 0.32),
+      0 12px 26px rgba(40, 24, 16, 0.2);
+  }
+  .phone::before, .phone::after {
+    content: '';
+    position: absolute;
+    width: 3px;
+    border-radius: 2px;
+    background: #2b2520;
+  }
+  .phone::before { left: -3px; top: 120px; height: 56px; }
+  .phone::after { right: -3px; top: 150px; height: 80px; }
+  .phone-screen {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    aspect-ratio: 9 / 19.2;
+    border-radius: 44px;
+    overflow: hidden;
+    background: var(--paper);
+    isolation: isolate;
+  }
+  .phone-status {
+    flex: none;
+    position: relative;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 26px 0 30px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .ps-island {
+    position: absolute;
+    left: 50%;
+    top: 10px;
+    width: 96px;
+    height: 28px;
+    margin-left: -48px;
+    border-radius: 16px;
+    background: #0d0b09;
+  }
+  .ps-icons { display: inline-flex; gap: 5px; align-items: center; }
+  .ps-icons svg { height: 11px; width: auto; fill: currentColor; }
+  .phone-appbar {
+    flex: none;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 2px 20px 8px;
+    font-family: var(--serif);
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    color: var(--ink-3);
+  }
+  .pa-tab.is-on { color: var(--ink); }
+  .pa-tab:not(.is-on) { font-size: 15px; }
+  .phone-home {
+    flex: none;
+    display: block;
+    width: 112px;
+    height: 4px;
+    margin: 6px auto 8px;
+    border-radius: 3px;
+    background: var(--ink);
+    opacity: 0.85;
+  }
   .deck-stage {
     position: relative;
-    height: min(500px, 128vw);
+    flex: 1;
+    min-height: 0;
+    margin: 0 10px;
     perspective: 1200px;
   }
   .deck-stack { list-style: none; margin: 0; padding: 0; position: absolute; inset: 0; }
@@ -230,15 +330,14 @@ const googlePlayUrl =
      italic meaning, mono meta with rose dots. */
   .dcard {
     position: absolute;
-    inset: 4px 4px 22px;
-    border-radius: 24px;
+    inset: 0 0 12px;
+    border-radius: 26px;
     overflow: hidden;
     background: var(--ink);
     color: var(--paper);
-    box-shadow: 0 24px 48px rgba(40, 24, 16, 0.28), 0 6px 14px rgba(40, 24, 16, 0.14);
-    transform-origin: 50% 120%;
-    transform: translate3d(0, calc(min(var(--depth, var(--i)), 2) * 12px), 0)
-      scale(calc(1 - min(var(--depth, var(--i)), 2) * 0.05));
+    box-shadow: 0 10px 24px rgba(40, 24, 16, 0.22);
+    transform-origin: 50% 50%;
+    transform: scale(calc(1 - min(var(--depth, var(--i)), 2) * 0.04));
     z-index: calc(10 - var(--i));
     transition: transform 0.38s cubic-bezier(0.2, 0.9, 0.25, 1.15), opacity 0.3s ease, box-shadow 0.3s ease;
     touch-action: pan-y;
@@ -360,8 +459,8 @@ const googlePlayUrl =
   .stamp-nope { right: 20px; color: #FFD8CC; transform: rotate(12deg); opacity: var(--nope, 0); }
   .deck-count {
     position: absolute;
-    top: 18px;
-    right: 18px;
+    top: 14px;
+    right: 14px;
     z-index: 30;
     height: 28px;
     padding: 0 11px;
@@ -378,14 +477,14 @@ const googlePlayUrl =
 
   /* Rail: the app's Pass / Love pills */
   .deck-controls {
+    flex: none;
     display: flex;
     gap: 10px;
-    margin-top: 6px;
-    padding: 0 4px;
+    padding: 0 12px;
   }
   .pill {
-    height: 52px;
-    border-radius: 26px;
+    height: 48px;
+    border-radius: 24px;
     border: 0;
     display: inline-flex;
     align-items: center;
@@ -410,11 +509,14 @@ const googlePlayUrl =
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    padding: 6px 4px;
+    padding: 6px 8px;
+    background: var(--paper);
+    z-index: 40;
     opacity: 0;
     transform: translateY(14px) scale(0.98);
     transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.2, 0.9, 0.25, 1.1);
   }
+  .deck-reveal[hidden] { display: none; }
   .deck-reveal.is-on { opacity: 1; transform: none; }
   .reveal-copy { margin: 10px auto 0; max-width: 46ch; color: var(--ink-2); font-size: 0.95rem; line-height: 1.5; }
   .reveal-chips { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 12px 0 0; padding: 0; }
@@ -441,7 +543,10 @@ const googlePlayUrl =
   .reveal-note { margin: 6px 0 0; color: var(--ink-3); font-family: var(--mono); font-size: 0.68rem; }
   .deck.is-revealed .deck-stack,
   .deck.is-revealed .deck-controls { visibility: hidden; }
-  .deck.is-revealed .deck-stage { height: 360px; }
+  .deck-reveal h3 { font-size: 1.45rem; }
+  .deck-reveal .reveal-copy { font-size: 0.85rem; }
+  .deck-reveal .reveal-actions { flex-direction: column; align-items: stretch; gap: 8px; }
+  .deck-reveal .reveal-actions .btn { justify-content: center; }
   .deck.is-revealed .deck-count { display: none; }
 
   /* Only show the store button for the visitor's OS (desktop sees both) */
@@ -449,7 +554,11 @@ const googlePlayUrl =
   :global(html.os-android) .deck .store-ios { display: none; }
 
   /* No-JS / pre-hydration: plain readable list, no stage */
-  .deck:not(.is-live) .deck-stage { height: auto; }
+  .deck:not(.is-live) .phone { width: auto; padding: 0; background: none; box-shadow: none; border-radius: 0; }
+  .deck:not(.is-live) .phone::before, .deck:not(.is-live) .phone::after,
+  .deck:not(.is-live) .phone-status, .deck:not(.is-live) .phone-appbar, .deck:not(.is-live) .phone-home { display: none; }
+  .deck:not(.is-live) .phone-screen { aspect-ratio: auto; overflow: visible; border-radius: 0; background: none; }
+  .deck:not(.is-live) .deck-stage { height: auto; margin: 0; }
   .deck:not(.is-live) .deck-stack { position: static; display: grid; gap: 10px; }
   .deck:not(.is-live) .dcard { position: relative; inset: auto; transform: none; opacity: 1; cursor: default; height: 360px; }
   .deck:not(.is-live) .deck-count { display: none; }
@@ -556,18 +665,22 @@ const googlePlayUrl =
       }
     }
 
-    // Drag physics on the top card.
+    // Drag physics on the top card. Move/up are tracked on window so a mouse
+    // release anywhere (outside the card, outside the deck) always drops it.
     let startX = 0, startY = 0, dx = 0, dy = 0, dragging = false, crossed = false, pid = -1;
+    deck.addEventListener('dragstart', (e) => e.preventDefault());
     deck.addEventListener('pointerdown', (e) => {
       const card = cards[idx];
       if (!card || !(e.target instanceof Node) || !card.contains(e.target)) return;
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      if (e.pointerType === 'mouse') e.preventDefault(); // no text selection / native drag
       dragging = true; crossed = false; pid = e.pointerId;
       startX = e.clientX; startY = e.clientY; dx = dy = 0;
       card.classList.add('is-dragging');
-      card.setPointerCapture?.(e.pointerId);
     });
-    deck.addEventListener('pointermove', (e) => {
+    const move = (e: PointerEvent) => {
       if (!dragging || e.pointerId !== pid) return;
+      if (e.pointerType === 'mouse' && e.buttons === 0) { end(e); return; }
       const card = cards[idx];
       dx = e.clientX - startX;
       dy = e.clientY - startY;
@@ -577,14 +690,15 @@ const googlePlayUrl =
       card.style.setProperty('--like', dx > 0 ? String(p) : '0');
       card.style.setProperty('--nope', dx < 0 ? String(p) : '0');
       const next = cards[idx + 1];
-      if (next) next.style.transform = `translate3d(0, ${10 - 10 * p}px, 0) scale(${0.955 + 0.045 * p})`;
+      if (next) next.style.transform = `scale(${0.96 + 0.04 * p})`;
       if (!crossed && Math.abs(dx) > THRESHOLD) { crossed = true; buzz(6); }
       if (crossed && Math.abs(dx) < THRESHOLD) crossed = false;
-    });
-    const end = (e: PointerEvent) => {
+    };
+    function end(e: PointerEvent | { pointerId: number }) {
       if (!dragging || e.pointerId !== pid) return;
       dragging = false;
       const card = cards[idx];
+      if (!card) return;
       if (Math.abs(dx) > THRESHOLD) {
         commit(dx > 0 ? 'like' : 'nope', false);
       } else {
@@ -594,9 +708,11 @@ const googlePlayUrl =
         card.style.transform = '';
         layout();
       }
-    };
-    deck.addEventListener('pointerup', end);
-    deck.addEventListener('pointercancel', end);
+    }
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', end);
+    window.addEventListener('pointercancel', end);
+    window.addEventListener('blur', () => end({ pointerId: pid }));
 
     btnLike.addEventListener('click', () => commit('like', true));
     btnNope.addEventListener('click', () => commit('nope', true));
