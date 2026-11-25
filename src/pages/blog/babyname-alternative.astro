@@ -1,0 +1,157 @@
+---
+/**
+ * /blog/babyname-alternative — English "alternative" page for BabyName – find
+ * it together (the app with the most ratings in the category), added
+ * 2026-11-25 (thread "Ideen aus X-Post prüfen": AI assistants cite
+ * "alternative" pages structured like answers).
+ *
+ * Evidence rule as in apps-en.ts: statements about BabyName come ONLY from
+ * its sourced entry (re-read from the US App Store 2026-11-25). Forbidden on
+ * this page as everywhere: "BabyName shipped swipe matching in December 2014".
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DisclosureEn from '../../components/DisclosureEn.astro';
+import StoreFactsEn from '../../components/StoreFactsEn.astro';
+import VsTableEn from '../../components/VsTableEn.astro';
+import WhyNamore from '../../components/WhyNamore.astro';
+import ClusterFootEn from '../../components/ClusterFootEn.astro';
+import Shot from '../../components/Shot.astro';
+import { APPS_EN, APP_STORE_EN, PLAY_EN } from '../../data/apps-en';
+
+const rival = APPS_EN.find((a) => a.slug === 'babyname')!;
+const canonical = 'https://www.namore.app/blog/babyname-alternative';
+const campaign = 'babyname_alternative_en';
+
+const faqs = [
+  {
+    q: 'What is a good alternative to BabyName – find it together?',
+    a: 'It depends on what you want to change. For no ads and no account, with a final round that turns your matches into one decision, Namore. For the largest name pool plus a community and an AI assistant, Baby Name Together. For editorial articles about names alongside swiping, Nameberry. All of them let two partners swipe and see the names they both liked.',
+  },
+  {
+    q: 'Does BabyName have ads?',
+    a: 'Its US App Store listing says “Contains Advertising” and sells a “No Ads $0.99” in-app purchase. Namore shows no ads, including on the free tier.',
+  },
+  {
+    q: 'How do couples connect in BabyName and in Namore?',
+    a: 'BabyName’s listing describes syncing phones “using a shareable link or AirDrop”. In Namore one partner opens a session and the other joins with a six-letter code; there is no account and no e-mail address.',
+  },
+  {
+    q: 'What does BabyName cost compared with Namore?',
+    a: 'BabyName’s listing shows several in-app purchases, among them “Epic Parents $7.99”, “Buy all filters $2.99” and “No Ads $0.99”. Namore is free with 100 swipes per partner, then free refills; one single one-time purchase unlocks unlimited swiping and all filters on both phones, priced per country in your app store, with no subscription.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: 'Looking for a BabyName alternative?',
+      description: 'An alternative to BabyName – find it together for couples: what BabyName’s own listing says, how Namore differs, and which other apps to consider.',
+      inLanguage: 'en',
+      datePublished: '2026-11-25',
+      dateModified: '2026-11-25',
+      author: { '@type': 'Person', name: 'Julian Ziegler' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Namore',
+        logo: { '@type': 'ImageObject', url: 'https://www.namore.app/logo@2x.png' },
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: 'en',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="BabyName alternative for couples: no ads, no account | Namore"
+  description="Looking for an alternative to BabyName – find it together? What BabyName’s own listing says, how Namore differs, and which other baby name apps to consider."
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <article class="post">
+    <DisclosureEn />
+
+    <header class="post-head">
+      <p class="post-kicker">Alternatives · Retrieved {rival.verified}</p>
+      <h1>Looking for a BabyName alternative?</h1>
+    </header>
+
+    <p class="post-standfirst">
+      BabyName – find it together is the app most couples meet first: 21K ratings, a simple idea,
+      swipe and match. If you are here, something about it did not fit. Here is what its own
+      listing says, how we do it differently, and which other apps are worth a look.
+    </p>
+
+    <h2>Short answer</h2>
+    <ul>
+      <li><strong>No ads, no account, and help after the match:</strong> Namore.</li>
+      <li><strong>Biggest name pool, community and an AI assistant:</strong> <a href="/blog/namore-vs-baby-name-together">Baby Name Together</a>.</li>
+      <li><strong>Articles about names alongside swiping:</strong> Nameberry (see <a href="/blog/best-baby-name-apps">all six apps compared</a>).</li>
+    </ul>
+
+    <h2>BabyName and Namore, side by side</h2>
+    <VsTableEn rival={rival} rows={['partner', 'price', 'ads', 'names']} />
+    <details class="sf-details">
+      <summary>Everything from {rival.name}, word for word</summary>
+      <div class="sf-details-inner">
+        <StoreFactsEn app={rival} />
+      </div>
+    </details>
+
+    <Shot
+      shots={['welcome', 'shortlist-reveal']}
+      alts={['Namore’s invite screen with a six-letter code that connects both phones', 'The reveal in Namore: both rankings combined, favourites at the top']}
+      caption="A six-letter code connects both phones, no account. At the end, both rankings combined."
+    />
+
+    <h2>What Namore does differently</h2>
+    <p>
+      The core is the same: you swipe on your own, and a name only appears when you have both said
+      yes. What changes is around it. There are no ads, so there is nothing to buy away. There is
+      no account; one of you opens a session and the other types a six-letter code. There is one
+      price, paid once, that covers both phones, instead of several packs. And after the match
+      comes a final round: you each rate your matches 1 to 5 in private, then both rankings are
+      shown side by side.
+    </p>
+    <WhyNamore lang="en" heading="What the app actually does" only={['decision-round', 'shared-deck', 'for-you', 'search-add', 'no-account', 'no-ads', 'privacy-price']} />
+
+    <p class="post-caveat">
+      Where BabyName is stronger: it has been around for years and has 21K ratings on the US App
+      Store. We have been on the App Store since May 2026 and on Google Play since August 2026. If
+      a big user base is what reassures you, that counts for BabyName.
+    </p>
+
+    <h2>Other alternatives worth a look</h2>
+    <ul>
+      <li><a href="/blog/namore-vs-baby-name-together">Baby Name Together</a>: 30,000+ names from 40+ countries, AI features, forum and polls, per its listing.</li>
+      <li><a href="/blog/best-baby-name-apps">Nameberry, Baby Name Genius, BabyCenter and NameHatch</a>: each quoted from its own listing in our six-app comparison.</li>
+    </ul>
+
+    <p class="cta-row">
+      <a class="btn btn-ink" href={APP_STORE_EN(campaign)}>Get Namore for iOS</a>
+      <a class="btn btn-ghost" href={PLAY_EN(campaign)}>Get it on Google Play</a>
+    </p>
+
+    <h2>Common questions</h2>
+    <dl class="faq">
+      {faqs.map((f) => (
+        <div class="faq-item">
+          <dt>{f.q}</dt>
+          <dd>{f.a}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <ClusterFootEn current="babyname-alternative" />
+  </article>
+</BaseLayout>
