@@ -25,7 +25,7 @@ const noneLabel = isWeb ? 'No statement on the vendor site' : NO_STATEMENT_EN;
 
 <div class="storefacts">
   <h3>What {app.name} says about itself</h3>
-  <p class="storefacts-meta">{app.vendor} · {app.updated} · retrieved {VERIFIED_EN}</p>
+  <p class="storefacts-meta">{app.vendor} · {app.updated} · retrieved {app.verified ?? VERIFIED_EN}</p>
   <dl>
     {rows.map(([label, v]) => (
       <div class="sf-row">

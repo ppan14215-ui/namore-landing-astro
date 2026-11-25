@@ -24,6 +24,8 @@
  */
 
 export const VERIFIED_EN = 'August 20, 2026';
+/** Entries re-read on 2026-11-25 (US App Store) carry `verified: REFRESH_EN`. */
+export const REFRESH_EN = 'November 25, 2026';
 
 export type Sourced = {
   q: string;
@@ -46,6 +48,8 @@ export type AppEn = {
   ai: Sourced;
   ads: Sourced;
   updated: string;
+  /** Set when this entry was re-read after VERIFIED_EN; shown instead of it. */
+  verified?: string;
 };
 
 const A = (id: string, slug: string) => `https://apps.apple.com/us/app/${slug}/id${id}`;
@@ -64,19 +68,21 @@ export const APPS_EN: AppEn[] = [
     ai: null,
     ads: { q: 'Contains Advertising', note: 'the listing also sells a \u201cNo Ads $0.99\u201d in-app purchase', src: A('950562312', 'babyname-find-it-together') },
     updated: 'Apr 16 (version 3.4.5) · © 2014-2025 Do Something Good LLC',
+    verified: REFRESH_EN,
   },
   {
     slug: 'baby-name-together',
     name: 'Baby Name Together',
     vendor: 'Linkinet, sold in Germany as \u201cUnser Baby Name\u201d (same app id)',
     src: A('918073224', 'baby-name-together'),
-    rating: { q: '4.5 · 321 Ratings', src: A('918073224', 'baby-name-together') },
-    price: { q: 'Full Version $7.99', q2: 'Unlock all features $1.99', q3: 'Monthly: $1.49', compiled: true, src: A('918073224', 'baby-name-together') },
-    names: { q: '30,000 baby names and counting!', src: A('918073224', 'baby-name-together') },
-    partner: { q: 'Each parent swipes independently and privately. The app reveals only the names you both liked — no arguments, no vetoes, just matches.', note: 'from the Google Play listing; the App Store listing says “Both parents install the app and link their accounts through email address.”', src: BNT_PLAY },
-    ai: { q: 'AI Name Assistant: Chat with AI for personalized name suggestions', src: A('918073224', 'baby-name-together') },
-    ads: { q: 'Contains ads', src: BNT_PLAY },
-    updated: 'Jul 1 (version 4.1.0)',
+    rating: { q: '4.5 · 326 Ratings', src: A('918073224', 'baby-name-together') },
+    price: { q: 'Full Version $7.99', q2: 'Unlock all features $1.99', q3: 'Baby Name Together Pro is available as a one-time purchase with lifetime access or as a monthly auto-renewing subscription.', compiled: true, src: A('918073224', 'baby-name-together') },
+    names: { q: '30,000+ boy, girl and unisex names from 40+ countries', src: A('918073224', 'baby-name-together') },
+    partner: { q: 'You and your partner each swipe through 30,000+ boy, girl and unisex names from 40+ countries, privately, on your own phones.', q2: 'Link your accounts in seconds with a QR code, an invitation code or a link.', compiled: true, src: A('918073224', 'baby-name-together') },
+    ai: { q: 'Now with the AI List, which learns from your swipes, and an AI name assistant.', src: A('918073224', 'baby-name-together') },
+    ads: { q: 'Contains Advertising', src: A('918073224', 'baby-name-together') },
+    updated: 'Nov 2 (version 5.0.2)',
+    verified: REFRESH_EN,
   },
   {
     slug: 'baby-name-genius',

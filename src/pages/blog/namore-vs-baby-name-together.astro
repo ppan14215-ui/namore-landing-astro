@@ -1,0 +1,178 @@
+---
+/**
+ * /blog/namore-vs-baby-name-together — first English head-to-head page,
+ * added 2026-11-25 (thread "Ideen aus X-Post prüfen": AI assistants cite
+ * "X vs Y" and "alternative" pages; the German cluster had four, English none).
+ *
+ * Evidence rule as in apps-en.ts: competitor statements come ONLY from the
+ * sourced entry (re-read from the US App Store 2026-11-25), rendered by
+ * VsTableEn / StoreFactsEn. Our prose says nothing factual about Baby Name
+ * Together beyond those quotes.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DisclosureEn from '../../components/DisclosureEn.astro';
+import StoreFactsEn from '../../components/StoreFactsEn.astro';
+import VsTableEn from '../../components/VsTableEn.astro';
+import WhyNamore from '../../components/WhyNamore.astro';
+import ClusterFootEn from '../../components/ClusterFootEn.astro';
+import Shot from '../../components/Shot.astro';
+import { APPS_EN, APP_STORE_EN, PLAY_EN } from '../../data/apps-en';
+
+const rival = APPS_EN.find((a) => a.slug === 'baby-name-together')!;
+const canonical = 'https://www.namore.app/blog/namore-vs-baby-name-together';
+const campaign = 'vs_baby_name_together_en';
+
+const faqs = [
+  {
+    q: 'What is the difference between Namore and Baby Name Together?',
+    a: 'Both let two partners swipe privately and show only the names you both liked. Baby Name Together lists 30,000+ names from 40+ countries, an AI List and an AI name assistant, a forum, polls and announcement cards, and links partners’ accounts by QR code, invitation code or link. Namore has 15,182 names, needs no account (one partner opens a session, the other joins with a six-letter code), shows no ads, and ends with a final round where you each rate your matches 1 to 5 in private before both rankings are shown side by side.',
+  },
+  {
+    q: 'Is Baby Name Together the same app as Unser Baby Name?',
+    a: 'Yes. It is one product from the same vendor, Linkinet, with the same app id in both stores. In Germany it is listed as “Unser Baby Name”. Comparison lists that show both as separate apps count the same app twice.',
+  },
+  {
+    q: 'How much does Baby Name Together cost compared with Namore?',
+    a: 'The US App Store listing of Baby Name Together shows the in-app purchases “Full Version $7.99” and “Unlock all features $1.99” and says Pro is available as a one-time purchase or as a monthly subscription. Namore is free with 100 swipes per partner, then free refills; one single one-time purchase unlocks unlimited swiping and all filters for both phones, priced per country in your app store, with no subscription.',
+  },
+  {
+    q: 'Which one is better for couples?',
+    a: 'If you want the largest name pool, a community and lots of extras, Baby Name Together offers more. If you want to start without accounts or ads and want help getting from a list of matches to one decision, Namore is built for that. Both are free to try.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: 'Namore vs Baby Name Together',
+      description: 'Namore and Baby Name Together side by side: what Baby Name Together’s own listing says, what Namore does, and which one suits which couple.',
+      inLanguage: 'en',
+      datePublished: '2026-11-25',
+      dateModified: '2026-11-25',
+      author: { '@type': 'Person', name: 'Julian Ziegler' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Namore',
+        logo: { '@type': 'ImageObject', url: 'https://www.namore.app/logo@2x.png' },
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: 'en',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="Namore vs Baby Name Together: which baby name app for couples? | Namore"
+  description="Namore and Baby Name Together side by side: what Baby Name Together’s own App Store listing says, what Namore does, and which one suits which couple."
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <article class="post">
+    <DisclosureEn />
+
+    <header class="post-head">
+      <p class="post-kicker">App comparison · Retrieved {rival.verified}</p>
+      <h1>Namore vs Baby Name Together</h1>
+    </header>
+
+    <p class="post-standfirst">
+      Of all the apps we compare ourselves with, this is the closest one, and the one where we
+      have to be most honest: it is older than us, bigger than us and lists twice as many names.
+      What separates us comes down to a few details that look small and are not, once you are two
+      tired people trying to agree on a name.
+    </p>
+
+    <h2>Short answer</h2>
+    <ul>
+      <li><strong>Best for the biggest name pool and extras</strong> (AI List, forum, polls, announcement cards): Baby Name Together.</li>
+      <li><strong>Best for starting with no account and no ads, and for actually reaching one decision:</strong> Namore.</li>
+    </ul>
+
+    <VsTableEn rival={rival} />
+    <details class="sf-details">
+      <summary>Everything from {rival.name}, word for word</summary>
+      <div class="sf-details-inner">
+        <StoreFactsEn app={rival} />
+      </div>
+    </details>
+
+    <Shot
+      shots={['shortlist-round']}
+      alts={['The final round in Namore: each match is rated with stars, the partner’s rating stays hidden']}
+      caption="What comes after the match: the final round, where each of you rates the matches on your own."
+    />
+
+    <h2>When we would point you to Baby Name Together</h2>
+    <p>
+      When size reassures you. 30,000+ names against our 15,182, statistics per country, and an
+      app that has been around for years. That is not a marketing line, it is a real lead, and we
+      will not close it this year. If you also want to talk names with other parents or let family
+      vote in a poll, its listing describes all of that, and we do not have it.
+    </p>
+    <p class="post-caveat">
+      Because it is often wrong in comparison lists: <strong>Baby Name Together and Unser Baby
+      Name are the same app</strong> from the same vendor, with the same app id in both stores.
+    </p>
+
+    <h2>Where Namore is different</h2>
+    <p>
+      Hidden votes until a match are not unique to us; Baby Name Together’s listing says the same.
+      The differences are elsewhere. There is no account: one of you opens a session, the other
+      types a six-letter code. There are no ads on the free tier. And the app does not stop at the
+      match: in the final round you each rate your matches 1 to 5 in private, then both rankings
+      are shown side by side, so a list of twenty “maybe” names turns into one.
+    </p>
+    <WhyNamore lang="en" heading="What Namore does" only={['decision-round', 'shared-deck', 'for-you', 'countries-top', 'no-account', 'privacy-price']} />
+
+    <h2>Choose Baby Name Together if …</h2>
+    <ul>
+      <li>the biggest collection matters most; its listing says 30,000+ names from 40+ countries.</li>
+      <li>you want an AI assistant to chat with about names.</li>
+      <li>you want a community, polls for family, or birth announcement cards in the same app.</li>
+    </ul>
+
+    <h2>Choose Namore if …</h2>
+    <ul>
+      <li>you want to start without an account or an e-mail address.</li>
+      <li>you do not want to see ads.</li>
+      <li>you want one price, paid once, for both phones, and no subscription next to it.</li>
+      <li>you do not want to end up in front of another list after the match.</li>
+    </ul>
+
+    <h2>Our verdict</h2>
+    <p>
+      We are a vendor, so read this accordingly. If you love statistics and want the biggest
+      possible collection, take Baby Name Together; it has more than we do. If accounts and ads
+      put you off, or you already have a pile of matches and still no name, try us. Both are free,
+      so you do not have to decide before you try.
+    </p>
+
+    <p class="cta-row">
+      <a class="btn btn-ink" href={APP_STORE_EN(campaign)}>Get Namore for iOS</a>
+      <a class="btn btn-ghost" href={PLAY_EN(campaign)}>Get it on Google Play</a>
+    </p>
+
+    <h2>Common questions</h2>
+    <dl class="faq">
+      {faqs.map((f) => (
+        <div class="faq-item">
+          <dt>{f.q}</dt>
+          <dd>{f.a}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <ClusterFootEn current="namore-vs-baby-name-together" />
+  </article>
+</BaseLayout>

@@ -1,0 +1,63 @@
+---
+/**
+ * VsTableEn — English twin of VsTable.astro (added 2026-11-25 for the first
+ * English head-to-head pages). Same evidence rule: the competitor column is
+ * ONLY literal transcriptions from apps-en.ts, or "No statement in the
+ * listing". The Namore column is our own description from namore-cells.ts.
+ * No ticks, crosses or "better" — a tick grid is a characterisation.
+ */
+import { NO_STATEMENT_EN, VERIFIED_EN, type AppEn, type Sourced } from '../data/apps-en';
+import { NAMORE_EN, LABELS_EN, type CellKey } from '../data/namore-cells';
+
+export interface Props {
+  rival: AppEn;
+  rows?: CellKey[];
+}
+const { rival, rows = ['partner', 'price', 'ads', 'names', 'ai'] } = Astro.props;
+
+const lines = (v: NonNullable<Sourced>) =>
+  [v.q, v.q2, v.q3, v.q4, v.q5].filter(Boolean) as string[];
+const anyCompiled = rows.some((r) => r !== 'account' && rival[r as keyof AppEn] && (rival[r as keyof AppEn] as NonNullable<Sourced>).compiled);
+const cell = (r: CellKey): Sourced => (r === 'account' ? null : (rival[r as keyof AppEn] as Sourced));
+const retrieved = rival.verified ?? VERIFIED_EN;
+---
+
+<div class="table-wrap">
+  <table class="cmp cmp-vs">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Namore</th>
+        <th><a href={rival.src} rel="nofollow noopener" target="_blank">{rival.name}</a></th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((r) => {
+        const v = cell(r);
+        return (
+          <tr>
+            <th scope="row">{LABELS_EN[r]}</th>
+            <td data-label="Namore">{NAMORE_EN[r]}</td>
+            <td data-label={rival.name}>
+              {v ? (
+                <>
+                  {lines(v).map((l, i) => <>{i > 0 ? ' · ' : ''}<q>{l}</q></>)}
+                  {v.note ? <span class="sf-note"> ({v.note})</span> : null}
+                  {v.src !== rival.src ? <> <a class="sf-src" href={v.src} rel="nofollow noopener" target="_blank">Source</a></> : null}
+                </>
+              ) : (
+                <span class="sf-none">{NO_STATEMENT_EN}</span>
+              )}
+            </td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+</div>
+<p class="post-caveat">
+  The Namore column is our own description. The {rival.name} column is quoted word for word from
+  its US App Store listing, retrieved {retrieved}.{anyCompiled
+    ? ' Where a cell holds more than one entry, those are separate lines from the same source, placed side by side by us.'
+    : ''} The full wording is further down this page.
+</p>
