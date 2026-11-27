@@ -41,6 +41,7 @@ const L = de
       revealCopy: 'In Namore swipt ihr beide auf euren eigenen Handys. Eure Listen bleiben privat. Ihr seht nur die Namen, die ihr <strong>beide</strong> behalten habt.',
       ios: 'Zusammen swipen auf dem iPhone', android: 'Zusammen swipen auf Android', more: 'Hier weiterswipen',
       note: 'Kostenlos starten · keine Werbung · kein Konto nötig', namesN: (n: number) => `${n} Namen`,
+      hint: 'Swipe mich', jump: 'Namen swipen wie in der App',
       pass: 'Weiter', love: 'Behalten', skipAria: 'Namen überspringen', keepAria: 'Namen behalten', iosNs: 'Für iPhone laden', androidNs: 'Für Android laden',
     }
   : {
@@ -50,6 +51,7 @@ const L = de
       revealCopy: 'In Namore you both swipe on your own phones. Your lists stay private. You only see the names you <strong>both</strong> kept.',
       ios: 'Swipe together on iPhone', android: 'Swipe together on Android', more: 'Keep swiping here',
       note: 'Free to start · no ads · no account needed', namesN: (n: number) => `${n} names`,
+      hint: 'Swipe me', jump: 'Swipe names like in the app',
       pass: 'Pass', love: 'Love it', skipAria: 'Skip this name', keepAria: 'Keep this name', iosNs: 'Get for iPhone', androidNs: 'Get for Android',
     };
 
@@ -166,6 +168,11 @@ const googlePlayUrl =
         </li>
       ))}
     </ol>
+    <div class="deck-hint" data-hint aria-hidden="true">
+      <svg viewBox="0 0 24 24" class="hint-arrow"><path d="M15 6l-6 6 6 6"/></svg>
+      <span>{L.hint}</span>
+      <svg viewBox="0 0 24 24" class="hint-arrow"><path d="M9 6l6 6-6 6"/></svg>
+    </div>
 
     <div class="deck-reveal" data-reveal hidden>
       <p class="deck-eyebrow">{L.savedEyebrow}</p>
@@ -200,6 +207,11 @@ const googlePlayUrl =
       <a class="btn btn-ink btn-lg" href={googlePlayUrl}>{L.androidNs}</a>
     </div>
   </noscript>
+  <button type="button" class="deck-jump" data-jump hidden>
+    <span class="jump-heart" aria-hidden="true">♥</span>
+    <span>{L.jump}</span>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+  </button>
 </section>
 
 <style>
@@ -569,6 +581,74 @@ const googlePlayUrl =
   @media (prefers-reduced-motion: reduce) {
     .dcard, .dcard-photo, .deck-reveal, .pill { transition-duration: 0.01ms !important; }
   }
+
+  /* "Swipe me" hint: a pill over the top card plus a small nudge of the card,
+     shown when the deck scrolls into view until the first touch. */
+  .deck-hint {
+    position: absolute;
+    left: 50%;
+    top: 28%;
+    z-index: 30;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: rgba(28, 22, 18, 0.82);
+    color: #fff;
+    font: 600 14px/1 var(--sans, system-ui);
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+  .deck-hint .hint-arrow { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .deck.is-live.is-inview:not(.is-touched):not(.is-revealed) .deck-hint { opacity: 1; }
+  .deck.is-hinting .hint-arrow:first-child { animation: hint-left 1.8s ease-in-out; }
+  .deck.is-hinting .hint-arrow:last-child { animation: hint-right 1.8s ease-in-out; }
+  .deck.is-hinting .dcard.is-top { animation: deck-nudge 1.8s ease-in-out; }
+  @keyframes deck-nudge {
+    0%, 100% { transform: none; }
+    22% { transform: translate3d(38px, 0, 0) rotate(5deg); }
+    50% { transform: translate3d(-30px, 0, 0) rotate(-4deg); }
+    72% { transform: translate3d(8px, 0, 0) rotate(1deg); }
+  }
+  @keyframes hint-right { 0%, 100% { transform: none; } 22% { transform: translateX(4px); } }
+  @keyframes hint-left { 0%, 100% { transform: none; } 50% { transform: translateX(-4px); } }
+
+  /* Floating jump pill: only while the deck is still below the fold. */
+  .deck-jump {
+    position: fixed;
+    left: 50%;
+    bottom: max(16px, env(safe-area-inset-bottom));
+    z-index: 60;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: max-content;
+    max-width: calc(100vw - 32px);
+    padding: 13px 18px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--ink, #1c1612);
+    color: var(--paper, #fff);
+    font: 600 15px/1.1 var(--sans, system-ui);
+    box-shadow: 0 12px 30px rgba(28, 22, 18, 0.28);
+    cursor: pointer;
+    transform: translate(-50%, 0);
+    transition: transform 0.35s cubic-bezier(0.3, 0.7, 0.3, 1), opacity 0.35s ease;
+  }
+  .deck-jump[hidden] { display: none; }
+  .deck-jump.is-away { transform: translate(-50%, 140%); opacity: 0; pointer-events: none; }
+  .deck-jump .jump-heart { color: var(--terra, #c9785c); font-size: 17px; }
+  .deck-jump svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .deck.is-hinting .dcard.is-top, .deck.is-hinting .hint-arrow { animation: none; }
+  }
 </style>
 
 <script>
@@ -656,6 +736,7 @@ const googlePlayUrl =
     function commit(dir: 'like' | 'nope', viaButton: boolean) {
       const card = cards[idx];
       if (!card) return;
+      touch();
       const out = dir === 'like' ? 1 : -1;
       card.classList.remove('is-dragging');
       card.classList.add('is-gone');
@@ -689,6 +770,7 @@ const googlePlayUrl =
       if (!card || !(e.target instanceof Node) || !card.contains(e.target)) return;
       if (e.pointerType === 'mouse' && e.button !== 0) return;
       if (e.pointerType === 'mouse') e.preventDefault(); // no text selection / native drag
+      touch();
       dragging = true; crossed = false; pid = e.pointerId;
       startX = e.clientX; startY = e.clientY; dx = dy = 0;
       card.classList.add('is-dragging');
@@ -742,6 +824,55 @@ const googlePlayUrl =
       track('name_deck_keep_swiping', { page_name: pageName, liked_count: liked.length });
     });
 
+
+    // "Swipe me" hint + floating jump pill (removed on the first touch).
+    let touched = false, nudges = 0, nudgeTimer = 0;
+    const jump = deck.querySelector<HTMLButtonElement>('[data-jump]');
+    const touch = () => {
+      if (touched) return;
+      touched = true;
+      deck.classList.add('is-touched');
+      deck.classList.remove('is-hinting');
+      clearTimeout(nudgeTimer);
+      jump?.classList.add('is-away');
+    };
+    const nudge = () => {
+      if (touched || nudges >= 3 || !deck.classList.contains('is-inview') || deck.classList.contains('is-revealed')) return;
+      nudges += 1;
+      deck.classList.add('is-hinting');
+      nudgeTimer = window.setTimeout(() => {
+        deck.classList.remove('is-hinting');
+        nudgeTimer = window.setTimeout(nudge, 2600);
+      }, 1850);
+    };
+    if ('IntersectionObserver' in window) {
+      const stage = deck.querySelector<HTMLElement>('[data-stage]')!;
+      new IntersectionObserver((entries) => {
+        entries.forEach((en) => {
+          const on = en.isIntersecting && en.intersectionRatio >= 0.55;
+          deck.classList.toggle('is-inview', on);
+          if (on) {
+            jump?.classList.add('is-away');
+            if (!touched && !deck.classList.contains('is-hinting')) { clearTimeout(nudgeTimer); nudgeTimer = window.setTimeout(nudge, 500); }
+          }
+        });
+      }, { threshold: [0, 0.55, 1] }).observe(stage);
+      // Only the first deck on the page, and only if it starts below the fold.
+      if (jump && deck === document.querySelector('[data-deck]') && deck.getBoundingClientRect().top > window.innerHeight * 0.9) {
+        jump.hidden = false;
+        jump.classList.add('is-away');
+        setTimeout(() => { if (!touched && !deck.classList.contains('is-inview')) jump.classList.remove('is-away'); }, 1200);
+        const seen = new IntersectionObserver((entries) => {
+          if (entries.some((en) => en.isIntersecting)) { jump.classList.add('is-away'); seen.disconnect(); }
+        });
+        seen.observe(deck);
+        jump.addEventListener('click', () => {
+          track('name_deck_jump_click', { page_name: pageName });
+          (deck.querySelector('.phone') || stage).scrollIntoView({ behavior: 'smooth', block: 'end' });
+          jump.classList.add('is-away');
+        });
+      }
+    }
     layout();
   });
 </script>
