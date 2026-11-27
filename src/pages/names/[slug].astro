@@ -242,15 +242,18 @@ const relatedIntro = describeRelation(row, related);
   @media (min-width: 1000px) {
     .name-top {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 430px;
+      grid-template-columns: minmax(0, 1fr) 460px;
       gap: 32px;
       align-items: start;
       margin-bottom: 56px;
     }
     .name-top :global(.card) { margin: 0; max-width: none; }
-    .name-top :global(.deck) { margin: 0; position: sticky; top: 84px; padding-top: 16px; padding-bottom: 16px; }
-    /* Fit the whole phone into the viewport next to the card. */
-    .name-top :global(.phone) { width: clamp(230px, calc((100vh - 345px) * 0.47 + 22px), 330px); }
+    .name-top :global(.deck) { margin: 0; padding-top: 18px; padding-bottom: 22px; }
+    .name-top :global(.deck-head) { margin-bottom: 12px; }
+    .name-top :global(.deck h2) { font-size: 1.75rem; }
+    .name-top :global(.deck-sub) { display: none; }
+    /* Full-size phone: the card should feel like the real app, not a thumbnail. */
+    .name-top :global(.phone) { width: 370px; }
   }
   /* Up-links to the browse hubs. Mono, understated — a navigational footer
      to the name narrative, not a CTA. */
