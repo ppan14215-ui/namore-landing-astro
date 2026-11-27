@@ -159,9 +159,10 @@ const relatedIntro = describeRelation(row, related);
   <main class="wrap page">
     <p class="page-eyebrow">Baby name</p>
 
-    <NameCardHero name={row} />
-
-    <SwipeDeck name={row} related={related} />
+    <div class="name-top">
+      <NameCardHero name={row} />
+      <SwipeDeck name={row} related={related} />
+    </div>
 
     {row.longevity_read && (
       <section class="narrative" aria-label={`Longevity reading for ${row.name}`}>
@@ -236,6 +237,21 @@ const relatedIntro = describeRelation(row, related);
 </BaseLayout>
 
 <style>
+  /* Desktop: the swipe deck sits next to the name card, above the fold,
+     instead of below it. Mobile keeps the stacked order (card, then deck). */
+  @media (min-width: 1000px) {
+    .name-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 430px;
+      gap: 32px;
+      align-items: start;
+      margin-bottom: 56px;
+    }
+    .name-top :global(.card) { margin: 0; max-width: none; }
+    .name-top :global(.deck) { margin: 0; position: sticky; top: 84px; padding-top: 16px; padding-bottom: 16px; }
+    /* Fit the whole phone into the viewport next to the card. */
+    .name-top :global(.phone) { width: clamp(230px, calc((100vh - 345px) * 0.47 + 22px), 330px); }
+  }
   /* Up-links to the browse hubs. Mono, understated — a navigational footer
      to the name narrative, not a CTA. */
   .browse {
